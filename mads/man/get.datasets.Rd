@@ -1,0 +1,40 @@
+\name{get.datasets}
+\alias{get.datasets}
+\title{Extracts the data and models from the ddf objects}
+\usage{
+  get.datasets(species.name, ddf.models)
+}
+\arguments{
+  \item{species.name}{a character vector of species codes}
+
+  \item{ddf.models}{a list of character vectors of model
+  names with the elements named by species code}
+}
+\value{
+  list with the following elements: unique.ddf.models - a
+  list of unique model combinations ddf.dat.master - a list
+  of dataframes containing the data used to fit the unique
+  models combinations defined in unique.ddf.models
+  model.index - named character vector indicating which
+  model is to be used for each species.
+}
+\description{
+  Compiles a list of unique model combinations, which are
+  stored as character vectors within the list. The
+  associated data for the models in each of the elements of
+  this list are also obtained (these will only be one per
+  set of models as each model group must use the same
+  data). It also constructs a look up table in the from of
+  a named character vector to relate species code to models
+  as these have now been reduced to unique model
+  combinations only.
+}
+\note{
+  Internal function not intended to be called by user.
+}
+\author{
+  Laura Marshall
+}
+\keyword{data}
+\keyword{preparation}
+

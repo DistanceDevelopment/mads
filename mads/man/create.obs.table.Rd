@@ -1,0 +1,36 @@
+\name{create.obs.table}
+\alias{create.obs.table}
+\title{Creates a subsetted observation table}
+\usage{
+  create.obs.table(obs.table, ddf.data, subset.variable,
+    subset.value)
+}
+\arguments{
+  \item{obs.table}{dataframe of observation records with
+  fields object, Region.Label, and Sample.Label which give
+  links to sample.table, region.table and the data records
+  used in \code{model}}
+
+  \item{ddf.data}{dataframe containing the observations}
+
+  \item{subset.variable}{variable name supplied as a
+  character}
+
+  \item{subset.value}{character value on which to subset
+  the data}
+}
+\value{
+  dataframe containing the subset of the obs.table
+}
+\description{
+  Subsets the obs.table dataframe supplied to only contain
+  the observations of interest.
+}
+\note{
+  Internal function not intended to be called by user.
+}
+\author{
+  Laura Marshall
+}
+\keyword{utility}
+

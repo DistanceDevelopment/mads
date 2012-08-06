@@ -1,0 +1,41 @@
+\name{calculate.dht}
+\alias{calculate.dht}
+\title{Calculates the abundance for each species code including the unidentified
+codes if supplied.}
+\usage{
+  calculate.dht(species.name, model.index, ddf.results,
+    region.table, sample.table, obs.table)
+}
+\arguments{
+  \item{species.name}{character vector of species codes}
+
+  \item{model.index}{named character vector which acts as a
+  look up table for duplicate detection function models.}
+
+  \item{ddf.results}{a list of ddf objects}
+
+  \item{region.table}{dataframe of region records -
+  Region.Label and Area}
+
+  \item{sample.table}{dataframe of sample records -
+  Region.Label, Sample.Label, Effort}
+
+  \item{obs.table}{dataframe of observation records with
+  fields object, Region.Label, and Sample.Label which give
+  links to sample.table, region.table and the data records
+  used in \code{model}}
+}
+\value{
+  a list of dht objects, one for each species code
+}
+\description{
+  Calculates the abundance for each species code including
+  the unidentified codes if supplied.
+}
+\author{
+  Laura Marshall
+}
+\seealso{
+  \code{mrds::dht}
+}
+

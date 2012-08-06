@@ -1,0 +1,38 @@
+\name{prorate.unidentified}
+\alias{prorate.unidentified}
+\title{Prorate the estimated abundances of the unidentified sightings to the
+other identified species categories.}
+\usage{
+  prorate.unidentified(dht.results,
+    species.code.definitions, species.presence)
+}
+\arguments{
+  \item{dht.results}{a list of objects of class dht}
+
+  \item{species.code.definitions}{a list of character
+  vectors detailing the species codes associated with the
+  unidentified code given as the element name.}
+
+  \item{species.presence}{a list of character vectors
+  defining the species present in each strata. of
+  identified species codes corresponding to which species
+  are present in each strata.}
+}
+\value{
+  a list of proprated results with an element for each
+  species
+}
+\description{
+  The prorating is done individually for each strata. It
+  will prorate the unidentified abundance between the
+  species as defined in the species.code.definitions except
+  where specified that a given species is not present in
+  that strata as defined in the species.presence argument.
+}
+\note{
+  Internal function not intended to be called by user.
+}
+\author{
+  Laura Marshall
+}
+

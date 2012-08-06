@@ -1,0 +1,24 @@
+\name{mae.warning}
+\alias{mae.warning}
+\title{Warning function}
+\usage{
+  mae.warning(warning.msg = NULL, warning.mode = "store")
+}
+\arguments{
+  \item{warning.msg}{the message to be stored/printed
+  (optional)}
+
+  \item{warning.mode}{report or print errors (default
+  report)}
+}
+\value{
+  None
+}
+\description{
+  Writes or stores messages for various situations that can
+  occur
+}
+\author{
+  Dave Miller & Laura Marshall
+}
+

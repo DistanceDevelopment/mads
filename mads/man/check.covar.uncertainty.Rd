@@ -1,0 +1,33 @@
+\name{check.covar.uncertainty}
+\alias{check.covar.uncertainty}
+\title{Performs checks on the covariate.uncertainty dataframe}
+\usage{
+  check.covar.uncertainty(covariate.uncertainty)
+}
+\arguments{
+  \item{covariate.uncertainty}{dataframe containing
+  information used to parametrically resample data or NULL
+  if not required}
+}
+\value{
+  verified covariate.uncertainty dataframe
+}
+\description{
+  Ensures that where necessary the values are characters
+  and that only supported sampling distributions have been
+  selected.
+}
+\note{
+  Internal function not intended to be called by user.
+}
+\author{
+  Laura Marshall
+}
+\seealso{
+  \code{execute.multi.analysis}
+}
+\keyword{data}
+\keyword{input}
+\keyword{validation}
+\keyword{validation,}
+

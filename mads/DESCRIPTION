@@ -1,0 +1,11 @@
+Package: mads
+Type: Package
+Title: Multi-Analysis Distance Sampling. 
+Version: 1.0
+Date: 2012-08-03
+Author: Laura Marshall
+Maintainer: Laura Marshall <lauram@mcs.st-and.ac.uk>
+Description: Performs distance sampling analyses on a number of species 
+    accounting for unidentified sightings, model uncertainty and covariate 7
+    uncertainty.
+License: GPL (>=2)
