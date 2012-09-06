@@ -92,6 +92,9 @@
 #' @param species.presence must be specified if species.code.definitions is 
 #'  specified. A list with an element for each strata which contains the vector
 #'  of species codes present in that strata
+#' @return object of class "ma" which consists of a list of objects of class 
+#'   "ma.element". 
+#'   \item{}{}
 #' @export
 #' @author Laura Marshall
 #' @seealso \code{\link{ddf.ds}}, \code{\link{ddf.io}},\code{\link{ddf.io.fi}},
@@ -114,7 +117,7 @@
 #' obs<<-ETP.data$obs
 #' ddf.1=ddf(dsmodel = ~mcds(key = "hn", formula = ~1), data = egdata, method = "ds", meta.data = list(width = 4))
 #' 
-execute.multi.analysis <- function(region.table, sample.table, obs.table, bootstrap, bootstrap.options=list(), covariate.uncertainty = NULL, ddf.models, ddf.model.options=list(), species.code.definitions = NULL, species.presence = NULL){
+execute.multi.analysis <- function(region.table, sample.table, obs.table, bootstrap, bootstrap.options=list(), covariate.uncertainty = NULL, ddf.models, ddf.model.options=list(), species.code.definitions = NULL, species.presence = NULL, seed.array = NULL){
 # 
 # execute.multi.analysis  - function for dealing with model uncertainty, covariate uncertainty and unidentified species in Distance Sampling
 #
@@ -133,7 +136,7 @@ execute.multi.analysis <- function(region.table, sample.table, obs.table, bootst
 #
 # Value:
 # 
-#   result object of class=???
+#   result object of class = ma
 #
 # Functions Used: create.warning.storage, check.ddf.models, check.covar.uncertainty,
 #   check.species.code.definitions, get.datasets, resample.data, resample.covariates, 
@@ -148,44 +151,39 @@ execute.multi.analysis <- function(region.table, sample.table, obs.table, bootst
     
   #input checks
   ddf.models               <- check.ddf.models(ddf.models, species.name, ddf.model.options$distance.naming.conv)
-  covariate.uncertainty    <- check.covar.uncertainty(covariate.uncertainty)
+  clusters                 <- ddf.models$clusters
+  double.observer          <- ddf.models$double.observer
+  ddf.models               <- ddf.models$ddf.models
   species.code.definitions <- check.species.code.definitions(species.code.definitions, species.name)
+  unidentified.species     <- species.code.definitions$unidentified
+  species.code.definitions <- species.code.definitions$species.code.definitions
+  covariate.uncertainty    <- check.covar.uncertainty(covariate.uncertainty)
   
   #Make master copies of all the datasets
-  ddf.dat.master    <- get.datasets(species.name, ddf.models)
-  unique.ddf.models <- ddf.dat.master$unique.ddf.models
-  model.index       <- ddf.dat.master$model.index
-  ddf.dat.master    <- ddf.dat.master$ddf.dat.master
-  obs.table.master  <- obs.table
+  ddf.dat.master      <- get.datasets(species.name, ddf.models)
+  unique.ddf.models   <- ddf.dat.master$unique.ddf.models
+  model.index         <- ddf.dat.master$model.index
+  ddf.dat.master      <- ddf.dat.master$ddf.dat.master
+  obs.table.master    <- obs.table
+  sample.table.master <- sample.table
   
   #Create storage for results (only for the species codes not the unidentified codes)
-  identified.species <- NULL
-  for(sp in seq(along = species.name)){
-    if(length(species.code.definitions[[species.name[sp]]]) == 1){
-      identified.species <- c(identified.species, species.name[sp]) 
-    }
-  }
-  no.id.species   <- length(identified.species)                                       
-  strata.name  <- as.character(region.table$Region.Label)
-  no.strata    <- length(strata.name)
-  #create arrays to record bootstrap results
-  individual.summary <- array(dim=c(no.strata+1, 5, bootstrap.options$n, no.id.species), dimnames = list(c(strata.name, "Total"), c("Area", "CoveredArea", "Effort", "n", "ER"), 1:bootstrap.options$n, identified.species))                                    
-  individual.N       <- array(dim=c(no.strata+1, 2, bootstrap.options$n, no.id.species), dimnames = list(c(strata.name, "Total"), c("Estimate", "PercentUnidentified"), 1:bootstrap.options$n, identified.species))
-  clusters.summary   <- array(dim=c(no.strata+1, 6, bootstrap.options$n, no.id.species), dimnames = list(c(strata.name, "Total"), c("Area", "CoveredArea", "Effort", "n", "k", "ER"), 1:bootstrap.options$n, identified.species))
-  clusters.N         <- array(dim=c(no.strata+1, 2, bootstrap.options$n, no.id.species), dimnames = list(c(strata.name, "Total"), c("Estimate", "PercentUnidentified"), 1:bootstrap.options$n, identified.species))
-  Expected.S         <- array(dim=c(no.strata+1, 2, bootstrap.options$n, no.id.species), dimnames = list(c(strata.name, "Total"), c("Expected.S", "new.Expected.S"), 1:bootstrap.options$n, identified.species))
-  # store these arrays in a list
-  bootstrap.results <- list(individual.summary = individual.summary, individual.N = individual.N, clusters.summary = clusters.summary, clusters.N = clusters.N, Expected.S = Expected.S)
-
-   
+  bootstrap.results <- create.result.arrays(species.name, species.code.definitions, region.table, clusters, bootstrap.options$n)
+  bootstrap.ddf.statistics <- create.param.arrays(unique.ddf.models, bootstrap.options$n, ddf.model.options$criterion)
+     
   #Set up a loop
   for(n in 1:bootstrap.options$n){
+  
+      if(!is.null(seed.array)){
+        set.seet(seed.array[n])
+      }
                                                                                 
       #Resample Data                                                                                           
       if(bootstrap){                                                              
-        ddf.dat.working <- resample.data(resample=bootstrap.options$resample, obs.table.master, sample.table, ddf.dat.master) 
-        obs.table       <- ddf.dat.working[[2]]  
-        ddf.dat.working <- ddf.dat.working[[1]]   
+        ddf.dat.working <- resample.data(resample=bootstrap.options$resample, obs.table.master, sample.table.master, ddf.dat.master, double.observer) 
+        obs.table       <- ddf.dat.working$obs.table 
+        sample.table    <- ddf.dat.working$sample.table
+        ddf.dat.working <- ddf.dat.working$ddf.dat.working  
       }else{
         ddf.dat.working <- ddf.dat.master
       }    
@@ -196,38 +194,45 @@ execute.multi.analysis <- function(region.table, sample.table, obs.table, bootst
       }                                                                           
            
       #Fit ddf models to all species codes
-      ddf.results <- fit.ddf.models(ddf.dat.working, ddf.models, ddf.model.options$criterion)
-      #if(!ddf.is.valid(ddf.results)){
-        #If the ddf results are not valid for all species 
-        #Save warning
-        #move to next bootstrap iteration
+      #if(double.observer){
+      ddf.results <- fit.ddf.models(ddf.dat.working, ddf.models, ddf.model.options$criterion, bootstrap.ddf.statistics, n)
+      #}else{
+      #  ddf.results <- fit.ds.models(ddf.dat.working, ddf.models, ddf.model.options$criterion, bootstrap.ddf.statistics, n)
       #}
+      if(is.null(ddf.results)){
+        #If the ddf results are not valid for all species move to next bootstrap iteration
+        next
+      }else{
+        bootstrap.ddf.statistics <- ddf.results$bootstrap.ddf.statistics
+        ddf.results <- ddf.results$ddf.results
+      }
                                                                                    
       #Calculate densities and abundance for all species codes
       dht.results <- calculate.dht(species.name, model.index, ddf.results, region.table, sample.table, obs.table)
                           
-      #Deal with unidentified sightings
-      if(!is.null(species.code.definitions)){
-        prorated.results <- prorate.unidentified(dht.results, species.code.definitions, species.presence)
+      #Deal with unidentified sightings if present or format dht results if not
+      if(unidentified.species){
+        formatted.dht.results <- prorate.unidentified(dht.results, species.code.definitions, species.presence, clusters)
+      }else{
+        formatted.dht.results <- format.dht.results(dht.results, species.name, clusters)
       }                                                                           
       
-      #Format / Record results 
-      if(!is.null(species.code.definitions)){                                                         
-        bootstrap.results <- accumulate.results(n, bootstrap.results, prorated.results)  #NOTE prorated results may not exist
-      }else{
-      }
-                                                                                
+      #Format / Record results                                                          
+      bootstrap.results <- accumulate.results(n, bootstrap.results, formatted.dht.results, clusters)   
+                                                                           
   }#next iteration 
   
   #process results
-  results <- process.bootstrap.results(bootstrap.results)                                                              
-                                                                                
+  results <- process.bootstrap.results(bootstrap.results, model.index, clusters, bootstrap.ddf.statistics)                                                                                                                                         
   #process warning messages
-  process.warnings()
+  process.warnings()  
                      
   #return results
-  return(results)
-
+  class(results) <- "ma"
+  for(sp in seq(along = results)){
+    class(results[[sp]]) <- "ma.element"
+  }
+  return(results)    
 }
 
 

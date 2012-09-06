@@ -14,7 +14,7 @@
 #' @note Internal function not intended to be called by user.
 #' @author Laura Marshall
 #'
-fit.ddf.models <- function(ddf.dat.working, ddf.models, criterion){
+fit.ddf.models <- function(ddf.dat.working, ddf.models, criterion, bootstrap.ddf.statistics, rep.no){
 # fit.ddf.models function to refits the detection functions to the data provided
 #
 # Arguments:
@@ -44,32 +44,52 @@ fit.ddf.models <- function(ddf.dat.working, ddf.models, criterion){
       #point the call at the new data
       model.call$data <- as.name("usedata")
       #get parameter estimates from original model to act as start values to aid convergence
-      start.values <- list(scale=get(model.name)$ds$aux$ddfob$scale$parameters, shape=get(model.name)$ds$aux$ddfob$shape$parameters, adjustment=get(model.name)$ds$aux$ddfob$adjustment$parameters)                           
-      model.call$control <- call("list",initial=start.values)
+      model.type <- get(model.name)$method
+      if(model.type%in%c("ds")){
+        start.values <- list(scale=get(model.name)$ds$aux$ddfob$scale$parameters, shape=get(model.name)$ds$aux$ddfob$shape$parameters, adjustment=get(model.name)$ds$aux$ddfob$adjustment$parameters)                           
+        model.call$control <- call("list",initial=start.values)
+      }
+      if(model.type%in%c("trial", "io")){
+        start.values <- list(scale=get(model.name)$ds$ds$aux$ddfob$scale$parameters, shape=get(model.name)$ds$ds$aux$ddfob$shape$parameters, adjustment=get(model.name)$ds$ds$aux$ddfob$adjustment$parameters)                           
+        model.call$control <- call("list",initial=start.values)
+      }
       #refit ddf model
       temp.results[[m]] <- try(eval(model.call))
       if(class(temp.results[[m]])[1] == "try-error"){
         cat("Model did not converge for species ",species.name[sp]," model ",model.name, sep="", fill=TRUE)
-      }else{
+        bootstrap.ddf.statistics[[species.name[sp]]]$convergence[2,model.name] <- bootstrap.ddf.statistics[[species.name[sp]]]$convergence[2,model.name] + 1
+      }else if(check.convergence(temp.results[[m]])){
         cat("Model converged for species ",species.name[sp]," model ",model.name, sep="", fill=TRUE)
+        bootstrap.ddf.statistics[[species.name[sp]]]$convergence[1,model.name] <- bootstrap.ddf.statistics[[species.name[sp]]]$convergence[1,model.name] + 1
+        #bootstrap.ddf.statistics[[species.name[sp]]][[model.name]]
+        bootstrap.ddf.statistics <- store.param.ests(bootstrap.ddf.statistics, species.name[sp], model.name, temp.results[[m]], rep.no)
         lnl <- temp.results[[m]]$lnl 
         k <- length(temp.results[[m]]$par)
         n <- nrow(temp.results[[m]]$data)
         selection.criterion.values[m] <- switch(criterion,
           AIC  = 2*k-2*lnl,
           AICc = 2*k-2*lnl+(2*k*(k+1))/(n-k-1),
-          BIC  = k*log(n)-2*lnl)             
+          BIC  = k*log(n)-2*lnl)
+        bootstrap.ddf.statistics[[species.name[sp]]][[model.name]][[criterion]][rep.no] <- selection.criterion.values[m]             
+      }else{
+        cat("Model did not converge for species ",species.name[sp]," model ",model.name,". Convergence code was not zero.", sep="", fill=TRUE)
+        bootstrap.ddf.statistics[[species.name[sp]]]$convergence[2,model.name] <- bootstrap.ddf.statistics[[species.name[sp]]]$convergence[2,model.name] + 1
       }
-    } 
-  #Find the model with the minimum selection criteria
-  if(!is.null(selection.criterion.values)){  
-    selected.model <- which(selection.criterion.values == min(selection.criterion.values))  #if 2 models have the same selection criteria how should we choose between them?
-    ddf.results[[species.name[sp]]] <- temp.results[[selected.model[1]]]
-  }else{
-    ddf.results[[species.name[sp]]] <- NULL
-  }
-  }
-  return(ddf.results)
+    }#next model 
+    #Check at least one converged                  
+    if(!is.null(selection.criterion.values)){  
+      selected.model <- which(selection.criterion.values == min(na.omit(selection.criterion.values)))  
+      ddf.results[[species.name[sp]]] <- temp.results[[selected.model[1]]]
+      selected.model.name <- ddf.models[[species.name[sp]]][selected.model[1]]
+      bootstrap.ddf.statistics[[species.name[sp]]]$convergence[3,selected.model.name] <- bootstrap.ddf.statistics[[species.name[sp]]]$convergence[3,selected.model.name] + 1
+      bootstrap.ddf.statistics[[species.name[sp]]][[selected.model.name]]$selected[rep.no] <- 1
+    }else{
+      #If none converged return NULL and exit function
+      mae.warning(paste("No models converged for species ",species.name[sp],", this bootstrap iteration is being skipped", sep=""), warning.mode="store")
+      return(NULL)
+    }
+  }#next species
+  return(list(ddf.results = ddf.results, bootstrap.ddf.statistics = bootstrap.ddf.statistics))
 }
 
 

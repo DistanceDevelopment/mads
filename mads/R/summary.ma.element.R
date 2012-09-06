@@ -1,0 +1,105 @@
+#' Print summary of the multi-analysis object
+#' 
+#' Provides a brief summary of data and fitted detection probability model
+#' parameters, model selection criterion, and optionally abundance in the
+#' covered (sampled) region and its standard error. What is printed depends
+#' on the corresponding call to summary.
+#' 
+#' @S3method print summary.ma
+#' @aliases print.summary.ma
+#' @method print summary.ma
+#' @param x a summary of \code{ma} model object
+#' @param \dots unspecified and unused arguments for S3 consistency
+#' @return NULL
+#' @author Laura Marshall
+#' @seealso \code{\link{summary.ma}}
+#' @keywords utility
+
+summary.ma.element <- function (x,species=NULL,...){
+
+  print.tables <- function(x){
+    cat("\nBootstrap summary statistics:\n")
+    print(x$summary)
+    if("N" %in% names(x)){
+      cat("\nAbundance:\n")
+      print(x$N)
+    }
+    cat("\nDensity:\n")
+    print(x$D)
+  }
+  
+  #Display title line
+  if(!is.null(species)){
+    cat("\nBootstrap summary for species  : ",species,"\n")
+  }else{
+    cat("\nBootstrap summary for individual species in a multi-analysis object\n")
+  }  
+  #Display ddf summary
+  cat("\nDetection function model summary\n")
+  cat("\nModel Selection:\n")
+  print(x$ddf$convergence)
+  model.names <- dimnames(x$ddf$convergence)[2][[1]]
+  criteria <- names(x$ddf[[model.names[1]]])[2]
+  #cat(paste("\nSummary of ", criteria, " values:\n"), sep = "")
+  #for(m in seq(along = model.names)){
+    #cat(paste("\n", model.names[m], ":\n", sep = ""))
+    #print(summary(x$ddf[[model.names[m]]][[criteria]]))    
+  #} 
+  #cat("\nDetection Function Parameters\n")
+  cat("\nModel Summaries\n")
+  for(m in seq(along = model.names)){
+    cat("\nModel name: ", model.names[m], "\n")
+    cat("\nDetection function:\n")
+    print(model.description(get(model.names[m])))
+    cat("\n")
+    selected <- FALSE
+    if(!is.null(x$ddf[[model.names[m]]]$ds.param)){
+      cat("\nParameter estimates (dsmodel):\n")
+      if(nrow(x$ddf[[model.names[m]]]$ds.param) > 1){
+        param.estimates <- apply(x$ddf[[model.names[m]]]$ds.param, 2, mean)
+        param.se <- apply(x$ddf[[model.names[m]]]$ds.param, 2, sd)
+        print(array(c(param.estimates, param.se), dim=c(length(param.estimates),2), dimnames=list(dimnames(x$ddf[[model.names[m]]]$ds.param)[[2]], c("Estimate", "se"))))
+      }else if(nrow(x$ddf[[model.names[m]]]$ds.param) == 1){
+        param.estimates <- x$ddf[[model.names[m]]]$ds.param[1,]
+        param.se <- rep(NA, ncol(x$ddf[[model.names[m]]]$ds.param))
+        print(array(c(param.estimates, param.se), dim=c(length(param.estimates),2), dimnames=list(dimnames(x$ddf[[model.names[m]]]$ds.param)[[2]], c("Estimate", "se"))))
+      }else{
+        cat("\nModel never selected\n")
+        selected <- FALSE
+      }
+    }
+    if(!is.null(x$ddf[[model.names[m]]]$mr.param)){
+      cat("\nParameter estimates (mrmodel):\n")
+      if(nrow(x$ddf[[model.names[m]]]$mr.param) > 1){
+        param.estimates <- apply(x$ddf[[model.names[m]]]$mr.param, 2, mean)
+        param.se <- apply(x$ddf[[model.names[m]]]$mr.param, 2, sd)
+        print(array(c(param.estimates, param.se), dim=c(length(param.estimates),2), dimnames=list(dimnames(x$ddf[[model.names[m]]]$mr.param)[[2]], c("Estimate", "se"))))
+      }else if(nrow(x$ddf[[model.names[m]]]$mr.param) == 1){
+        param.estimates <- x$ddf[[model.names[m]]]$mr.param[1,]
+        param.se <- rep(NA, ncol(x$ddf[[model.names[m]]]$mr.param))
+        print(array(c(param.estimates, param.se), dim=c(length(param.estimates),2), dimnames=list(dimnames(x$ddf[[model.names[m]]]$mr.param)[[2]], c("Estimate", "se"))))
+      }else{
+        cat("\nModel never selected\n")
+        selected <- FALSE
+      }        
+    }
+    if(selected){
+      cat(paste("\nSummary of ", criteria, " values:\n"), sep = "")
+      print(summary(x$ddf[[model.names[m]]][[criteria]]))  
+    }         
+  }
+  cat("\nDensity / Abundance Summaries\n")
+  #Display density (and abundance and expected cluster size tables)
+  if(is.null(x$clusters)){
+    cat("\nSummary for individuals\n")
+    print.tables(x$individuals)
+  }else{
+    cat("\nSummary for clusters\n")
+    print.tables(x$clusters)
+    cat("\nSummary for individuals\n")
+    print.tables(x$individuals)
+    cat("\nExpected cluster size\n")
+    print(x$Expected.S)
+  } 
+  invisible()
+}

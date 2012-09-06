@@ -18,8 +18,8 @@
 #' @note Internal function not intended to be called by user.
 #' @author Laura Marshall
 #'
-prorate.unidentified <- function(dht.results, species.code.definitions, species.presence){
-# prorate.unidentified function to rorate the estimated abundances of the unidentified sightings to the
+prorate.unidentified <- function(dht.results, species.code.definitions, species.presence, clusters){
+# prorate.unidentified function to prorate the estimated abundances of the unidentified sightings to the
 # other identified species categories.
 #
 # Arguments:
@@ -44,17 +44,25 @@ prorate.unidentified <- function(dht.results, species.code.definitions, species.
   
   #create results object to store results in
   results <- list()
-  #add all data for identified codes to results
+  #INDIVIDUALS add all data for identified codes to results
   for(id in seq(along = identified.codes)){
-    results[[identified.codes[id]]]$individual$summary <- dht.results[[identified.codes[id]]]$individuals$summary[,1:6]
-    results[[identified.codes[id]]]$individual$N <- dht.results[[identified.codes[id]]]$individuals$N[,1:2]
-    results[[identified.codes[id]]]$clusters$summary <- dht.results[[identified.codes[id]]]$clusters$summary[,1:7]
-    results[[identified.codes[id]]]$clusters$N <- dht.results[[identified.codes[id]]]$clusters$N[,1:2]
-    results[[identified.codes[id]]]$Expected.S <- dht.results[[identified.codes[id]]]$Expected.S[,1:2]
+    results[[identified.codes[id]]]$individual$summary <- dht.results[[identified.codes[id]]]$individuals$summary[,c("Region", "Area", "CoveredArea", "Effort", "n", "ER")]
+    results[[identified.codes[id]]]$individual$N <- dht.results[[identified.codes[id]]]$individuals$N[,c("Label","Estimate","df")]
+  }
+  #CLUSTERS add all data for identified codes to results
+  if(clusters){
+    for(id in seq(along = identified.codes)){    
+      results[[identified.codes[id]]]$clusters$summary <- dht.results[[identified.codes[id]]]$clusters$summary[,c("Region", "Area", "CoveredArea", "Effort", "n", "k", "ER")]
+      results[[identified.codes[id]]]$clusters$N <- dht.results[[identified.codes[id]]]$clusters$N[,c("Label","Estimate","df")]
+      results[[identified.codes[id]]]$Expected.S <- dht.results[[identified.codes[id]]]$Expected.S[,c("Region", "Expected.S")]
+    }
   }
   
   #get names of strata
   strata <- names(species.presence)
+  if(length(strata) == 1){
+    strata <- "Total"
+  }
   
   #for all unidentified codes
   for(unid in seq(along = unidentified.codes)){
@@ -65,49 +73,64 @@ prorate.unidentified <- function(dht.results, species.code.definitions, species.
       
       #check unidentifed category has abundance in this strata if not next
       unid.abundance <- dht.results[[unidentified.codes[unid]]]$individuals$N$Estimate[dht.results[[unidentified.codes[unid]]]$individuals$N$Label == strata[st]]
-      cat("unid.abundance: ", unid.abundance, ", class(unid.abundance): ", class(unid.abundance), fill=T)
-      if(length(unid.abundance) == 0){                                          #CHECK WHEN THIS IS EMPTY!!!
+      #cat("unid.abundance: ", unid.abundance, ", class(unid.abundance): ", class(unid.abundance), fill=T)
+      if(length(unid.abundance) == 0){                                          #CHECK WHEN THIS IS EMPTY!!! CAN NO LONGER FIND A PROBLEM
         next
       }else if(unid.abundance == 0){                
         next
       }
-      unid.cluster.abundance <- dht.results[[unidentified.codes[unid]]]$clusters$N$Estimate[dht.results[[unidentified.codes[unid]]]$clusters$N$Label == strata[st]]
-      species.present <- species.presence[[strata[st]]]
-      #find species which are both contained in the unid category and present in this strata
+      #find which species to prorate between
+      species.present <- species.presence[[st]]
       prorate.species <- corresp.identifieds[which(!is.na(match(corresp.identifieds, species.present)))] 
       prorate.species <- as.character(prorate.species)
 
-      #get the abundances of each identified
-      id.abundance <- id.cluster.abundance <- NULL
+      #INDIVIDUAL CALCULATIONS
+      id.abundance <- NULL
       for(psp in seq(along = prorate.species)){
         id.abundance[psp] <- dht.results[[prorate.species[psp]]]$individuals$N$Estimate[dht.results[[prorate.species[psp]]]$individuals$N$Label == strata[st]]
-        id.cluster.abundance[psp] <- dht.results[[prorate.species[psp]]]$clusters$N$Estimate[dht.results[[prorate.species[psp]]]$clusters$N$Label == strata[st]]
       } 
-      names(id.abundance) <- prorate.species
-      names(id.cluster.abundance) <- prorate.species
-      #prorate the unidentified 
+      names(id.abundance) <- prorate.species 
       prorated.unid.abundance <- (id.abundance/sum(id.abundance))*unid.abundance
-      prorated.unid.abundance.cluster <- (id.cluster.abundance/sum(id.cluster.abundance))*unid.cluster.abundance  
       for(psp in seq(along = prorate.species)){
         results[[prorate.species[psp]]]$individual$N$Estimate[results[[prorate.species[psp]]]$individual$N$Label == strata[st]] <- prorated.unid.abundance[[prorate.species[psp]]] + results[[prorate.species[psp]]]$individual$N$Estimate[results[[prorate.species[psp]]]$individual$N$Label == strata[st]]
-        cat(prorated.unid.abundance[[prorate.species[psp]]]," was added to species ", prorate.species[psp]," in strata ", strata[st]," from unidentified code ", unidentified.codes[unid],". Original abundance: ",id.abundance[psp], sep="", fill=T)
-        results[[prorate.species[psp]]]$clusters$N$Estimate[results[[prorate.species[psp]]]$clusters$N$Label == strata[st]] <- prorated.unid.abundance.cluster[[prorate.species[psp]]] + results[[prorate.species[psp]]]$clusters$N$Estimate[results[[prorate.species[psp]]]$clusters$N$Label == strata[st]]
-        cat(prorated.unid.abundance.cluster[[prorate.species[psp]]]," clusters were added to species ", prorate.species[psp]," in strata ", strata[st]," from unidentified code ", unidentified.codes[unid],". Original abundance: ",id.cluster.abundance[psp], sep="", fill=T)
+        #cat(prorated.unid.abundance[[prorate.species[psp]]]," was added to species ", prorate.species[psp]," in strata ", strata[st]," from unidentified code ", unidentified.codes[unid],". Original abundance: ",id.abundance[psp], sep="", fill=T)
+      }
+      
+      #CLUSTER CALCULATIONS
+      if(clusters){
+        id.cluster.abundance <- NULL
+        unid.cluster.abundance <- dht.results[[unidentified.codes[unid]]]$clusters$N$Estimate[dht.results[[unidentified.codes[unid]]]$clusters$N$Label == strata[st]]
+        for(psp in seq(along = prorate.species)){
+          id.cluster.abundance[psp] <- dht.results[[prorate.species[psp]]]$clusters$N$Estimate[dht.results[[prorate.species[psp]]]$clusters$N$Label == strata[st]]
+        }
+        names(id.cluster.abundance) <- prorate.species
+        prorated.unid.abundance.cluster <- (id.cluster.abundance/sum(id.cluster.abundance))*unid.cluster.abundance 
+        for(psp in seq(along = prorate.species)){
+          results[[prorate.species[psp]]]$clusters$N$Estimate[results[[prorate.species[psp]]]$clusters$N$Label == strata[st]] <- prorated.unid.abundance.cluster[[prorate.species[psp]]] + results[[prorate.species[psp]]]$clusters$N$Estimate[results[[prorate.species[psp]]]$clusters$N$Label == strata[st]]
+          #cat(prorated.unid.abundance.cluster[[prorate.species[psp]]]," clusters were added to species ", prorate.species[psp]," in strata ", strata[st]," from unidentified code ", unidentified.codes[unid],". Original abundance: ",id.cluster.abundance[psp], sep="", fill=T)
+        }
       }
     }#next strata
   }#next unidentified code   
   
-  #update totals and include percentage from unidentifieds
+  # INDIVIDUALS - update totals and include percentage from unidentifieds
+  index <- which(results[[1]]$individual$N$Label == "Total")
   for(r in seq(along = results)){
-    index <- which(results[[1]]$individual$N$Label == "Total")
     #update totals
     results[[identified.codes[r]]]$individual$N$Estimate[index] <- sum(results[[identified.codes[r]]]$individual$N$Estimate[1:(index-1)])
-    results[[identified.codes[r]]]$clusters$N$Estimate[index] <- sum(results[[identified.codes[r]]]$clusters$N$Estimate[1:(index-1)])
     #add in information regarding what percentage came from unidentified sightings
-    results[[identified.codes[r]]]$individual$N <- cbind(results[[identified.codes[r]]]$individual$N, PercentUnidentified = round(((results[[identified.codes[r]]]$individual$N$Estimate-dht.results[[identified.codes[r]]]$individuals$N$Estimate)/results[[identified.codes[r]]]$individual$N$Estimate)*100,4))
-    results[[identified.codes[r]]]$clusters$N <- cbind(results[[identified.codes[r]]]$clusters$N, PercentUnidentified = round(((results[[identified.codes[r]]]$clusters$N$Estimate-dht.results[[identified.codes[r]]]$clusters$N$Estimate)/results[[identified.codes[r]]]$clusters$N$Estimate)*100,4))
-    #Calculate new expected cluster size
-    results[[identified.codes[r]]]$Expected.S$new.Expected.S <- results[[identified.codes[r]]]$individual$N$Estimate/results[[identified.codes[r]]]$cluster$N$Estimate 
+    results[[identified.codes[r]]]$individual$N <- cbind(results[[identified.codes[r]]]$individual$N, PercentUnidentified = as.numeric(round(((results[[identified.codes[r]]]$individual$N$Estimate-dht.results[[identified.codes[r]]]$individuals$N$Estimate)/results[[identified.codes[r]]]$individual$N$Estimate)*100,4))) 
+  }
+  # CLUSTERS - update totals and include percentage from unidentifieds
+  if(clusters){
+    for(r in seq(along = results)){
+      #update totals
+      results[[identified.codes[r]]]$clusters$N$Estimate[index] <- sum(results[[identified.codes[r]]]$clusters$N$Estimate[1:(index-1)])
+      #add in information regarding what percentage came from unidentified sightings
+      results[[identified.codes[r]]]$clusters$N <- cbind(results[[identified.codes[r]]]$clusters$N, PercentUnidentified = as.numeric(round(((results[[identified.codes[r]]]$clusters$N$Estimate-dht.results[[identified.codes[r]]]$clusters$N$Estimate)/results[[identified.codes[r]]]$clusters$N$Estimate)*100,4)))
+      #Calculate new expected cluster size
+      results[[identified.codes[r]]]$Expected.S$new.Expected.S <- results[[identified.codes[r]]]$individual$N$Estimate/results[[identified.codes[r]]]$cluster$N$Estimate 
+    }
   } 
   #return results        
   return(results)

@@ -42,6 +42,7 @@ resample.covariates <- function(ddf.dat.working, covariate.uncertainty){
       
       #check that both the observations and uncertainty exist
       if(is.null(observations) | is.null(uncertainty)){
+        process.warnings()
         stop("Invalid names for the covariates or associated uncertainty have been specified in the covariate uncertainty dataframe.")
       }
                                                                                 # what this varies across observer?

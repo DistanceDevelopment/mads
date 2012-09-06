@@ -31,7 +31,24 @@ check.species.code.definitions <- function(species.code.definitions, species.nam
 #   the updated species.code.definitions list
 #
 # Function Calls: none 
-#      
+# 
+  #check to see if there are unidentified species codes
+  unidentified = FALSE
+  for(i in seq(along = species.code.definitions)){
+    if(is.null(species.code.definitions[[i]])){
+      process.warnings()
+      stop(paste("No species codes specified for ",names(species.code.definitions)[i]," in the species code definitions list.", sep = ""), call. = FALSE) 
+    }else if(length(species.code.definitions[[i]]) > 1){
+      unidentified = TRUE
+    }else if(length(species.code.definitions[[i]]) == 1 & species.code.definitions[[i]] != names(species.code.definitions)[i]){
+      process.warnings()
+      stop("Incorrect species code definition for species ",names(species.code.definitions)[i],". If only a single code is entered it must match the name of the list element.", call. = FALSE)      
+    }else if(length(species.code.definitions[[i]]) == 0){ 
+      process.warnings()
+      stop(paste("No species codes specified for ",names(species.code.definitions)[i]," in the species code definitions list.", sep = ""), call. = FALSE) 
+    }
+  } 
+  #get all unique codes in the list    
   all.codes <- definition.names <- names(species.code.definitions)
   for(sp in seq(along = species.code.definitions)){
     all.codes <- c(all.codes, species.code.definitions[[sp]])
@@ -40,9 +57,11 @@ check.species.code.definitions <- function(species.code.definitions, species.nam
   compare.codes <- ifelse(length(species.name) == length(unique.codes), sort(species.name) == sort(unique.codes), NA)
   #check that there are not multiple definitions for the same species code
   if(length(species.code.definitions) != length(unique(definition.names))){
+    process.warnings()
     stop("Multiple species code entries in the species code definitions list", call. = FALSE)
   #check that the names of the ddf models correspond to the names in the species code definitions  
   }else if(is.na(compare.codes) | !is.na(compare.codes) & length(which(compare.codes)) == length(species.name)){
+    process.warnings()
     stop("Species mismatch in ddf models and species code definitions. Models not suppled for all species or models supplied for species not included in species code definitions.", call. = FALSE)
   #if there are no problems and definitions are provided for all species return the list unchanged
   }else if(length(species.code.definitions) == length(unique.codes)){
@@ -56,7 +75,7 @@ check.species.code.definitions <- function(species.code.definitions, species.nam
         species.code.definitions[[species.name[sp]]] <- c(species.name[sp])
       }      
     }
-    return(species.code.definitions)
+    return(list(unidentified = unidentified, species.code.definitions=species.code.definitions))
   } 
 }
 

@@ -22,7 +22,10 @@ check.covar.uncertainty <- function(covariate.uncertainty){
 #  returns the updated covariate.uncertainty dataframe
 #
 # Function Calls: none
-#                                      
+# 
+  if(is.null(covariate.uncertainty)){
+    return(NULL)
+  }                                   
   #Make sure these options are all characters
   for(i in c(1,2,4:7)){
     covariate.uncertainty[,i] <- as.character(covariate.uncertainty[,i])
@@ -33,6 +36,7 @@ check.covar.uncertainty <- function(covariate.uncertainty){
   #compare chosen values with those allowed
   compare <- covariate.uncertainty$sampling.distribution%in%c("Normal", "Normal.Absolute", "Lognormal.BC", "Poisson", "TruncPoisson.BC")
   if(length(which(!compare)) != 0){
+    process.warnings()
     stop(paste("An unsupported sampling distribution has been chosen for covariate uncertainty. Only one of the following may be specified: Normal, Normal.Absolute, Lognormal.BC, Poisson, TruncPoisson.BC",sep = ""))
   }
   

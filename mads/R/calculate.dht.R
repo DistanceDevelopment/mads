@@ -29,7 +29,7 @@ calculate.dht <- function(species.name, model.index, ddf.results, region.table, 
 # Value:
 #   list of dht objects
 # 
-# Function Calls: mrds::dht 
+# Function Calls: create.obs.table, mrds::dht 
 #                                      
   #run dht
   dht.results <- list()

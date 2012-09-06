@@ -74,6 +74,9 @@ check.ddf.models <- function(ddf.models, species.name, dist.names){
     }
   }
   
+  clusters <- FALSE
+  double.observer <- NULL
+  
   #RENAME MODELS IF DISTANCE NAMING CONVENTION WAS USED AND ONLY NUMBERS WERE PROVIDED
   if(dist.names){
     for(sp in seq(along = ddf.models)){     
@@ -83,6 +86,51 @@ check.ddf.models <- function(ddf.models, species.name, dist.names){
       }#next model
     }# next species
   }
+  #CHECK WHETHER IT IS A MR DOUBLE OBSERVER ANALYSIS
+  model.type <- NULL
+  counter <- 1
+  for(sp in seq(along = ddf.models)){     
+    #for every model
+    for(m in seq(along = ddf.models[[sp]])){
+      model.type[counter] <- get(ddf.models[[sp]][m])$method  
+      counter <- counter + 1
+    }#next model
+  }# next species
+  double.observer <- which(model.type%in%c("trial", "trial.fi", "io", "io.fi"))
+  ds <- which(model.type%in%c("ds"))
+  unsupported <- which(!model.type%in%c("trial", "trial.fi", "io", "io.fi", "ds"))
+  if(length(double.observer) == length(model.type)){
+    double.observer <- TRUE
+    #check all are trial or all are io
+    if(!(length(which(model.type%in%c("trial", "trial.fi"))) == length(model.type) | length(which(model.type%in%c("io", "io.fi"))) == length(model.type))){
+      process.warnings()
+      stop(paste("Models must either be all trial or all io, not a mixture.", sep = ""), call. = FALSE)
+    }
+  }else if(length(ds) == length(model.type)){
+    double.observer <- FALSE
+  }else if(length(double.observer) > 0 & length(ds) > 0){
+    process.warnings()
+    stop("Models must either be all mark-recapture (double observer) or all standard distance sampling models, not a mixture.", call. = FALSE)
+  }else{
+    process.warnings()
+    stop(paste("Unsupported model types have been selected: ",paste(model.type[unsupported], collapse = ", "), sep = ""), call. = FALSE)
+  } 
+  rm(model.type, counter, ds, unsupported)
+
+  #CHECK THAT MODELS FOR EACH SPECIES ARE UNIQUE
+  for(sp in seq(along = ddf.models)){
+    model.names <- ddf.models[[sp]]
+    for(m in seq(along = model.names)){
+      for(mcheck in seq(along = model.names)){
+        if(m == mcheck){
+          next
+        }else if(model.names[m] == model.names[mcheck]){
+          process.warnings()
+          stop(paste("The model names are not unique for species ",names(ddf.models)[sp],".", sep = ""), call. = FALSE)
+        }
+      }
+    }   
+  }
   #CHECK DATA MATCHES ACROSS DIFFERENT MODELS FOR THE SAME SPECIES
   for(sp in seq(along = ddf.models)){     
     for(m in seq(along = ddf.models[[sp]])){ 
@@ -90,17 +138,27 @@ check.ddf.models <- function(ddf.models, species.name, dist.names){
       ddf.data <- try(get(ddf.models[[sp]][m])$data, silent = TRUE)
       if(class(ddf.data)[1] == "try-error"){
         #ddf object doesn't exist
-        stop(paste("ddf object ",m," (analysis name ",ddf.models[[sp]][m],") for species code ",species.name[sp]," does not exist.",sep = ""))
+        process.warnings()
+        stop(paste("ddf object ",m," (analysis name ",ddf.models[[sp]][m],") for species code ",species.name[sp]," does not exist.",sep = ""), call. = FALSE)
       }else if(m == 1){
         #Get first dataset to compare all others too
         check.data <- ddf.data
-      }else {
-        #Compare subsequent datasets to first dataset     
-        if(is.same(check.data, ddf.data) != 0){
-          stop(paste("Datasets within species must contain the same data to ensure the model selection criteria are valid. The ",species.name[sp]," analyses ",ddf.models[[sp]][1]," and ",ddf.models[[sp]][m]," do not have the same sightings and/or associated distances", sep = ""))
-        }
+      }else if(is.same(check.data, ddf.data) != 0){
+        process.warnings()
+        stop(paste("Datasets within species must contain the same data to ensure the model selection criteria are valid. The ",species.name[sp]," analyses ",ddf.models[[sp]][1]," and ",ddf.models[[sp]][m]," do not have the same sightings and/or associated distances", sep = ""), call. = FALSE)
       }
     }#next model
+    #CHECK IF DATA CONTAINS CLUSTER SIZES "size" (either all must or all most not)
+    if("size"%in%names(ddf.data)){
+      if(sp > 1 & !clusters){
+        process.warnings()
+        stop("Cluster size must be present in all datasets within the ddf models or none.", call. = FALSE)
+      }
+      clusters <- TRUE
+    }else if(clusters){
+      process.warnings()
+      stop("Cluster size must be present in all datasets within the ddf models or none.", call. = FALSE)
+    }    
   }#next species
-  return(ddf.models)
+  return(list(ddf.models = ddf.models, clusters = clusters, double.observer = double.observer))
 }
