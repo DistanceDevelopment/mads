@@ -2,10 +2,12 @@
 \alias{truncated.poisson.table}
 \docType{data}
 \title{
-%%   ~~ data name/kind ... ~~
+Look up table for zero-truncated Poisson distribution
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of the dataset. ~~
+Gives the lambda values for the zero-truncated Poisson distribution which
+generate values with the specified mean. Used in the implementation of the
+bias corrected zero-truncated Poisson distribution.
 }
 \usage{data(truncated.poisson.table)}
 \format{
@@ -14,18 +16,5 @@
     \item{\code{mean}}{a numeric vector}
     \item{\code{lambda}}{a numeric vector}
   }
-}
-\details{
-%%  ~~ If necessary, more details than the __description__ above ~~
-}
-\source{
-%%  ~~ reference to a publication or URL from which the data were obtained ~~
-}
-\references{
-%%  ~~ possibly secondary sources and usages ~~
-}
-\examples{
-data(truncated.poisson.table)
-## maybe str(truncated.poisson.table) ; plot(truncated.poisson.table) ...
 }
 \keyword{datasets}
