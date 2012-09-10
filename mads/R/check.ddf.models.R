@@ -92,13 +92,24 @@ check.ddf.models <- function(ddf.models, species.name, dist.names){
   for(sp in seq(along = ddf.models)){     
     #for every model
     for(m in seq(along = ddf.models[[sp]])){
-      model.type[counter] <- get(ddf.models[[sp]][m])$method  
+      method <- try(get(ddf.models[[sp]][m])$method, silent = TRUE)
+      #CHECK MODEL EXISTS
+      if(class(method)[1] == "try-error"){
+        #ddf object doesn't exist
+        process.warnings()
+        stop(paste("ddf object ",m," (analysis name ",ddf.models[[sp]][m],") for species code ",species.name[sp]," does not exist.",sep = ""), call. = FALSE)
+      } 
+      model.type[counter] <- method 
       counter <- counter + 1
     }#next model
   }# next species
   double.observer <- which(model.type%in%c("trial", "trial.fi", "io", "io.fi"))
   ds <- which(model.type%in%c("ds"))
   unsupported <- which(!model.type%in%c("trial", "trial.fi", "io", "io.fi", "ds"))
+  if(length(unsupported) > 0){
+    process.warnings()
+    stop(paste("Unsupported model types have been selected: ",paste(model.type[unsupported], collapse = ", "), sep = ""), call. = FALSE)
+  }
   if(length(double.observer) == length(model.type)){
     double.observer <- TRUE
     #check all are trial or all are io
@@ -111,10 +122,7 @@ check.ddf.models <- function(ddf.models, species.name, dist.names){
   }else if(length(double.observer) > 0 & length(ds) > 0){
     process.warnings()
     stop("Models must either be all mark-recapture (double observer) or all standard distance sampling models, not a mixture.", call. = FALSE)
-  }else{
-    process.warnings()
-    stop(paste("Unsupported model types have been selected: ",paste(model.type[unsupported], collapse = ", "), sep = ""), call. = FALSE)
-  } 
+  }
   rm(model.type, counter, ds, unsupported)
 
   #CHECK THAT MODELS FOR EACH SPECIES ARE UNIQUE
@@ -135,12 +143,8 @@ check.ddf.models <- function(ddf.models, species.name, dist.names){
   for(sp in seq(along = ddf.models)){     
     for(m in seq(along = ddf.models[[sp]])){ 
       #check model exists 
-      ddf.data <- try(get(ddf.models[[sp]][m])$data, silent = TRUE)
-      if(class(ddf.data)[1] == "try-error"){
-        #ddf object doesn't exist
-        process.warnings()
-        stop(paste("ddf object ",m," (analysis name ",ddf.models[[sp]][m],") for species code ",species.name[sp]," does not exist.",sep = ""), call. = FALSE)
-      }else if(m == 1){
+      ddf.data <- get(ddf.models[[sp]][m])$data
+      if(m == 1){
         #Get first dataset to compare all others too
         check.data <- ddf.data
       }else if(is.same(check.data, ddf.data) != 0){

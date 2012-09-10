@@ -40,6 +40,18 @@ check.species.code.definitions <- function(species.code.definitions, species.nam
       stop(paste("No species codes specified for ",names(species.code.definitions)[i]," in the species code definitions list.", sep = ""), call. = FALSE) 
     }else if(length(species.code.definitions[[i]]) > 1){
       unidentified = TRUE
+      #check to see that unidentified codes are only being prorated to identified codes.
+      for(j in seq(along = species.code.definitions[[i]])){
+        if(species.code.definitions[[i]][j] == names(species.code.definitions)[i]){
+          process.warnings()
+          stop("Incorrect species code definition for species ",names(species.code.definitions)[i],". Unidentified code cannot be prorated to itself.", call. = FALSE)
+        }else if(species.code.definitions[[i]][j]%in%names(species.code.definitions)){   
+          if(length(species.code.definitions[[species.code.definitions[[i]][j]]]) > 1){
+            process.warnings()
+            stop("Incorrect species code definition for species ",names(species.code.definitions)[i],". An Unidentified code cannot be prorated to another unidentified code.", call. = FALSE)
+          }
+        }
+      } 
     }else if(length(species.code.definitions[[i]]) == 1 & species.code.definitions[[i]] != names(species.code.definitions)[i]){
       process.warnings()
       stop("Incorrect species code definition for species ",names(species.code.definitions)[i],". If only a single code is entered it must match the name of the list element.", call. = FALSE)      
@@ -58,7 +70,7 @@ check.species.code.definitions <- function(species.code.definitions, species.nam
   #check that there are not multiple definitions for the same species code
   if(length(species.code.definitions) != length(unique(definition.names))){
     process.warnings()
-    stop("Multiple species code entries in the species code definitions list", call. = FALSE)
+    stop("Multiple species code entries in the species code definitions list.", call. = FALSE)
   #check that the names of the ddf models correspond to the names in the species code definitions  
   }else if(is.na(compare.codes) | !is.na(compare.codes) & length(which(compare.codes)) == length(species.name)){
     process.warnings()

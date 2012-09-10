@@ -5,7 +5,7 @@
 #'  
 #' @param ddf.dat.working a list of datasets to be used in the analyses
 #' @param covariate.uncertainty a dataframe detailing the variables to be 
-#'   resampled - variable.layer, variable.name, correction.factor.layer,        #THIS FUNCTION NEEDS TO BE MODIFIED TO TAKE IN CORRECTION FACTOR LAYER TOO!
+#'   resampled - variable.layer, variable.name, correction.factor.layer,        
 #'   variable.correction.factor , uncertainty.layer, uncertainty.name, 
 #'   uncertainty.measure, sampling.distribution.
 #' @return list of dataframes containing the parametrically resampled data
@@ -15,7 +15,7 @@
 #'         
 resample.covariates <- function(ddf.dat.working, covariate.uncertainty){
 # adds uncertainty and/or applies correction factors to the specified covariates 
-# currently only implemented for covariates in the observation layer            #IMPLEMENT FOR OTHER DATA LAYERS
+# currently only implemented for covariates in the observation layer            
 #
 # Arguments:
 #   ddf.dat.working - a list of dataframes containing the datasets
@@ -43,26 +43,17 @@ resample.covariates <- function(ddf.dat.working, covariate.uncertainty){
       #check that both the observations and uncertainty exist
       if(is.null(observations) | is.null(uncertainty)){
         process.warnings()
-        stop("Invalid names for the covariates or associated uncertainty have been specified in the covariate uncertainty dataframe.")
+        stop("Invalid names for the covariates or associated uncertainty have been specified in the covariate uncertainty dataframe.", call. = FALSE)
       }
-                                                                                # what this varies across observer?
+                                                                                
       #Apply correction factor
-      observations <- observations*covariate.uncertainty$variable.correction.factor[covar]
-      
+      observations <- observations*covariate.uncertainty$variable.correction.factor[covar]        
     
       #Turn uncertainty measure into standard deviation
       error.sd <- switch(covariate.uncertainty$uncertainty.measure[covar],
         sd  = uncertainty,
         var = sqrt(uncertainty),
         CV  = uncertainty*observations)                                         #is this right or should it be uncertainty*mean(observation)?  
-            
-      #if(covariate.uncertainty$sampling.distribution[covar] == "Normal"){      #replace with switch statement
-      #  new.observations <- rnorm(length(observations), observations, error.sd)
-      #}else if(covariate.uncertainty$sampling.distribution[covar] == "Lognormal"){
-      #  new.observations <- exp(rnorm(length(observations), log(observations), error.sd) - ((error.sd*error.sd)/2))
-      #}else if(covariate.uncertainty$sampling.distribution[covar] == "Poisson"){
-      #  new.observations <- rpois(length(observations), observations)              #what happens when cluster sizes of zero are generated?
-      #}
       
       #Data pre-processing for the bias corrected truncated Poisson
       #if(as.character(covariate.uncertainty$sampling.distribution[covar]) == "Poisson.BC"){
@@ -101,7 +92,7 @@ resample.covariates <- function(ddf.dat.working, covariate.uncertainty){
       #if not replace the existing observations with the ones generated including error
       observation.check.less.0 <- which(new.observations < 0)
       observation.check.equal.0 <- which(new.observations == 0)
-      if(length(observation.check.less.0) > 0 & covariate.uncertainty$variable.name[covar] == "distance"){    #change this to stop it crashing on the 998th iteration
+      if(length(observation.check.less.0) > 0 & covariate.uncertainty$variable.name[covar] == "distance"){    
         mae.warning("Parametric resampling has generated distances less than zero", warning.mode="store")  
       }else if(length(observation.check.less.0) > 0 & covariate.uncertainty$variable.name[covar] == "size"){
         mae.warning("Parametric resampling has generated cluster sizes less than zero", warning.mode="store")
