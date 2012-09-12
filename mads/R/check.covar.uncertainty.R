@@ -40,15 +40,6 @@ check.covar.uncertainty <- function(covariate.uncertainty){
     stop(paste("An unsupported sampling distribution has been chosen for covariate uncertainty. Only one of the following may be specified: Normal, Normal.Absolute, Lognormal.BC, Poisson, TruncPoisson.BC",sep = ""), call. = FALSE)
   }
   
-  #Make sure variables exist in the dataframes.
-  #for(i in seq(along = covariate.uncertainty$variable.layer)){
-  #  if(is.null(observations) | is.null(uncertainty)){
-  #      process.warnings()
-  #      stop("Invalid names for the covariates or associated uncertainty have been specified in the covariate uncertainty dataframe.")
-  #    
-  #  }
-  #}
-  
   #vector of implemented sampling distributions
   #sampling.distributions <- c("Normal", "Normal.Absolute", "Lognormal.BC", "Poisson", "TruncPoisson.BC")
   
