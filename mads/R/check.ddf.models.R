@@ -97,7 +97,7 @@ check.ddf.models <- function(ddf.models, species.name, dist.names){
       if(class(method)[1] == "try-error"){
         #ddf object doesn't exist
         process.warnings()
-        stop(paste("ddf object ",m," (analysis name ",ddf.models[[sp]][m],") for species code ",species.name[sp]," does not exist.",sep = ""), call. = FALSE)
+        stop(paste("ddf object ",m,", analysis name ",ddf.models[[sp]][m],", for species code ",species.name[sp]," does not exist.",sep = ""), call. = FALSE)
       } 
       model.type[counter] <- method 
       counter <- counter + 1
@@ -121,7 +121,7 @@ check.ddf.models <- function(ddf.models, species.name, dist.names){
     double.observer <- FALSE
   }else if(length(double.observer) > 0 & length(ds) > 0){
     process.warnings()
-    stop("Models must either be all mark-recapture (double observer) or all standard distance sampling models, not a mixture.", call. = FALSE)
+    stop("Models must either be all double observer mark-recapture or all standard distance sampling models, not a mixture.", call. = FALSE)
   }
   rm(model.type, counter, ds, unsupported)
 

@@ -8,7 +8,7 @@
 #' @note Internal function not intended to be called by user.
 #' @author Laura Marshall
 #'
-format.dht.results <- function(dht.results, species.code){
+format.dht.results <- function(dht.results, species.name, clusters){
 # format.dht.results function to fromat the dht results
 #
 # Arguments:
@@ -26,17 +26,21 @@ format.dht.results <- function(dht.results, species.code){
   #create results object to store results in
   results <- list()
   #add all data for identified codes to results
-    for(id in seq(along = identified.codes)){
+  for(id in seq(along = identified.codes)){
     results[[identified.codes[id]]]$individual$summary <- dht.results[[identified.codes[id]]]$individuals$summary[,c("Region", "Area", "CoveredArea", "Effort", "n", "ER")]
     results[[identified.codes[id]]]$individual$N <- cbind(dht.results[[identified.codes[id]]]$individuals$N[,c("Label","Estimate","df")], PercentUnidentified = rep(0,nrow(dht.results[[identified.codes[id]]]$individuals$N)))
-    results[[identified.codes[id]]]$clusters$summary <- dht.results[[identified.codes[id]]]$clusters$summary[,c("Region", "Area", "CoveredArea", "Effort", "n", "k", "ER")]
-    results[[identified.codes[id]]]$clusters$N <- cbind(dht.results[[identified.codes[id]]]$clusters$N[,c("Label","Estimate","df")], PercentUnidentified = rep(0,nrow(dht.results[[identified.codes[id]]]$clusters$N)))
-    results[[identified.codes[id]]]$Expected.S <- dht.results[[identified.codes[id]]]$Expected.S[,c("Region", "Expected.S")]
+    if(clusters){
+      results[[identified.codes[id]]]$clusters$summary <- dht.results[[identified.codes[id]]]$clusters$summary[,c("Region", "Area", "CoveredArea", "Effort", "n", "k", "ER")]
+      results[[identified.codes[id]]]$clusters$N <- cbind(dht.results[[identified.codes[id]]]$clusters$N[,c("Label","Estimate","df")], PercentUnidentified = rep(0,nrow(dht.results[[identified.codes[id]]]$clusters$N)))
+      results[[identified.codes[id]]]$Expected.S <- dht.results[[identified.codes[id]]]$Expected.S[,c("Region", "Expected.S")]
+    }
   }
   #add in new cluster size col same as existing cluster size col
-  for(r in seq(along = results)){
-    results[[identified.codes[r]]]$Expected.S$new.Expected.S <- results[[identified.codes[r]]]$individual$N$Estimate/results[[identified.codes[r]]]$cluster$N$Estimate 
-  } 
+  if(clusters){
+    for(r in seq(along = results)){
+      results[[identified.codes[r]]]$Expected.S$new.Expected.S <- results[[identified.codes[r]]]$Expected.S$Expected.S 
+    }   
+  }
   #return results        
   return(results)
 }

@@ -56,10 +56,10 @@ fit.ddf.models <- function(ddf.dat.working, ddf.models, criterion, bootstrap.ddf
       #refit ddf model
       temp.results[[m]] <- try(eval(model.call))
       if(class(temp.results[[m]])[1] == "try-error"){
-        cat("Model did not converge for species ",species.name[sp]," model ",model.name, sep="", fill=TRUE)
+        #cat("Model did not converge for species ",species.name[sp]," model ",model.name, sep="", fill=TRUE)
         bootstrap.ddf.statistics[[species.name[sp]]]$convergence[2,model.name] <- bootstrap.ddf.statistics[[species.name[sp]]]$convergence[2,model.name] + 1
       }else if(check.convergence(temp.results[[m]])){
-        cat("Model converged for species ",species.name[sp]," model ",model.name, sep="", fill=TRUE)
+        #cat("Model converged for species ",species.name[sp]," model ",model.name, sep="", fill=TRUE)
         bootstrap.ddf.statistics[[species.name[sp]]]$convergence[1,model.name] <- bootstrap.ddf.statistics[[species.name[sp]]]$convergence[1,model.name] + 1
         #bootstrap.ddf.statistics[[species.name[sp]]][[model.name]]
         bootstrap.ddf.statistics <- store.param.ests(bootstrap.ddf.statistics, species.name[sp], model.name, temp.results[[m]], rep.no)

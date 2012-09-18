@@ -117,7 +117,7 @@
 #' obs<<-ETP.data$obs
 #' ddf.1=ddf(dsmodel = ~mcds(key = "hn", formula = ~1), data = egdata, method = "ds", meta.data = list(width = 4))
 #' 
-execute.multi.analysis <- function(region.table, sample.table, obs.table, bootstrap, bootstrap.options=list(), covariate.uncertainty = NULL, ddf.models, ddf.model.options=list(), species.code.definitions = NULL, species.presence = NULL, seed.array = NULL){
+execute.multi.analysis <- function(region.table, sample.table, obs.table, bootstrap, bootstrap.options=list(), covariate.uncertainty = NULL, ddf.models, ddf.model.options=list(), species.code.definitions = NULL, species.presence = NULL, seed.array = NULL, silent = FALSE){
 # 
 # execute.multi.analysis  - function for dealing with model uncertainty, covariate uncertainty and unidentified species in Distance Sampling
 #
@@ -142,7 +142,28 @@ execute.multi.analysis <- function(region.table, sample.table, obs.table, bootst
 #   check.species.code.definitions, get.datasets, resample.data, resample.covariates, 
 #   fit.ddf.models, calculate.dht, prorate.unidentified, process.warnings 
 
-
+  #load required libraries for ddf so they don't need to be reloaded with each ddf call
+  loaded <- library(BB, logical.return = TRUE)
+  if(!loaded & !silent){
+    cat("You do not have the BB library installed. It may speed up the analyses if you install it in your R libraries to avoid reloading on every bootstrap iteration.")
+  }
+  loaded <- library(ucminf, logical.return = TRUE)
+  if(!loaded & !silent){
+    cat("You do not have the ucminf library installed. It may speed up the analyses if you install it in your R libraries to avoid reloading on every bootstrap iteration.")
+  }
+  loaded <- library(Rcgmin, logical.return = TRUE)
+  if(!loaded & !silent){
+    cat("You do not have the Rcgmin library installed. It may speed up the analyses if you install it in your R libraries to avoid reloading on every bootstrap iteration.")
+  }
+  loaded <- library(Rvmmin, logical.return = TRUE)
+  if(!loaded & !silent){
+    cat("You do not have the Rvmmin library installed. It may speed up the analyses if you install it in your R libraries to avoid reloading on every bootstrap iteration.")
+  }
+  loaded <- library(minqa, logical.return = TRUE)
+  if(!loaded & !silent){
+    cat("You do not have the minqa library installed. It may speed up the analyses if you install it in your R libraries to avoid reloading on every bootstrap iteration.")
+  }
+  
   #create global variable to store error messages
   create.warning.storage()
   
@@ -157,6 +178,7 @@ execute.multi.analysis <- function(region.table, sample.table, obs.table, bootst
   species.code.definitions <- check.species.code.definitions(species.code.definitions, species.name)
   unidentified.species     <- species.code.definitions$unidentified
   species.code.definitions <- species.code.definitions$species.code.definitions
+  species.presence         <- check.species.presence(species.presence, species.name, strata.name = as.character(region.table$Region.Label))
   covariate.uncertainty    <- check.covar.uncertainty(covariate.uncertainty)
   
   #Make master copies of all the datasets

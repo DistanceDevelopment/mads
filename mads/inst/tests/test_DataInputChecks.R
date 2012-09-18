@@ -5,11 +5,10 @@ library(testthat)
 answer<-readline("\nWarning: running test_package creates global objects, 
                   \nit is therefore advised to only run this in a clean 
                   \nR workspace. Do you wish to continue? (y/n)? ")
-answer<-as.character(answer)
+answer<<-as.character(answer)
 if(answer == "y" | answer == "Y"){
 
-
-  context("Data input")
+  context("Data Input")
 
   test_that("Test data input checks", {
 
@@ -35,7 +34,7 @@ if(answer == "y" | answer == "Y"){
     ddf.8 <<- ddf.7
     class(ddf.8) <<- c("rem", "ddf") 
     ddf.9 <<- ddf.7
-    class(ddf.8) <<- c("glm")
+    class(ddf.9) <<- c("glm")
     ddf.10 <<- ddf.3
     ddf.10$data  <<- ddf.10$data[,-3]
     
@@ -60,7 +59,7 @@ if(answer == "y" | answer == "Y"){
                  bootstrap.options, covariate.uncertainty=covariate.uncertainty, 
                  ddf.models, ddf.model.options = ddf.model.options, 
                  species.code.definitions, species.presence),
-             throws_error("Error : The model names are not unique for species CD."))
+             throws_error("The model names are not unique for species CD."))
     # check that there is an error when ds models are mixed with io/trial
     ddf.models               <- list("CD"=c(1,4), "WD"=c(1,2), "UnidDol"=c(1,2))
     expect_that(results <- execute.multi.analysis(region.table=region.table, 
@@ -68,7 +67,7 @@ if(answer == "y" | answer == "Y"){
                  bootstrap.options, covariate.uncertainty=covariate.uncertainty, 
                  ddf.models, ddf.model.options = ddf.model.options, 
                  species.code.definitions, species.presence),
-             throws_error())#"Error : Models must either be all mark-recapture (double observer) or all standard distance sampling models, not a mixture."))
+             throws_error("Models must either be all double observer mark-recapture or all standard distance sampling models, not a mixture."))
     # check that there is an error when io models are mixed with trial
     ddf.models               <- list("CD"=c(4,5), "WD"=c(4,5), "UnidDol"=c(4,7))
     expect_that(results <- execute.multi.analysis(region.table=region.table, 
@@ -76,7 +75,7 @@ if(answer == "y" | answer == "Y"){
                  bootstrap.options, covariate.uncertainty=covariate.uncertainty, 
                  ddf.models, ddf.model.options = ddf.model.options, 
                  species.code.definitions, species.presence),
-             throws_error("Error : Models must either be all trial or all io, not a mixture."))
+             throws_error("Models must either be all trial or all io, not a mixture."))
     # check that there is an error when models don't exists
     ddf.models               <- list("CD"=c(100,5), "WD"=c(4,5), "UnidDol"=c(4,5))
     expect_that(results <- execute.multi.analysis(region.table=region.table, 
@@ -84,7 +83,7 @@ if(answer == "y" | answer == "Y"){
                  bootstrap.options, covariate.uncertainty=covariate.uncertainty, 
                  ddf.models, ddf.model.options = ddf.model.options, 
                  species.code.definitions, species.presence),
-             throws_error())#"Error : ddf object 1 (analysis name ddf.100) for species code CD does not exist."))
+             throws_error("ddf object 1, analysis name ddf.100, for species code CD does not exist."))
     # check that there is an error when some models contain data with cluster size and some contain data withough cluster size
     ddf.models               <- list("CD"=c(2,3), "WD"=c(2,3), "UnidDol"=c(2,10))
     expect_that(results <- execute.multi.analysis(region.table=region.table, 
@@ -92,7 +91,7 @@ if(answer == "y" | answer == "Y"){
                  bootstrap.options, covariate.uncertainty=covariate.uncertainty, 
                  ddf.models, ddf.model.options = ddf.model.options, 
                  species.code.definitions, species.presence),
-             throws_error("Error : Cluster size must be present in all datasets within the ddf models or none."))  
+             throws_error("Cluster size must be present in all datasets within the ddf models or none."))  
              
     #~~~~~~~~~~~~~~~~ TEST check.species.code.definitions(...) ~~~~~~~~~~~~~~~~~~~
     
@@ -103,28 +102,28 @@ if(answer == "y" | answer == "Y"){
                  bootstrap.options, covariate.uncertainty=covariate.uncertainty, 
                  ddf.models, ddf.model.options = ddf.model.options, 
                  species.code.definitions, species.presence),
-             throws_error("Error : No species codes specified for CD in the species code definitions list."))
+             throws_error("No species codes specified for CD in the species code definitions list."))
     species.code.definitions <- list("UnidDol"=c("CD","WD"), "CP"="CP")
     expect_that(results <- execute.multi.analysis(region.table=region.table, 
                  sample.table=sample.table, obs.table=obs.table, bootstrap, 
                  bootstrap.options, covariate.uncertainty=covariate.uncertainty, 
                  ddf.models, ddf.model.options = ddf.model.options, 
                  species.code.definitions, species.presence),
-             throws_error("Error : Species mismatch in ddf models and species code definitions. Models not suppled for all species or models supplied for species not included in species code definitions."))
+             throws_error("Species mismatch in ddf models and species code definitions. Models not suppled for all species or models supplied for species not included in species code definitions."))
     species.code.definitions <- list("UnidDol"=c("CD","WD"), "CD"="WD")
     expect_that(results <- execute.multi.analysis(region.table=region.table, 
                  sample.table=sample.table, obs.table=obs.table, bootstrap, 
                  bootstrap.options, covariate.uncertainty=covariate.uncertainty, 
                  ddf.models, ddf.model.options = ddf.model.options, 
                  species.code.definitions, species.presence),
-             throws_error("Error : Incorrect species code definition for species CD. If only a single code is entered it must match the name of the list element."))
+             throws_error("Incorrect species code definition for species CD. If only a single code is entered it must match the name of the list element."))
     species.code.definitions <- list("UnidDol"=c("UnidDol","CD","WD"))
     expect_that(results <- execute.multi.analysis(region.table=region.table, 
                  sample.table=sample.table, obs.table=obs.table, bootstrap, 
                  bootstrap.options, covariate.uncertainty=covariate.uncertainty, 
                  ddf.models, ddf.model.options = ddf.model.options, 
                  species.code.definitions, species.presence),
-             throws_error("Error : Incorrect species code definition for species UnidDol. Unidentified code cannot be prorated to itself."))
+             throws_error("Incorrect species code definition for species UnidDol. Unidentified code cannot be prorated to itself."))
     species.code.definitions <- list("UnidDol"=c("CD","WD"), "UnidDel" = c("CD", "WD", "UnidDol"))
     ddf.models               <- list("CD"=c(1,2), "WD"=c(1,2), "UnidDol"=c(1,2), "UnidDel"=c(1,2))
     expect_that(results <- execute.multi.analysis(region.table=region.table, 
@@ -132,7 +131,7 @@ if(answer == "y" | answer == "Y"){
                  bootstrap.options, covariate.uncertainty=covariate.uncertainty, 
                  ddf.models, ddf.model.options = ddf.model.options, 
                  species.code.definitions, species.presence),
-             throws_error("Error : Incorrect species code definition for species UnidDel. An Unidentified code cannot be prorated to another unidentified code."))
+             throws_error("Incorrect species code definition for species UnidDel. An Unidentified code cannot be prorated to another unidentified code."))
     species.code.definitions <- list("UnidDol"=c("CD","WD"), "UnidDol"=c("CD","HP"))
     ddf.models               <- list("CD"=c(1,2), "WD"=c(1,2), "UnidDol"=c(1,2))
     expect_that(results <- execute.multi.analysis(region.table=region.table, 
@@ -140,7 +139,7 @@ if(answer == "y" | answer == "Y"){
                  bootstrap.options, covariate.uncertainty=covariate.uncertainty, 
                  ddf.models, ddf.model.options = ddf.model.options, 
                  species.code.definitions, species.presence),
-             throws_error("Error : Multiple species code entries in the species code definitions list."))
+             throws_error("Multiple species code entries in the species code definitions list."))
     species.code.definitions <- list("UnidDol"=c("CD","WD"))
     ddf.models               <- list("CD"=c(1,2), "WD"=c(1,2), "UnidDol"=c(1,2), "HP"=c(1,2))
     expect_that(results <- execute.multi.analysis(region.table=region.table, 
@@ -148,7 +147,7 @@ if(answer == "y" | answer == "Y"){
                  bootstrap.options, covariate.uncertainty=covariate.uncertainty, 
                  ddf.models, ddf.model.options = ddf.model.options, 
                  species.code.definitions, species.presence),
-             throws_error("Error : Species mismatch in ddf models and species code definitions. Models not suppled for all species or models supplied for species not included in species code definitions."))
+             throws_error("Species mismatch in ddf models and species code definitions. Models not suppled for all species or models supplied for species not included in species code definitions."))
     
     #~~~~~~~~~~~~~~~~~~~ TEST check.covar.uncertainty(...) ~~~~~~~~~~~~~~~~~~~~~~~
     
@@ -159,7 +158,7 @@ if(answer == "y" | answer == "Y"){
                  bootstrap.options, covariate.uncertainty=covariate.uncertainty, 
                  ddf.models, ddf.model.options = ddf.model.options, 
                  species.code.definitions, species.presence),
-             throws_error("Error : An unsupported sampling distribution has been chosen for covariate uncertainty. Only one of the following may be specified: Normal, Normal.Absolute, Lognormal.BC, Poisson, TruncPoisson.BC"))
+             throws_error("An unsupported sampling distribution has been chosen for covariate uncertainty. Only one of the following may be specified: Normal, Normal.Absolute, Lognormal.BC, Poisson, TruncPoisson.BC"))
     covariate.uncertainty = data.frame(variable.layer = c("observation"), variable.name = c("scaledtotsize"), variable.correction.factor = c(1), uncertainty.layer = c("observation"), uncertainty.name = c("totsizecv"), uncertainty.measure = c("CV"), sampling.distribution = c("Normal"))
     
     expect_that(results <- execute.multi.analysis(region.table=region.table, 
@@ -167,6 +166,7 @@ if(answer == "y" | answer == "Y"){
                  bootstrap.options, covariate.uncertainty=covariate.uncertainty, 
                  ddf.models, ddf.model.options = ddf.model.options, 
                  species.code.definitions, species.presence),
-             throws_error("Error : Invalid names for the covariates or associated uncertainty have been specified in the covariate uncertainty dataframe.")) 
+             throws_error("Invalid names for the covariates or associated uncertainty have been specified in the covariate uncertainty dataframe.")) 
   })
+  rm(ddf.1, ddf.2, ddf.3, ddf.4, ddf.5, ddf.6, ddf.7, ddf.8, ddf.9, ddf.10, pos = 1)
 }

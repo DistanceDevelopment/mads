@@ -76,8 +76,9 @@ check.species.code.definitions <- function(species.code.definitions, species.nam
     process.warnings()
     stop("Species mismatch in ddf models and species code definitions. Models not suppled for all species or models supplied for species not included in species code definitions.", call. = FALSE)
   #if there are no problems and definitions are provided for all species return the list unchanged
-  }else if(length(species.code.definitions) == length(unique.codes)){
-    return(species.code.definitions) 
+  }
+  if(length(species.code.definitions) == length(unique.codes)){
+    return(list(unidentified = unidentified, species.code.definitions = species.code.definitions)) 
   #if there are missing definitions add them in assuming they are identified categories
   }else {     
     for(sp in seq(along = species.name)){
@@ -87,7 +88,7 @@ check.species.code.definitions <- function(species.code.definitions, species.nam
         species.code.definitions[[species.name[sp]]] <- c(species.name[sp])
       }      
     }
-    return(list(unidentified = unidentified, species.code.definitions=species.code.definitions))
+    return(list(unidentified = unidentified, species.code.definitions = species.code.definitions))
   } 
 }
 
