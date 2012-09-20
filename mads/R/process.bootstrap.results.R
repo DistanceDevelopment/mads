@@ -140,6 +140,7 @@ process.bootstrap.results <- function(bootstrap.results, model.index, clusters, 
           if(length(param.data) > 0){
             summary.element$ddf[[model.names[m]]]$ds.params <- matrix(param.data, ncol = 1, dimnames = list(1:length(param.data), param.name))
           }else{
+            summary.element$ddf[[model.names[m]]]$model.description <- bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]]$model.description
             next
           }
         }
@@ -153,12 +154,14 @@ process.bootstrap.results <- function(bootstrap.results, model.index, clusters, 
           if(length(param.data) > 0){
             summary.element$ddf[[model.names[m]]]$mr.params <- matrix(param.data, ncol = 1, dimnames = list(1:length(param.data), param.name))
           }else{
+            summary.element$ddf[[model.names[m]]]$model.description <- bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]]$model.description
             next
           }
         }
       }
       criteria <- names(bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]])[2]
       summary.element$ddf[[model.names[m]]][[criteria]] <- bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]][[criteria]][bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]]$selected == 1] 
+      summary.element$ddf[[model.names[m]]]$model.description <- bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]]$model.description
     }
     #add summary element to results list
     results.summary[[species.names[sp]]] <- summary.element     

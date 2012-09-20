@@ -8,41 +8,42 @@
 #' to models as these have now been reduced to unique model combinations only.
 #'  
 #' @param species.name a character vector of species codes
-#' @param ddf.models a list of character vectors of model names 
+#' @param model.names a list of character vectors of model names 
 #'   with the elements named by species code
 #' @return list with the following elements:
-#'   unique.ddf.models - a list of unique model combinations
+#'   unique.model.names - a list of unique model combinations
 #'   ddf.dat.master - a list of dataframes containing the data used to fit
-#'     the unique models combinations defined in unique.ddf.models
+#'     the unique models combinations defined in unique.model.names
 #'   model.index - named character vector indicating which model is to be used
 #'     for each species.                                                                       
 #' @note Internal function not intended to be called by user.
 #' @author Laura Marshall
 #' @keywords data preparation
 #'
-get.datasets <- function(species.name, ddf.models){
+get.datasets <- function(model.names, ddf.models){
 # get.datasets function to extract unique models and corresponding data and provide the
 # required look up table for those models used for more than one species.
 #
 # Arguments:
 #   species.name a character vector of species codes
-#   ddf.models a list of character vectors of model names for all species codes
+#   model.names a list of character vectors of model names for all species codes
 #
 # Value: list containing the following elements
-#   unique.ddf.models a list of unique character vectors of model names 
-#   ddf.dat.master a list of dataframes containing the data used to fit the models named in unique.ddf.models
+#   unique.model.names a list of unique character vectors of model names 
+#   ddf.dat.master a list of dataframes containing the data used to fit the models named in unique.model.names
 #   model.index look up table in the form of a named character vector
 #
 # Function Calls: none
 #
+  species.name <- names(model.names)
   model.id <- species.name[1]
   unique.ddf.models <- list()
   #Add the models for the first species as they must be unique
-  unique.ddf.models[[species.name[1]]] <- sort(ddf.models[[species.name[1]]]) 
+  unique.ddf.models[[species.name[1]]] <- sort(model.names[[species.name[1]]]) 
   #For each species code (except the first)
   for(sp in seq(along = species.name)[-1]){
     #find mode names for new species code
-    current.model.names <- sort(ddf.models[[species.name[sp]]])  
+    current.model.names <- sort(model.names[[species.name[sp]]])  
     #set up a boolean flag to check if the models are already in the unique.ddf.models list 
     exist <- FALSE
     for(uniq in seq(along = unique.ddf.models)){
@@ -67,7 +68,7 @@ get.datasets <- function(species.name, ddf.models){
       model.id[sp] <- common.species
     }else{
       #Otherwise add them to unique.ddf.models
-      unique.ddf.models[[species.name[sp]]] <- sort(ddf.models[[species.name[sp]]]) 
+      unique.ddf.models[[species.name[sp]]] <- sort(model.names[[species.name[sp]]]) 
       #Update model.id
       model.id[sp] <- species.name[sp]  
     }
@@ -78,7 +79,7 @@ get.datasets <- function(species.name, ddf.models){
   unique.ddf.model.names <- names(unique.ddf.models)
   for(sp in seq(along = unique.ddf.model.names)){
     #Only take the first model as all models have the same data [checked above]
-    ddf.dat.master[[unique.ddf.model.names[sp]]] <- get(unique.ddf.models[[sp]])$data  
+    ddf.dat.master[[unique.ddf.model.names[sp]]] <- ddf.models[[unique.ddf.models[[sp]][1]]]$data  
   } 
-  return(list(ddf.dat.master = ddf.dat.master, unique.ddf.models = unique.ddf.models, model.index = model.id))
+  return(list(ddf.dat.master = ddf.dat.master, unique.model.names = unique.ddf.models, model.index = model.id))
 }

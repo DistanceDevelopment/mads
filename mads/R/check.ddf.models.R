@@ -20,18 +20,18 @@
 #' @keywords input validation, data validation
 #'
 
-check.ddf.models <- function(ddf.models, species.name, dist.names){             
+check.ddf.models <- function(model.names, ddf.models){             
 # 
 # check.ddf.models - Performs various checks on the model names supplied by the user
 #
 # Arguments:
 #
-#  ddf.models   - a list of vectors specifying the model names for each species code
+#  model.names   - a list of vectors specifying the model names for each species code
 #  species.name - a vector of species names 
 #  dist.names   -   
 #
 # Value: updated list of vectors of model names if only numbers were supplied
-#   otherwise ddf.models is returned unchanged.
+#   otherwise model.names is returned unchanged.
 # 
 # Function calls: 
 #   is.same - local function to compare two datasets to see if they match
@@ -74,30 +74,25 @@ check.ddf.models <- function(ddf.models, species.name, dist.names){
     }
   }
   
+
+  species.name <- names(model.names)
   clusters <- FALSE
   double.observer <- NULL
   
-  #RENAME MODELS IF DISTANCE NAMING CONVENTION WAS USED AND ONLY NUMBERS WERE PROVIDED
-  if(dist.names){
-    for(sp in seq(along = ddf.models)){     
-      #for every model
-      for(m in seq(along = ddf.models[[sp]])){ 
-        ddf.models[[sp]][m] <- paste("ddf.",ddf.models[[sp]][m],sep="")
-      }#next model
-    }# next species
-  }
-  #CHECK WHETHER IT IS A MR DOUBLE OBSERVER ANALYSIS
+  #CHECK WHETHER ALL MODELS ARE PROVIDED AND IF IT IS A MR DOUBLE OBSERVER ANALYSIS 
   model.type <- NULL
   counter <- 1
-  for(sp in seq(along = ddf.models)){     
+  for(sp in seq(along = model.names)){     
     #for every model
-    for(m in seq(along = ddf.models[[sp]])){
-      method <- try(get(ddf.models[[sp]][m])$method, silent = TRUE)
+    for(m in seq(along = model.names[[sp]])){
+      #method <- try(ddf.models[[model.names[[sp]][m]]]$method, silent = TRUE)
+      method <- ddf.models[[model.names[[sp]][m]]]$method
       #CHECK MODEL EXISTS
-      if(class(method)[1] == "try-error"){
+      #if(class(method)[1] == "try-error"){
+      if(is.null(method)){
         #ddf object doesn't exist
         process.warnings()
-        stop(paste("ddf object ",m,", analysis name ",ddf.models[[sp]][m],", for species code ",species.name[sp]," does not exist.",sep = ""), call. = FALSE)
+        stop(paste("ddf object ",m,", analysis name ",model.names[[sp]][m],", for species code ",species.name[sp]," has not been provided.",sep = ""), call. = FALSE)
       } 
       model.type[counter] <- method 
       counter <- counter + 1
@@ -126,30 +121,30 @@ check.ddf.models <- function(ddf.models, species.name, dist.names){
   rm(model.type, counter, ds, unsupported)
 
   #CHECK THAT MODELS FOR EACH SPECIES ARE UNIQUE
-  for(sp in seq(along = ddf.models)){
-    model.names <- ddf.models[[sp]]
-    for(m in seq(along = model.names)){
-      for(mcheck in seq(along = model.names)){
+  for(sp in seq(along = model.names)){
+    assoc.model.names <- model.names[[sp]]
+    for(m in seq(along = assoc.model.names)){
+      for(mcheck in seq(along = assoc.model.names)){
         if(m == mcheck){
           next
-        }else if(model.names[m] == model.names[mcheck]){
+        }else if(assoc.model.names[m] == assoc.model.names[mcheck]){
           process.warnings()
-          stop(paste("The model names are not unique for species ",names(ddf.models)[sp],".", sep = ""), call. = FALSE)
+          stop(paste("The model names are not unique for species ",names(model.names)[sp],".", sep = ""), call. = FALSE)
         }
-      }
-    }   
-  }
+      }#next model for checking
+    }#next model   
+  }#next species
   #CHECK DATA MATCHES ACROSS DIFFERENT MODELS FOR THE SAME SPECIES
-  for(sp in seq(along = ddf.models)){     
-    for(m in seq(along = ddf.models[[sp]])){ 
+  for(sp in seq(along = model.names)){     
+    for(m in seq(along = model.names[[sp]])){ 
       #check model exists 
-      ddf.data <- get(ddf.models[[sp]][m])$data
+      ddf.data <- ddf.models[[model.names[[sp]][m]]]$data
       if(m == 1){
         #Get first dataset to compare all others too
         check.data <- ddf.data
       }else if(is.same(check.data, ddf.data) != 0){
         process.warnings()
-        stop(paste("Datasets within species must contain the same data to ensure the model selection criteria are valid. The ",species.name[sp]," analyses ",ddf.models[[sp]][1]," and ",ddf.models[[sp]][m]," do not have the same sightings and/or associated distances", sep = ""), call. = FALSE)
+        stop(paste("Datasets within species must contain the same data to ensure the model selection criteria are valid. The ",species.name[sp]," analyses ",model.names[[sp]][1]," and ",model.names[[sp]][m]," do not have the same sightings and/or associated distances", sep = ""), call. = FALSE)
       }
     }#next model
     #CHECK IF DATA CONTAINS CLUSTER SIZES "size" (either all must or all most not)
@@ -164,5 +159,5 @@ check.ddf.models <- function(ddf.models, species.name, dist.names){
       stop("Cluster size must be present in all datasets within the ddf models or none.", call. = FALSE)
     }    
   }#next species
-  return(list(ddf.models = ddf.models, clusters = clusters, double.observer = double.observer))
+  return(list(clusters = clusters, double.observer = double.observer))
 }

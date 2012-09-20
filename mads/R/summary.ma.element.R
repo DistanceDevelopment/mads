@@ -50,7 +50,8 @@ summary.ma.element <- function (x,species=NULL,...){
   for(m in seq(along = model.names)){
     cat("\nModel name: ", model.names[m], "\n")
     cat("\nDetection function:\n")
-    print(model.description(get(model.names[m])))
+    #print(model.description(get(model.names[m])))
+    cat(x$ddf[[model.names[m]]]$model.description)
     cat("\n")
     selected <- FALSE
     if(!is.null(x$ddf[[model.names[m]]]$ds.param)){

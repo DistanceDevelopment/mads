@@ -83,8 +83,7 @@
 #'   parametrically resample data or NULL if not required
 #' @param ddf.models a list of character/numeric vectors of model names/suffixes 
 #'   with the elements named by species code
-#' @param ddf.model.options a list of options 1) if true numeric vectors in 
-#'   ddf.models are suffixes (see details) 2) selection.criterion either "AIC",
+#' @param ddf.model.options a list of options 1) selection.criterion either "AIC",
 #'   "AICc" or "BIC"
 #' @param species.code.definitions  a list with an element for each 
 #'   unidentified code which contains a vector of corresponding identified 
@@ -117,7 +116,7 @@
 #' obs<<-ETP.data$obs
 #' ddf.1=ddf(dsmodel = ~mcds(key = "hn", formula = ~1), data = egdata, method = "ds", meta.data = list(width = 4))
 #' 
-execute.multi.analysis <- function(region.table, sample.table, obs.table, bootstrap, bootstrap.options=list(), covariate.uncertainty = NULL, ddf.models, ddf.model.options=list(), species.code.definitions = NULL, species.presence = NULL, seed.array = NULL, silent = FALSE){
+execute.multi.analysis <- function(region.table, sample.table, obs.table, bootstrap, bootstrap.options=list(resample="samples", n=1), covariate.uncertainty = NULL, ddf.models, model.names, ddf.model.options=list(criterion="AIC"), species.code.definitions = NULL, species.presence = NULL, seed.array = NULL, silent = FALSE){
 # 
 # execute.multi.analysis  - function for dealing with model uncertainty, covariate uncertainty and unidentified species in Distance Sampling
 #
@@ -168,13 +167,12 @@ execute.multi.analysis <- function(region.table, sample.table, obs.table, bootst
   create.warning.storage()
   
   #set up a vector of species names
-  species.name <- names(ddf.models)
+  species.name <- names(model.names)
     
   #input checks
-  ddf.models               <- check.ddf.models(ddf.models, species.name, ddf.model.options$distance.naming.conv)
-  clusters                 <- ddf.models$clusters
-  double.observer          <- ddf.models$double.observer
-  ddf.models               <- ddf.models$ddf.models
+  ddf.model.info           <- check.ddf.models(model.names, ddf.models)
+  clusters                 <- ddf.model.info$clusters
+  double.observer          <- ddf.model.info$double.observer
   species.code.definitions <- check.species.code.definitions(species.code.definitions, species.name)
   unidentified.species     <- species.code.definitions$unidentified
   species.code.definitions <- species.code.definitions$species.code.definitions
@@ -182,8 +180,8 @@ execute.multi.analysis <- function(region.table, sample.table, obs.table, bootst
   covariate.uncertainty    <- check.covar.uncertainty(covariate.uncertainty)
   
   #Make master copies of all the datasets
-  ddf.dat.master      <- get.datasets(species.name, ddf.models)
-  unique.ddf.models   <- ddf.dat.master$unique.ddf.models
+  ddf.dat.master      <- get.datasets(model.names, ddf.models)
+  unique.model.names  <- ddf.dat.master$unique.model.names
   model.index         <- ddf.dat.master$model.index
   ddf.dat.master      <- ddf.dat.master$ddf.dat.master
   obs.table.master    <- obs.table
@@ -191,7 +189,7 @@ execute.multi.analysis <- function(region.table, sample.table, obs.table, bootst
   
   #Create storage for results (only for the species codes not the unidentified codes)
   bootstrap.results <- create.result.arrays(species.name, species.code.definitions, region.table, clusters, bootstrap.options$n)
-  bootstrap.ddf.statistics <- create.param.arrays(unique.ddf.models, bootstrap.options$n, ddf.model.options$criterion)
+  bootstrap.ddf.statistics <- create.param.arrays(unique.model.names, ddf.models, bootstrap.options$n, ddf.model.options$criterion)
      
   #Set up a loop
   for(n in 1:bootstrap.options$n){
@@ -217,7 +215,7 @@ execute.multi.analysis <- function(region.table, sample.table, obs.table, bootst
            
       #Fit ddf models to all species codes
       #if(double.observer){
-      ddf.results <- fit.ddf.models(ddf.dat.working, ddf.models, ddf.model.options$criterion, bootstrap.ddf.statistics, n)
+        ddf.results <- fit.ddf.models(ddf.dat.working, unique.model.names, ddf.models, ddf.model.options$criterion, bootstrap.ddf.statistics, n)
       #}else{
       #  ddf.results <- fit.ds.models(ddf.dat.working, ddf.models, ddf.model.options$criterion, bootstrap.ddf.statistics, n)
       #}
