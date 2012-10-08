@@ -1,6 +1,6 @@
-\name{summary.ma.element}
+\name{summary.ma.species}
 \alias{print.summary.ma}
-\alias{summary.ma.element}
+\alias{summary.ma.species}
 \title{Print a summary of an element of a multi-analysis result correcponding to
 a single species included in the analyses.}
 \usage{

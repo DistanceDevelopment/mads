@@ -246,15 +246,21 @@ execute.multi.analysis <- function(region.table, sample.table, obs.table, bootst
   }#next iteration 
   
   #process results
-  results <- process.bootstrap.results(bootstrap.results, model.index, clusters, bootstrap.ddf.statistics, bootstrap.options$quantile.type)                                                                                                                                         
+  results <- process.bootstrap.results(bootstrap.results, model.index, clusters, bootstrap.ddf.statistics, bootstrap.options$quantile.type, analysis.options = list(bootstrap = bootstrap, n = bootstrap.options$n, covariate.uncertainty = covariate.uncertainty, clusters = clusters, double.observer = double.observer, unidentified.species = unidentified.species, species.code.definitions = species.code.definitions, model.names = model.names))                                                                                                                                         
   #process warning messages
   process.warnings(MAE.warnings)  
                      
   #return results
   class(results) <- "ma"
-  for(sp in seq(along = results)){
-    class(results[[sp]]) <- "ma.element"
+  class(results$analysis.options) <- "ma.analysis"
+  class(results$species) <- "ma.allspecies"
+  for(sp in seq(along = results$species)){
+    class(results$species[[sp]]) <- "ma.species"
   }
+  if(!is.null(results$unidentified)){
+    class(results$unidentified) <- "ma.unid"
+  }
+
   return(results)    
 }
 

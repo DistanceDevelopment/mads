@@ -14,20 +14,12 @@
 #'   \code{ma} object.  
 #' @author Laura Marshall
 #' @keywords utility
-summary.ma <- function(object, glossary = FALSE, ...){
-  if(glossary){
-    #summary description
-    cat("\nGlossary")
-    cat("\n~~~~~~~~")    
-  }
-  cat("\nMulti-Analysis Summary \n")
-  for(ele in seq(along = object)){
-    summary(object[[ele]])
-  } 
-  #species.name <- names(object)   
-  #summary(object$analysis.options)
-  #for(sp in seq(along = species.name)[-1]){
-  #  summary(object[[sp]], species = species.name[sp])
-  #}     
+summary.ma.allspecies <- function(object,...){
+  cat("\nSpecies Results")
+  cat("\n~~~~~~~~~~~~~~~\n")
+  species.name <- names(object)   
+  for(sp in seq(along = species.name)){
+    summary(object[[sp]], species = species.name[sp])
+  }     
   invisible(object)
 }

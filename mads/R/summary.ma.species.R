@@ -16,7 +16,7 @@
 #' @seealso \code{\link{summary.ma}}
 #' @keywords utility
 
-summary.ma.element <- function (x,species=NULL,...){
+summary.ma.species <- function (x,species=NULL,...){
 
   print.tables <- function(x){
     cat("\nBootstrap summary statistics:\n")
@@ -64,7 +64,7 @@ summary.ma.element <- function (x,species=NULL,...){
       }else if(class(x$ddf[[model.names[m]]]$ds.param) == "numeric"){
         param.estimates <- x$ddf[[model.names[m]]]$ds.param
         param.se <- rep(NA, length(x$ddf[[model.names[m]]]$ds.param))
-        print(array(c(param.estimates, param.se), dim=c(length(param.estimates),2), names=list(dimnames(x$ddf[[model.names[m]]]$ds.param)[[2]], c("Estimate", "se"))))
+        print(array(c(param.estimates, param.se), dim=c(length(param.estimates),2), dimnames=list(names(x$ddf[[model.names[m]]]$ds.param), c("Estimate", "se"))))
       }else{
         cat("\nModel never selected\n")
         selected <- FALSE
@@ -79,7 +79,7 @@ summary.ma.element <- function (x,species=NULL,...){
       }else if(class(x$ddf[[model.names[m]]]$mr.param) == "numeric"){
         param.estimates <- x$ddf[[model.names[m]]]$mr.param
         param.se <- rep(NA, length(x$ddf[[model.names[m]]]$mr.param))
-        print(array(c(param.estimates, param.se), dim=c(length(param.estimates),2), names=list(dimnames(x$ddf[[model.names[m]]]$mr.param)[[2]], c("Estimate", "se"))))
+        print(array(c(param.estimates, param.se), dim=c(length(param.estimates),2), dimnames=list(names(x$ddf[[model.names[m]]]$mr.param), c("Estimate", "se"))))
       }else{
         cat("\nModel never selected\n")
         selected <- FALSE

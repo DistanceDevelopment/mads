@@ -11,7 +11,7 @@
 #' @note Internal functions not intended to be called by user.
 #' @author Laura Marshall
 #'
-process.bootstrap.results <- function(bootstrap.results, model.index, clusters, bootstrap.ddf.statistics, quantile.type){
+process.bootstrap.results <- function(bootstrap.results, model.index, clusters, bootstrap.ddf.statistics, quantile.type, analysis.options = list(bootstrap, n, covariate.uncertainty, clusters, double.observer, unidentified.species, species.code.definitions, model.names)){
 #process.bootstrap.results function to summarise bootstrap results
 #
 # Arguments:
@@ -25,7 +25,16 @@ process.bootstrap.results <- function(bootstrap.results, model.index, clusters, 
   #set up data storage for results
   results.summary <- list()
   quantile.type = as.numeric(quantile.type)
-  #quantile.type = 7
+
+  #add the analysis options to the result summary
+  results.summary$analysis.options$bootstrap = analysis.options$bootstrap
+  results.summary$analysis.options$n = analysis.options$n
+  results.summary$analysis.options$covariate.uncertainty = analysis.options$covariate.uncertainty
+  results.summary$analysis.options$clusters = analysis.options$clusters
+  results.summary$analysis.options$double.observer = analysis.options$double.observer
+  results.summary$analysis.options$unidentified.species = analysis.options$unidentified.species
+  results.summary$analysis.options$species.code.definitions = analysis.options$species.code.definitions
+  results.summary$analysis.options$model.names = analysis.options$model.names
   
   #gather, array names, species.names, strata names, and number of strata       
   species.names <- dimnames(bootstrap.results[[1]])[[4]]
@@ -166,8 +175,9 @@ process.bootstrap.results <- function(bootstrap.results, model.index, clusters, 
       summary.element$ddf[[model.names[m]]]$model.description <- bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]]$model.description
     }
     #add summary element to results list
-    results.summary[[species.names[sp]]] <- summary.element     
-  }#next species   
+    results.summary$species[[species.names[sp]]] <- summary.element     
+  }#next species 
+  #results.summary$unidentified <- NULL  
   return(results.summary) 
 }
 
