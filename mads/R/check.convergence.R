@@ -1,3 +1,9 @@
+#' Checks whether the model has converged 
+#'  
+#' @param ddf.model ddf object
+#' @return boolean
+#' @author Laura Marshall
+#'
 check.convergence <- function(ddf.model){
   model.type <- ddf.model$method
   converged <- NULL

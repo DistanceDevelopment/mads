@@ -1,28 +1,41 @@
 \name{rtpois}
 \alias{rtpois}
-\title{Checks the list of model names supplied by the user}
+\title{Ramdonly generates values from a zero-truncated Poisson distribution}
 \usage{
-  rtpois(N, mean = NA, lambda = NA)
+  rtpois(N, mean)
+
+  rtpois(N, mean)
 }
 \arguments{
-  \item{ddf.models}{}
+  \item{N}{number of values to randomly generate}
 
-  \item{species.name}{}
+  \item{mean}{mean of the generated values}
 
-  \item{dist.names}{}
+  \item{N}{number of values to randomly generate}
+
+  \item{mean}{mean of the generated values}
 }
 \description{
-  Performs various checks on the model names supplied by
-  the user. If the multi-analysis engine is being called
-  from Distance then the model names are transformed from
-  numbers to names. This also checks that the data in each
-  model are the same across species codes to ensure valid
-  comparison using the AIC/AICc/BIC selection criteria.
+  Generates values from a zero-truncated Poisson
+  distribution with mean equal to that specified. It uses a
+  look up table to check which value of lambda will give
+  values with the requested mean.
+
+  Generates values from a zero-truncated Poisson
+  distribution with mean equal to that specified. It uses a
+  look up table to check which value of lambda will give
+  values with the requested mean.
 }
 \note{
+  Internal function not intended to be called by user.
+
   Internal function not intended to be called by user.
 }
 \author{
   Laura Marshall
+
+  Laura Marshall
+
+  data(truncated.poisson.table)
 }
 

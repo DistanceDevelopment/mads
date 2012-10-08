@@ -1,0 +1,20 @@
+\name{model.description}
+\alias{model.description}
+\title{Extracts the model description}
+\usage{
+  model.description(model)
+}
+\arguments{
+  \item{model}{a ddf object}
+}
+\value{
+  mod.str a string descibing the fitted model
+}
+\description{
+  Returns a description of the model fitted in the ddf
+  object.
+}
+\author{
+  Jeff Laake & Laura Marshall
+}
+

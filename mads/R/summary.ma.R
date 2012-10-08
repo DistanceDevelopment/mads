@@ -1,10 +1,8 @@
-#' Summary of distance detection function model object
+#' Summary of multi-analysis object
 #' 
-#' Provides a brief summary of data and fitted detection probability model
+#' Provides asummary of the fitted detection probability model
 #' parameters, model selection criterion, and optionally abundance in the
-#' covered (sampled) region and its standard error.
-#' 
-#' The corresponding print function is called to print the summary results.
+#' covered (sampled) region and its standard error for all species.
 #' 
 #' @S3method summary ma
 #' @method summary ma
@@ -22,9 +20,5 @@ summary.ma <- function(object,...){
   for(sp in seq(along = species.name)){
     summary(object[[sp]], species = species.name[sp])
   }     
-  #for(sp in seq(along = object)){
-    #class(object[[sp]]) <- "ma.element"
-  #}
-  #class(object) <- "summary.ma"
   invisible(object)
 }

@@ -4,7 +4,7 @@
 other identified species categories.}
 \usage{
   prorate.unidentified(dht.results,
-    species.code.definitions, species.presence)
+    species.code.definitions, species.presence, clusters)
 }
 \arguments{
   \item{dht.results}{a list of objects of class dht}

@@ -1,0 +1,38 @@
+\name{store.param.ests}
+\alias{store.param.ests}
+\title{Updates bootstrap.ddf.statistics}
+\usage{
+  store.param.ests(bootstrap.ddf.statistics, species.name,
+    model.name, ddf.model, rep.no)
+}
+\arguments{
+  \item{bootstrap.ddf.statistics}{a list containing various
+  arrays and vectors storing model details.}
+
+  \item{species.name}{name of species model relates to}
+
+  \item{model.name}{name of ddf object}
+
+  \item{ddf.model}{ddf object}
+
+  \item{rep.no}{iteration number of the bootstrap}
+}
+\value{
+  bootstrap.ddf.statistics the updated list
+}
+\description{
+  #' Updates bootstrap.ddf.statistics with the latest
+  parameter estimates from the ddf object supplied.
+}
+\note{
+  Internal function not intended to be called by user.
+}
+\author{
+  Laura Marshall
+}
+\seealso{
+  \code{create.param.arrays}
+}
+\keyword{data}
+\keyword{manipulation}
+

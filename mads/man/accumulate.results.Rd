@@ -3,7 +3,7 @@
 \title{Enters the prorated results into the bootstrap.results array}
 \usage{
   accumulate.results(n, bootstrap.results,
-    prorated.results)
+    formatted.results, clusters)
 }
 \arguments{
   \item{n}{index of the current bootstrap iteration}

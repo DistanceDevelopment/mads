@@ -1,6 +1,9 @@
 #' Resamples the data for the bootstrap
 #'
 #' Can either resample samples within strata or observations within samples
+#'
+#' Once the observations have been resampled duplicates are given a different
+#' object id and the obs.table is updated appropriately. 
 #'  
 #' @param resample if "samples" resample samples within strata, if 
 #'   "observations" resample observations within samples.

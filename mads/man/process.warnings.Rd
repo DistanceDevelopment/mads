@@ -2,7 +2,7 @@
 \alias{process.warnings}
 \title{Summarises warnings}
 \usage{
-  process.warnings()
+  process.warnings(MAE.warnings)
 }
 \description{
   Sumarises warnings generated during the bootstrap and

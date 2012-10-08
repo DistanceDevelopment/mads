@@ -3,26 +3,10 @@
 \title{Resamples the data for the bootstrap}
 \usage{
   resample.data(resample, obs.table, sample.table,
-    ddf.dat.master)
-
-  resample.data(resample, obs.table, sample.table,
-    ddf.dat.master)
+    ddf.dat.master, double.observer,
+    subset.variable = "species")
 }
 \arguments{
-  \item{resample}{if "samples" resample samples within
-  strata, if "observations" resample observations within
-  samples.}
-
-  \item{obs.table}{dataframe of observation records with
-  fields object, Region.Label, and Sample.Label which give
-  links to sample.table, region.table and the data records
-  used in \code{model}}
-
-  \item{sample.table}{dataframe of sample records -
-  Region.Label, Sample.Label, Effort}
-
-  \item{ddf.dat.master}{list of complete/original datasets}
-
   \item{resample}{if "samples" resample samples within
   strata, if "observations" resample observations within
   samples.}
@@ -42,27 +26,20 @@
   resampled datasets to be used in the analyses obs.table
   an updated obs.table with additional entries for data
   replicates
-
-  a list with 2 elements: ddf.dat.working a list of
-  resampled datasets to be used in the analyses obs.table
-  an updated obs.table with additional entries for data
-  replicates
 }
 \description{
   Can either resample samples within strata or observations
   within samples
-
-  Can either resample samples within strata or observations
-  within samples
+}
+\details{
+  Once the observations have been resampled duplicates are
+  given a different object id and the obs.table is updated
+  appropriately.
 }
 \note{
   Internal function not intended to be called by user.
-
-  Internal function not intended to be called by user.
 }
 \author{
-  Laura Marshall
-
   Laura Marshall
 }
 \keyword{data}

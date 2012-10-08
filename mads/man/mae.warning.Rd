@@ -2,7 +2,8 @@
 \alias{mae.warning}
 \title{Warning function}
 \usage{
-  mae.warning(warning.msg = NULL, warning.mode = "store")
+  mae.warning(warning.msg = NULL, warning.mode = "store",
+    MAE.warnings)
 }
 \arguments{
   \item{warning.msg}{the message to be stored/printed

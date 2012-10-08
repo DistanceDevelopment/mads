@@ -2,7 +2,8 @@
 \alias{process.bootstrap.results}
 \title{Summarises the bootstrap results.}
 \usage{
-  process.bootstrap.results(bootstrap.results)
+  process.bootstrap.results(bootstrap.results, model.index,
+    clusters, bootstrap.ddf.statistics)
 }
 \arguments{
   \item{bootstrap.results}{list of arrays containg results

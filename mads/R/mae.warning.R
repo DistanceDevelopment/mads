@@ -2,12 +2,11 @@
 #' 
 #' Writes or stores messages for various situations that can occur
 #' 
-#' 
 #' @param warning.msg the message to be stored/printed (optional)
 #' @param warning.mode report or print errors (default report)
 #' @return None
 #' @author Dave Miller & Laura Marshall
-mae.warning <- function(warning.msg=NULL, warning.mode="store")
+mae.warning <- function(warning.msg=NULL, warning.mode="store", MAE.warnings)
 #
 # errors
 #
@@ -35,8 +34,9 @@ mae.warning <- function(warning.msg=NULL, warning.mode="store")
   if(warning.mode == "report"){
     cat(paste("\n** Warning:",warning.msg,"**\n"))
   }else if(warning.mode == "store"){
-    MAE.warnings <<- c(MAE.warnings, paste("Warning:",warning.msg))  
+    MAE.warnings <- c(MAE.warnings, paste("Warning:",warning.msg))  
   }else{
     cat("\nOnly report and store modes are implemented.\n")
-  }     
+  }
+  return(MAE.warnings)     
 }

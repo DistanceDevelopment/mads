@@ -157,15 +157,15 @@ test_that("Test data input checks", {
   
   model.names              <- list("CD"=c("ddf.1","ddf.2"), "WD"=c("ddf.1","ddf.2"), "UnidDol"=c("ddf.1","ddf.2"))
   ddf.models               <- list("ddf.1" = ddf.1, "ddf.2" = ddf.2)
-  covariate.uncertainty = data.frame(variable.layer = c("observation"), variable.name = c("scaledtotsize"), variable.correction.factor = c(1), uncertainty.layer = c("observation"), uncertainty.name = c("totsizecv"), uncertainty.measure = c("CV"), sampling.distribution = c("Norm"))
+  covariate.uncertainty = data.frame(variable.layer = c("observation"), variable.name = c("scaledtotsize"), cor.factor.layer = "numeric", cor.factor.name = 1, uncertainty.layer = c("observation"), uncertainty.name = c("totsizecv"), uncertainty.measure = c("CV"), sampling.distribution = c("Norm"))
   expect_that(results <- execute.multi.analysis(region.table=region.table, 
                sample.table=sample.table, obs.table=obs.table, bootstrap, 
                bootstrap.options, covariate.uncertainty=covariate.uncertainty, 
                ddf.models, model.names, ddf.model.options = ddf.model.options, 
                species.code.definitions, species.presence),
            throws_error("An unsupported sampling distribution has been chosen for covariate uncertainty. Only one of the following may be specified: Normal, Normal.Absolute, Lognormal.BC, Poisson, TruncPoisson.BC"))
-  covariate.uncertainty = data.frame(variable.layer = c("observation"), variable.name = c("scaledtotsize"), variable.correction.factor = c(1), uncertainty.layer = c("observation"), uncertainty.name = c("totsizecv"), uncertainty.measure = c("CV"), sampling.distribution = c("Normal"))
   
+  covariate.uncertainty = data.frame(variable.layer = c("observation"), variable.name = c("scaledtotsize"), cor.factor.layer = "numeric", cor.factor.name = 1, uncertainty.layer = c("observation"), uncertainty.name = c("totsizecv"), uncertainty.measure = c("CV"), sampling.distribution = c("Normal"))      
   expect_that(results <- execute.multi.analysis(region.table=region.table, 
                sample.table=sample.table, obs.table=obs.table, bootstrap, 
                bootstrap.options, covariate.uncertainty=covariate.uncertainty, 

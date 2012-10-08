@@ -8,18 +8,20 @@
 #'   models will be fitted
 #' @param model.names list of unique character vectors giving the names of the 
 #'   ddf objects for each species.
+#' @param ddf.models a list of ddf objects
 #' @param criterion character option specifying the model selection criteria - 
 #'   "AIC", "AICc" or "BIC".
 #' @return list of ddf objects 
 #' @note Internal function not intended to be called by user.
 #' @author Laura Marshall
 #'
-fit.ddf.models <- function(ddf.dat.working, model.names, ddf.models, criterion, bootstrap.ddf.statistics, rep.no){
+fit.ddf.models <- function(ddf.dat.working, model.names, ddf.models, criterion, bootstrap.ddf.statistics, rep.no, MAE.warnings){
 # fit.ddf.models function to refits the detection functions to the data provided
 #
 # Arguments:
 #   ddf.dat.working list of dataframes containing the datasets
 #   model.names list of unique character vectors specifying the model names
+#   ddf.models a list of ddf objects
 #   criterion character model selection option ("AIC", "AICc" or "BIC")
 #
 # Value: list of ddf objects 
@@ -86,8 +88,8 @@ fit.ddf.models <- function(ddf.dat.working, model.names, ddf.models, criterion, 
       bootstrap.ddf.statistics[[species.name[sp]]][[selected.model.name]]$selected[rep.no] <- 1
     }else{
       #If none converged return NULL and exit function
-      mae.warning(paste("No models converged for species ",species.name[sp],", this bootstrap iteration is being skipped", sep=""), warning.mode="store")
-      return(NULL)
+      mae.warning(paste("No models converged for species ",species.name[sp],", this bootstrap iteration is being skipped", sep=""), warning.mode="store", MAE.warnings)
+      return(MAE.warnings)
     }
   }#next species
   return(list(ddf.results = ddf.results, bootstrap.ddf.statistics = bootstrap.ddf.statistics))

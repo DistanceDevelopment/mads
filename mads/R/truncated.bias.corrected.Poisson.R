@@ -1,22 +1,24 @@
-#' Checks the list of model names supplied by the user
+#' Ramdonly generates values from a zero-truncated Poisson distribution
 #'
-#' Performs various checks on the model names supplied by the user. If the
-#' multi-analysis engine is being called from Distance then the model names are
-#' transformed from numbers to names. This also checks that the data in each
-#' model are the same across species codes to ensure valid comparison using the
-#' AIC/AICc/BIC selection criteria.
+#' Generates values from a zero-truncated Poisson distribution with mean
+#' equal to that specified. It uses a look up table to check which value of 
+#' lambda will give values with the requested mean. 
 #'  
-#' @param ddf.models
-#' @param species.name
-#' @param dist.names
+#' @param N number of values to randomly generate
+#' @param mean mean of the generated values
 #' @note Internal function not intended to be called by user.
 #' @author Laura Marshall
 #'
-data(truncated.poisson.table)
-rtpois <- function(N, mean=NA, lambda=NA){
+#' data(truncated.poisson.table)
+rtpois <- function(N, mean){
   #find corresponding lambda value for desired mean
+  #if(!is.na(mean) & !is.na(lambda)){
+  #  warning("Only one of either mean of lambda should be supplied. Mean is being used.")     
+  #}
+  #if(!is.na(mean)){
   lambda <- truncated.poisson.table$lambda[mean] #can make this just a vector rather than a dataframe
   lambda <- ifelse(is.na(lambda), mean, lambda)
+  #}
   #generate quantiles from a uniform distribution between the probability of getting a zero, given lambda, and 1.
   #endpoints are altered to ensure p is between these values and not equal to as this generates 0's or Infs.
   p <- runif(N, dpois(0, lambda)+1e-10, 1-1e-10)

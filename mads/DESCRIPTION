@@ -1,11 +1,40 @@
 Package: mads
 Type: Package
-Title: Multi-Analysis Distance Sampling. 
+Title: Multi-Analysis Distance Sampling.
 Version: 1.0
 Date: 2012-08-03
 Author: Laura Marshall
 Maintainer: Laura Marshall <lauram@mcs.st-and.ac.uk>
-Description: Performs distance sampling analyses on a number of species 
+Description: Performs distance sampling analyses on a number of species
     accounting for unidentified sightings, model uncertainty and covariate 7
     uncertainty.
 License: GPL (>=2)
+Collate:
+    'accumulate.results.R'
+    'calculate.dht.R'
+    'check.convergence.R'
+    'check.covar.uncertainty.R'
+    'check.ddf.models.R'
+    'check.species.code.definitions.R'
+    'check.species.presence.r'
+    'create.obs.table.R'
+    'create.param.arrays.r'
+    'create.result.arrays.R'
+    'execute.multi.analysis.R'
+    'fit.ddf.models.R'
+    'format.dht.results.R'
+    'get.datasets.R'
+    'mae.warning.R'
+    'model.description.R'
+    'process.bootstrap.results.R'
+    'process.warnings.R'
+    'prorate.unidentified.R'
+    'renumber.duplicates.R'
+    'resample.covariates.R'
+    'resample.data.R'
+    'rtpois.R'
+    'store.param.ests.R'
+    'summary.ma.element.R'
+    'summary.ma.R'
+    'truncated.bias.corrected.Poisson.R'
+    'check.bootstrap.options.r'

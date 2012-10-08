@@ -2,19 +2,19 @@
 \alias{get.datasets}
 \title{Extracts the data and models from the ddf objects}
 \usage{
-  get.datasets(species.name, ddf.models)
+  get.datasets(model.names, ddf.models)
 }
 \arguments{
   \item{species.name}{a character vector of species codes}
 
-  \item{ddf.models}{a list of character vectors of model
+  \item{model.names}{a list of character vectors of model
   names with the elements named by species code}
 }
 \value{
-  list with the following elements: unique.ddf.models - a
+  list with the following elements: unique.model.names - a
   list of unique model combinations ddf.dat.master - a list
   of dataframes containing the data used to fit the unique
-  models combinations defined in unique.ddf.models
+  models combinations defined in unique.model.names
   model.index - named character vector indicating which
   model is to be used for each species.
 }

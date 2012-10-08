@@ -1,6 +1,7 @@
-#' Print summary of the multi-analysis object
+#' Print a summary of an element of a multi-analysis result correcponding to 
+#' a single species included in the analyses.
 #' 
-#' Provides a brief summary of data and fitted detection probability model
+#' Provides a summary of the fitted detection probability model
 #' parameters, model selection criterion, and optionally abundance in the
 #' covered (sampled) region and its standard error. What is printed depends
 #' on the corresponding call to summary.
@@ -56,14 +57,14 @@ summary.ma.element <- function (x,species=NULL,...){
     selected <- FALSE
     if(!is.null(x$ddf[[model.names[m]]]$ds.param)){
       cat("\nParameter estimates (dsmodel):\n")
-      if(nrow(x$ddf[[model.names[m]]]$ds.param) > 1){
+      if(class(x$ddf[[model.names[m]]]$ds.param) == "matrix"){
         param.estimates <- apply(x$ddf[[model.names[m]]]$ds.param, 2, mean)
         param.se <- apply(x$ddf[[model.names[m]]]$ds.param, 2, sd)
         print(array(c(param.estimates, param.se), dim=c(length(param.estimates),2), dimnames=list(dimnames(x$ddf[[model.names[m]]]$ds.param)[[2]], c("Estimate", "se"))))
-      }else if(nrow(x$ddf[[model.names[m]]]$ds.param) == 1){
-        param.estimates <- x$ddf[[model.names[m]]]$ds.param[1,]
-        param.se <- rep(NA, ncol(x$ddf[[model.names[m]]]$ds.param))
-        print(array(c(param.estimates, param.se), dim=c(length(param.estimates),2), dimnames=list(dimnames(x$ddf[[model.names[m]]]$ds.param)[[2]], c("Estimate", "se"))))
+      }else if(class(x$ddf[[model.names[m]]]$ds.param) == "numeric"){
+        param.estimates <- x$ddf[[model.names[m]]]$ds.param
+        param.se <- rep(NA, length(x$ddf[[model.names[m]]]$ds.param))
+        print(array(c(param.estimates, param.se), dim=c(length(param.estimates),2), names=list(dimnames(x$ddf[[model.names[m]]]$ds.param)[[2]], c("Estimate", "se"))))
       }else{
         cat("\nModel never selected\n")
         selected <- FALSE
@@ -71,14 +72,14 @@ summary.ma.element <- function (x,species=NULL,...){
     }
     if(!is.null(x$ddf[[model.names[m]]]$mr.param)){
       cat("\nParameter estimates (mrmodel):\n")
-      if(nrow(x$ddf[[model.names[m]]]$mr.param) > 1){
+      if(class(x$ddf[[model.names[m]]]$mr.param) == "matrix"){
         param.estimates <- apply(x$ddf[[model.names[m]]]$mr.param, 2, mean)
         param.se <- apply(x$ddf[[model.names[m]]]$mr.param, 2, sd)
         print(array(c(param.estimates, param.se), dim=c(length(param.estimates),2), dimnames=list(dimnames(x$ddf[[model.names[m]]]$mr.param)[[2]], c("Estimate", "se"))))
-      }else if(nrow(x$ddf[[model.names[m]]]$mr.param) == 1){
-        param.estimates <- x$ddf[[model.names[m]]]$mr.param[1,]
-        param.se <- rep(NA, ncol(x$ddf[[model.names[m]]]$mr.param))
-        print(array(c(param.estimates, param.se), dim=c(length(param.estimates),2), dimnames=list(dimnames(x$ddf[[model.names[m]]]$mr.param)[[2]], c("Estimate", "se"))))
+      }else if(class(x$ddf[[model.names[m]]]$mr.param) == "numeric"){
+        param.estimates <- x$ddf[[model.names[m]]]$mr.param
+        param.se <- rep(NA, length(x$ddf[[model.names[m]]]$mr.param))
+        print(array(c(param.estimates, param.se), dim=c(length(param.estimates),2), names=list(dimnames(x$ddf[[model.names[m]]]$mr.param)[[2]], c("Estimate", "se"))))
       }else{
         cat("\nModel never selected\n")
         selected <- FALSE
@@ -99,7 +100,7 @@ summary.ma.element <- function (x,species=NULL,...){
     print.tables(x$clusters)
     cat("\nSummary for individuals\n")
     print.tables(x$individuals)
-    cat("\nExpected cluster size\n")
+    cat("\nExpected cluster size\n\n")
     print(x$Expected.S)
   } 
   invisible()

@@ -1,0 +1,41 @@
+\name{create.result.arrays}
+\alias{create.result.arrays}
+\title{Creates a list of arrays for storing the dht results}
+\usage{
+  create.result.arrays(species.name,
+    species.code.definitions, region.table, clusters, n)
+}
+\arguments{
+  \item{species.name}{a list of all the species in the
+  analysis}
+
+  \item{species.code.definitions}{a list with an element
+  for each unidentified code which contains a vector of
+  corresponding identified species codes or NULL if not
+  required}
+
+  \item{region.table}{dataframe of region records -
+  Region.Label and Area}
+
+  \item{clusters}{boolean, TRUE if observations are of
+  cluster, FALSE if observations are of individuals.}
+
+  \item{n}{the number of bootstrap iterations to be
+  completed.}
+}
+\value{
+  list of arrays
+}
+\description{
+  Creates a list of arrays. These are used to store the
+  summary, abundance and density outputs of the \code{dht}
+  routine called from \code{mrds}.
+}
+\note{
+  Internal function not intended to be called by user.
+}
+\author{
+  Laura Marshall
+}
+\keyword{utility}
+

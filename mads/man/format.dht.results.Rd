@@ -1,0 +1,27 @@
+\name{format.dht.results}
+\alias{format.dht.results}
+\title{Formats the estimated abundances of all species categories, to be consistent
+with the prorated results.}
+\usage{
+  format.dht.results(dht.results, species.name, clusters)
+}
+\arguments{
+  \item{dht.results}{a list of objects of class dht}
+
+  \item{species.name}{a character vectors detailing the
+  species codes}
+}
+\value{
+  a list of results with an element for each species
+}
+\description{
+  Formats the estimated abundances of all species
+  categories, to be consistent with the prorated results.
+}
+\note{
+  Internal function not intended to be called by user.
+}
+\author{
+  Laura Marshall
+}
+

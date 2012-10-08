@@ -6,7 +6,7 @@
 #' @note Internal function not intended to be called by user.
 #' @author Laura Marshall
 #'
-process.warnings <- function(){
+process.warnings <- function(MAE.warnings){
 # process.warnings function to summarise warnings
 #
 # Arguments: none
@@ -17,9 +17,8 @@ process.warnings <- function(){
   no.warnings <- NULL
   for(i in seq(along = mae.warning)){
     no.warnings <- length(which(MAE.warnings == mae.warning[i])) 
-    cat(mae.warning[i], " [warning occured ",no.warnings," times]", sep = "", fill = TRUE) 
+    message(paste(mae.warning[i], " [warning occured ",no.warnings," times]", sep = "")) 
   }
-  rm(MAE.warnings, pos=1)
 }  
 
 

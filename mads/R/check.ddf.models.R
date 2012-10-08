@@ -1,37 +1,33 @@
 #' Checks the list of model names supplied by the user
 #'
-#' Performs various checks on the model names supplied by the user. If the
-#' multi-analysis engine is being called from Distance then the model names are
-#' transformed from numbers to names. This also checks that the data in each
-#' model are the same across species codes to ensure valid comparison using the
-#' AIC/AICc/BIC selection criteria.
-#'  
-#' @param ddf.models a list of vectors of model names. Each list element is
-#'   named according to the species code.
-#' @param species.name a character vector of species codes
-#' @param dist.names boolean TRUE if only numbers are specified and the Distance
-#'   naming convention is being used. FALSE if complete character model names
-#'   are supplied.
-#' @return updated list of vectors of model names if only numbers were supplied
-#'   otherwise ddf.models is returned unchanged. 
+#' Performs various checks on the models and model names supplied by the user, 
+#' including checking that the data in each model are the same across species 
+#' codes to ensure valid comparison using the AIC/AICc/BIC selection criteria.
+#'
+#' In addition, this routine establishes whether the analyses are double
+#' observer or not and whether the observations are individuals of clusters.
+#'
+#' @param model.names a list of vectors of model names. Each list element is
+#'   named according to the species code. 
+#' @param ddf.models a list of ddf objects named in model.names
+#' @return list of two boolean values relating to cluster size and double
+#'   observer analyses. 
 #' @note Internal function not intended to be called by user.
 #' @author Laura Marshall
 #' @seealso \code{execute.multi.analysis}
 #' @keywords input validation, data validation
 #'
 
-check.ddf.models <- function(model.names, ddf.models){             
+check.ddf.models <- function(model.names, ddf.models, MAE.warnings){             
 # 
 # check.ddf.models - Performs various checks on the model names supplied by the user
 #
 # Arguments:
 #
 #  model.names   - a list of vectors specifying the model names for each species code
-#  species.name - a vector of species names 
-#  dist.names   -   
+#  ddf.models    - a list of ddf objects named in model.names   
 #
-# Value: updated list of vectors of model names if only numbers were supplied
-#   otherwise model.names is returned unchanged.
+# Value: list of two boolean values relating to cluster size and double observer analyses. 
 # 
 # Function calls: 
 #   is.same - local function to compare two datasets to see if they match
@@ -91,7 +87,7 @@ check.ddf.models <- function(model.names, ddf.models){
       #if(class(method)[1] == "try-error"){
       if(is.null(method)){
         #ddf object doesn't exist
-        process.warnings()
+        process.warnings(MAE.warnings)
         stop(paste("ddf object ",m,", analysis name ",model.names[[sp]][m],", for species code ",species.name[sp]," has not been provided.",sep = ""), call. = FALSE)
       } 
       model.type[counter] <- method 
@@ -102,20 +98,20 @@ check.ddf.models <- function(model.names, ddf.models){
   ds <- which(model.type%in%c("ds"))
   unsupported <- which(!model.type%in%c("trial", "trial.fi", "io", "io.fi", "ds"))
   if(length(unsupported) > 0){
-    process.warnings()
+    process.warnings(MAE.warnings)
     stop(paste("Unsupported model types have been selected: ",paste(model.type[unsupported], collapse = ", "), sep = ""), call. = FALSE)
   }
   if(length(double.observer) == length(model.type)){
     double.observer <- TRUE
     #check all are trial or all are io
     if(!(length(which(model.type%in%c("trial", "trial.fi"))) == length(model.type) | length(which(model.type%in%c("io", "io.fi"))) == length(model.type))){
-      process.warnings()
+      process.warnings(MAE.warnings)
       stop(paste("Models must either be all trial or all io, not a mixture.", sep = ""), call. = FALSE)
     }
   }else if(length(ds) == length(model.type)){
     double.observer <- FALSE
   }else if(length(double.observer) > 0 & length(ds) > 0){
-    process.warnings()
+    process.warnings(MAE.warnings)
     stop("Models must either be all double observer mark-recapture or all standard distance sampling models, not a mixture.", call. = FALSE)
   }
   rm(model.type, counter, ds, unsupported)
@@ -128,7 +124,7 @@ check.ddf.models <- function(model.names, ddf.models){
         if(m == mcheck){
           next
         }else if(assoc.model.names[m] == assoc.model.names[mcheck]){
-          process.warnings()
+          process.warnings(MAE.warnings)
           stop(paste("The model names are not unique for species ",names(model.names)[sp],".", sep = ""), call. = FALSE)
         }
       }#next model for checking
@@ -143,19 +139,19 @@ check.ddf.models <- function(model.names, ddf.models){
         #Get first dataset to compare all others too
         check.data <- ddf.data
       }else if(is.same(check.data, ddf.data) != 0){
-        process.warnings()
+        process.warnings(MAE.warnings)
         stop(paste("Datasets within species must contain the same data to ensure the model selection criteria are valid. The ",species.name[sp]," analyses ",model.names[[sp]][1]," and ",model.names[[sp]][m]," do not have the same sightings and/or associated distances", sep = ""), call. = FALSE)
       }
     }#next model
     #CHECK IF DATA CONTAINS CLUSTER SIZES "size" (either all must or all most not)
     if("size"%in%names(ddf.data)){
       if(sp > 1 & !clusters){
-        process.warnings()
+        process.warnings(MAE.warnings)
         stop("Cluster size must be present in all datasets within the ddf models or none.", call. = FALSE)
       }
       clusters <- TRUE
     }else if(clusters){
-      process.warnings()
+      process.warnings(MAE.warnings)
       stop("Cluster size must be present in all datasets within the ddf models or none.", call. = FALSE)
     }    
   }#next species

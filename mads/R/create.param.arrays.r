@@ -1,3 +1,19 @@
+#' Creates a list of arrays for storing the ddf results
+#'
+#' Creates a list of arrays. These are used to store the parameter estimates,
+#' a record of convergence, selection criteria values and which model was
+#' selected in the case of model uncertainty.
+#'  
+#' @param model.names a list of character vectors of model names 
+#'   with the elements named by species code
+#' @param ddf.models a list of all the ddf models named in model.names.
+#' @param n the number of bootstrap iterations to be completed.
+#' @param criteria the name of the model selection criteria.
+#' @return list of arrays
+#' @note Internal function not intended to be called by user.
+#' @author Laura Marshall
+#' @keywords utility
+#'       
 create.param.arrays <- function(model.names, ddf.models, n, criteria){
   bootstrap.ddf.statistics <- list()
   for(sp in seq(along = model.names)){

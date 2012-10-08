@@ -1,5 +1,17 @@
+#' Ramdonly generates values from a zero-truncated Poisson distribution
+#'
+#' Generates values from a zero-truncated Poisson distribution with mean
+#' equal to that specified. It uses a look up table to check which value of 
+#' lambda will give values with the requested mean. 
+#'  
+#' @param N number of values to randomly generate
+#' @param mean mean of the generated values
+#' @note Internal function not intended to be called by user.
+#' @author Laura Marshall
+#'
 rtpois <-
-function(N, mean=NA, lambda=NA){
+function(N, mean=NA){
+  data(truncated.poisson.table)
   #find corresponding lambda value for desired mean
   lambda <- truncated.poisson.table$lambda[mean] #can make this just a vector rather than a dataframe
   lambda <- ifelse(is.na(lambda), mean, lambda)

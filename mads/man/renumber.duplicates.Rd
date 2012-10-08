@@ -3,7 +3,7 @@
 \title{Renumbers the object IDs for the duplicate observations generated when
 bootstrapping}
 \usage{
-  renumber.duplicates(ddf.dat, obs.table)
+  renumber.duplicates(ddf.dat, obs.table, double.observer)
 }
 \arguments{
   \item{ddf.dat}{dataframe containing a single dataset with
