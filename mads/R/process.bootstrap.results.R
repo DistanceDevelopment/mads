@@ -40,6 +40,9 @@ process.bootstrap.results <- function(bootstrap.results, model.index, clusters, 
   species.names <- dimnames(bootstrap.results[[1]])[[4]]
   strata.names <- dimnames(bootstrap.results[[1]])[[1]]
   no.strata  <- length(strata.names)
+  all.species.codes <- names(model.index)
+  unid.names <- all.species.codes[-which(all.species.codes%in%species.names)]
+  
   
   #for each species summarise the bootstrap results
   for(sp in seq(along = species.names)){
@@ -176,8 +179,50 @@ process.bootstrap.results <- function(bootstrap.results, model.index, clusters, 
     }
     #add summary element to results list
     results.summary$species[[species.names[sp]]] <- summary.element     
-  }#next species 
-  #results.summary$unidentified <- NULL  
+  }#next species
+  #add in summaries for unids
+  if(length(unid.names) > 0){
+    for(u in seq(along = unid.names)){
+      ddf.code <- model.index[[unid.names[u]]]
+      summary.element <- list()
+      summary.element$ddf$convergence <- bootstrap.ddf.statistics[[ddf.code]]$convergence
+      model.names <- dimnames(bootstrap.ddf.statistics[[ddf.code]]$convergence)[[2]] 
+      for(m in seq(along = model.names)){
+        if(!is.null(bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]]$ds.param)){
+          if(dim(bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]]$ds.param)[2] > 1){
+            summary.element$ddf[[model.names[m]]]$ds.params <- bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]]$ds.param[bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]]$selected == 1,]
+          }else if(dim(bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]]$ds.param)[2] == 1){
+            param.name <- dimnames(bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]]$ds.param)[[2]]
+            param.data <- bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]]$ds.param[bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]]$selected == 1,]
+            if(length(param.data) > 0){
+              summary.element$ddf[[model.names[m]]]$ds.params <- matrix(param.data, ncol = 1, dimnames = list(1:length(param.data), param.name))
+            }else{
+              summary.element$ddf[[model.names[m]]]$model.description <- bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]]$model.description
+              next
+            }
+          }
+        }
+        if(!is.null(bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]]$mr.param)){
+          if(dim(bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]]$mr.param)[2] > 1){
+            summary.element$ddf[[model.names[m]]]$mr.params <- bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]]$mr.param[bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]]$selected == 1,]
+          }else if(dim(bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]]$mr.param)[2] == 1){
+            param.name <- dimnames(bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]]$mr.param)[[2]]
+            param.data <- bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]]$mr.param[bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]]$selected == 1,]
+            if(length(param.data) > 0){
+              summary.element$ddf[[model.names[m]]]$mr.params <- matrix(param.data, ncol = 1, dimnames = list(1:length(param.data), param.name))
+            }else{
+              summary.element$ddf[[model.names[m]]]$model.description <- bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]]$model.description
+              next
+            }
+          }
+        }
+        criteria <- names(bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]])[2]
+        summary.element$ddf[[model.names[m]]][[criteria]] <- bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]][[criteria]][bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]]$selected == 1] 
+        summary.element$ddf[[model.names[m]]]$model.description <- bootstrap.ddf.statistics[[ddf.code]][[model.names[m]]]$model.description
+      }
+      results.summary$unidentified[[unid.names[u]]] <- summary.element
+    }
+  } 
   return(results.summary) 
 }
 

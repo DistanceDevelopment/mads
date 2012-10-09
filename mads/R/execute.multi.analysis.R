@@ -258,7 +258,10 @@ execute.multi.analysis <- function(region.table, sample.table, obs.table, bootst
     class(results$species[[sp]]) <- "ma.species"
   }
   if(!is.null(results$unidentified)){
-    class(results$unidentified) <- "ma.unid"
+    class(results$unidentified) <- "ma.allunid"
+    for(sp in seq(along = results$unidentified)){
+      class(results$unidentified[[sp]]) <- "ma.unid"
+    }
   }
 
   return(results)    

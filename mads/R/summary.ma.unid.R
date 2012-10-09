@@ -14,9 +14,63 @@
 #'   \code{ma} object.  
 #' @author Laura Marshall
 #' @keywords utility
-summary.ma.unid <- function(object,...){
-  if(!is.null(object)){
-    cat("This the is unidentified summary")  
+summary.ma.unid <- function(x,species = NULL, ...){
+  if(!is.null(x)){
+    #Display title line
+    if(!is.null(species)){
+      cat("\nBootstrap summary for code  : ",species,"\n")
+    }else{
+      cat("\nBootstrap summary for individual unidentified code in a multi-analysis object\n")
+    }  
+    #Display ddf summary
+    cat("\nDetection function model summary\n")
+    cat("\nModel Selection:\n")
+    print(x$ddf$convergence)
+    model.names <- dimnames(x$ddf$convergence)[2][[1]]
+    criteria <- names(x$ddf[[model.names[1]]])[2]
+    cat("\nModel Summaries\n")
+    for(m in seq(along = model.names)){
+      cat("\nModel name: ", model.names[m], "\n")
+      cat("\nDetection function:\n")
+      cat(x$ddf[[model.names[m]]]$model.description)
+      cat("\n")
+      selected <- FALSE
+      if(!is.null(x$ddf[[model.names[m]]]$ds.param)){
+        cat("\nParameter estimates (dsmodel):\n")
+        if(class(x$ddf[[model.names[m]]]$ds.param) == "matrix"){
+          param.estimates <- apply(x$ddf[[model.names[m]]]$ds.param, 2, mean)
+          param.se <- apply(x$ddf[[model.names[m]]]$ds.param, 2, sd)
+          print(array(c(param.estimates, param.se), dim=c(length(param.estimates),2), dimnames=list(dimnames(x$ddf[[model.names[m]]]$ds.param)[[2]], c("Estimate", "se"))))
+        }else if(class(x$ddf[[model.names[m]]]$ds.param) == "numeric"){
+          param.estimates <- x$ddf[[model.names[m]]]$ds.param
+          param.se <- rep(NA, length(x$ddf[[model.names[m]]]$ds.param))
+          print(array(c(param.estimates, param.se), dim=c(length(param.estimates),2), dimnames=list(names(x$ddf[[model.names[m]]]$ds.param), c("Estimate", "se"))))
+        }else{
+          cat("\nModel never selected\n")
+          selected <- FALSE
+        }
+      }
+      if(!is.null(x$ddf[[model.names[m]]]$mr.param)){
+        cat("\nParameter estimates (mrmodel):\n")
+        if(class(x$ddf[[model.names[m]]]$mr.param) == "matrix"){
+          param.estimates <- apply(x$ddf[[model.names[m]]]$mr.param, 2, mean)
+          param.se <- apply(x$ddf[[model.names[m]]]$mr.param, 2, sd)
+          print(array(c(param.estimates, param.se), dim=c(length(param.estimates),2), dimnames=list(dimnames(x$ddf[[model.names[m]]]$mr.param)[[2]], c("Estimate", "se"))))
+        }else if(class(x$ddf[[model.names[m]]]$mr.param) == "numeric"){
+          param.estimates <- x$ddf[[model.names[m]]]$mr.param
+          param.se <- rep(NA, length(x$ddf[[model.names[m]]]$mr.param))
+          print(array(c(param.estimates, param.se), dim=c(length(param.estimates),2), dimnames=list(names(x$ddf[[model.names[m]]]$mr.param), c("Estimate", "se"))))
+        }else{
+          cat("\nModel never selected\n")
+          selected <- FALSE
+        }        
+      }
+      if(selected){
+        cat(paste("\nSummary of ", criteria, " values:\n"), sep = "")
+        print(summary(x$ddf[[model.names[m]]][[criteria]]))  
+      }         
+    }
+   
   }
-  invisible(object)
+  invisible(x)
 }
