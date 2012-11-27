@@ -4,9 +4,9 @@
 #' parameters, model selection criterion, and optionally abundance in the
 #' covered (sampled) region and its standard error for all species.
 #' 
-#' @S3method summary ma
-#' @method summary ma
-#' @aliases summary.ma
+#' @S3method summary ma.allunid
+#' @method summary ma.allunid
+#' @aliases summary.ma.allunid
 #' @param object a \code{ma} model object
 #' @param \dots unspecified and unused arguments for S3 consistency
 #' @return list of extracted and summarized objects
@@ -14,7 +14,7 @@
 #'   \code{ma} object.  
 #' @author Laura Marshall
 #' @keywords utility
-summary.ma.allunid <- function(object,...){
+summary.ma.allunid <- function(object, ...){
   cat("\nUnidentified Model Summaries")
   cat("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
   species.name <- names(object)   

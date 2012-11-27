@@ -7,20 +7,27 @@
 #' @S3method summary ma
 #' @method summary ma
 #' @aliases summary.ma
-#' @param object a \code{ma} model object
+#' @param object an object of class \code{ma} 
+#' @param glossary a \code{ma} model object would like a glossary to 
+#'   be displayed 
+#' @param description boolean if you would like  
 #' @param \dots unspecified and unused arguments for S3 consistency
 #' @return list of extracted and summarized objects
 #' @note This function is called by the generic function \code{summary} for any
 #'   \code{ma} object.  
 #' @author Laura Marshall
 #' @keywords utility
-summary.ma <- function(object, glossary = FALSE, ...){
+summary.ma <- function(object, description = FALSE, glossary = FALSE,  ...){
+  if(description){
+    #summary description
+    object.description()    
+  }
   if(glossary){
     #summary description
-    cat("\nGlossary")
-    cat("\n~~~~~~~~")    
+    glossary()    
   }
-  cat("\nMulti-Analysis Summary \n")
+  cat("\nMULTI-ANALYSIS SUMMARY") 
+  cat("\n----------------------\n")  
   for(ele in seq(along = object)){
     summary(object[[ele]])
   } 

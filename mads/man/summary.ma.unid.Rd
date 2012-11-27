@@ -1,17 +1,14 @@
-\name{summary.ma}
-\alias{summary.ma}
+\name{summary.ma.unid}
+\alias{summary.ma.unid}
 \title{Summary of multi-analysis object}
 \usage{
-  \method{summary}{ma} (object, description = FALSE,
-    glossary = FALSE, ...)
+  \method{summary}{ma.unid} (object, species = NULL, ...)
 }
 \arguments{
-  \item{object}{an object of class \code{ma}}
+  \item{object}{an object of class \code{ma.unid}}
 
-  \item{glossary}{a \code{ma} model object would like a
-  glossary to be displayed}
-
-  \item{description}{boolean if you would like}
+  \item{species}{optional character value giving the
+  species name, solely for display purposes}
 
   \item{\dots}{unspecified and unused arguments for S3
   consistency}

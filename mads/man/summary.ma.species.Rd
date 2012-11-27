@@ -1,13 +1,16 @@
 \name{summary.ma.species}
-\alias{print.summary.ma}
 \alias{summary.ma.species}
 \title{Print a summary of an element of a multi-analysis result correcponding to
 a single species included in the analyses.}
 \usage{
-  \method{print}{summary.ma} (x, species = NULL, ...)
+  \method{summary}{ma.species} (object, species = NULL,
+    ...)
 }
 \arguments{
-  \item{x}{a summary of \code{ma} model object}
+  \item{object}{a summary of \code{ma} model object}
+
+  \item{species}{optional character value giving the
+  species name, solely for display purposes}
 
   \item{\dots}{unspecified and unused arguments for S3
   consistency}
