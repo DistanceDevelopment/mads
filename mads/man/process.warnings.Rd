@@ -4,6 +4,9 @@
 \usage{
   process.warnings(MAE.warnings)
 }
+\arguments{
+  \item{MAE.warnings}{character vector of warning messages}
+}
 \description{
   Sumarises warnings generated during the bootstrap and
   removes the MAE.warnings global object.

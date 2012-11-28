@@ -13,6 +13,7 @@
 #'   resampled - variable.layer, variable.name, cor.factor.layer,        
 #'   cor.factor.name , uncertainty.layer, uncertainty.name, 
 #'   uncertainty.measure, sampling.distribution.
+#' @param MAE.warnings character vector of warning messages
 #' @return list of dataframes containing the parametrically resampled data
 #' @note Internal function not intended to be called by user.
 #' @author Laura Marshall

@@ -20,6 +20,13 @@
   Region.Label, Sample.Label, Effort}
 
   \item{ddf.dat.master}{list of complete/original datasets}
+
+  \item{double.observer}{boolean indicating if it is a
+  double observer survey}
+
+  \item{subset.variable}{character describing which
+  variable in the dataset should be used in subsetting the
+  data.}
 }
 \value{
   a list with 2 elements: ddf.dat.working a list of

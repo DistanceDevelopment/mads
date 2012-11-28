@@ -3,7 +3,7 @@
 \title{Checks the list of species presence definitions supplied by the user}
 \usage{
   check.species.presence(species.presence, species.name,
-    strata.names)
+    strata.name)
 }
 \arguments{
   \item{species.presence}{a list with an element for each
@@ -14,6 +14,8 @@
   \item{species.name}{a vector of species names for which
   model names were supplied in the ddf.models list passed
   to execute.multi.analysis by the user.}
+
+  \item{strata.name}{character vector of strata names}
 }
 \value{
   updated species.presence list

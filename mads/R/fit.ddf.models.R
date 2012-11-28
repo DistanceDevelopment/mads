@@ -11,6 +11,9 @@
 #' @param ddf.models a list of ddf objects
 #' @param criterion character option specifying the model selection criteria - 
 #'   "AIC", "AICc" or "BIC".
+#' @param bootstrap.ddf.statistics array storing parameter estimates
+#' @param rep.no numeric value indicating iteration number
+#' @param MAE.warnings character vector of warning messages
 #' @return list of ddf objects 
 #' @note Internal function not intended to be called by user.
 #' @author Laura Marshall

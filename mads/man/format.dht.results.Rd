@@ -10,6 +10,9 @@ with the prorated results.}
 
   \item{species.name}{a character vectors detailing the
   species codes}
+
+  \item{clusters}{boolean whether observations are clusters
+  of individuals}
 }
 \value{
   a list of results with an element for each species

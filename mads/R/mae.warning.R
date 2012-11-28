@@ -4,6 +4,7 @@
 #' 
 #' @param warning.msg the message to be stored/printed (optional)
 #' @param warning.mode report or print errors (default report)
+#' @param MAE.warnings character vector of existing warning messages
 #' @return None
 #' @author Dave Miller & Laura Marshall
 mae.warning <- function(warning.msg=NULL, warning.mode="store", MAE.warnings)

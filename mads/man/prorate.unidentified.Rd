@@ -14,9 +14,11 @@ other identified species categories.}
   unidentified code given as the element name.}
 
   \item{species.presence}{a list of character vectors
-  defining the species present in each strata. of
-  identified species codes corresponding to which species
-  are present in each strata.}
+  defining the species present in each strata.}
+
+  \item{clusters}{boolean whether observations are clusters
+  of individuals of identified species codes corresponding
+  to which species are present in each strata.}
 }
 \value{
   a list of proprated results with an element for each

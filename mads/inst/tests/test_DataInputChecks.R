@@ -1,4 +1,3 @@
-library(mads)
 library(mrds)
 library(testthat)
 
@@ -20,7 +19,8 @@ test_that("Test data input checks", {
   #run ddf analyses
   ddf.1 <- ddf(dsmodel = ~mcds(key = "hn", formula = ~ size), method='ds', data=ddf.dat,meta.data=list(width=4)) 
   ddf.2 <- ddf(dsmodel = ~mcds(key = "hr", formula = ~ size), method='ds', data=ddf.dat,meta.data=list(width=4)) 
-  ddf.3 <- ddf(dsmodel = ~mcds(key = "unif", formula = ~ 1, adj.series = "cos", adj.order = c(2)), method='ds', data=ddf.dat,meta.data=list(width=4))
+  #ddf.3 <- ddf(dsmodel = ~mcds(key = "unif", formula = ~ 1, adj.series = "cos", adj.order = c(2)), method='ds', data=ddf.dat,meta.data=list(width=4))
+  ddf.3 <- ddf(dsmodel = ~mcds(key = "hn", formula = ~ 1, adj.series = "cos", adj.order = c(2)), method='ds', data=ddf.dat,meta.data=list(width=4, mono=TRUE))
   ddf.4 <- ddf(dsmodel = ~mcds(key = "hn", formula = ~ size), method='trial',mrmodel=~glm(link='logit',formula=~distance + size + sex + exposure), data=ddf.dat,meta.data=list(width=4)) 
   ddf.5 <- ddf(dsmodel = ~mcds(key = "hn", formula = ~ size), method='trial.fi',mrmodel=~glm(link='logit',formula=~distance + size + sex + exposure), data=ddf.dat,meta.data=list(width=4)) 
   #ddf.6 <- ddf(dsmodel = ~mcds(key = "hn", formula = ~ size), method='io',mrmodel=~glm(link='logit',formula=~distance + size + sex + exposure), data=ddf.dat,meta.data=list(width=4)) 

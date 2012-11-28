@@ -11,12 +11,14 @@
   \item{bootstrap.results}{list of 4-dimensional arrays
   containing the bootstrap results}
 
-  \item{prorated.results}{list of data objects similar to
+  \item{formatted.results}{list of data objects similar to
   the dht class}
+
+  \item{clusters}{boolean are the observations clusters of
+  individuals bootstrap results}
 }
 \value{
   list of 4-dimensional arrays containing the updated
-  bootstrap results
 }
 \description{
   Enters the prorated results into the bootstrap.results

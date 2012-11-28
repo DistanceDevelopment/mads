@@ -7,9 +7,9 @@
 #' look up table in the from of a named character vector to relate species code
 #' to models as these have now been reduced to unique model combinations only.
 #'  
-#' @param species.name a character vector of species codes
 #' @param model.names a list of character vectors of model names 
 #'   with the elements named by species code
+#' @param ddf.models a list of the ddf models named in model.names
 #' @return list with the following elements:
 #'   unique.model.names - a list of unique model combinations
 #'   ddf.dat.master - a list of dataframes containing the data used to fit

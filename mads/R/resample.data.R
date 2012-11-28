@@ -13,6 +13,9 @@
 #' @param sample.table dataframe of sample records - Region.Label,
 #'   Sample.Label, Effort
 #' @param ddf.dat.master list of complete/original datasets
+#' @param double.observer boolean indicating if it is a double observer survey
+#' @param subset.variable character describing which variable in the dataset
+#'   should be used in subsetting the data.
 #' @return a list with 2 elements: 
 #'   ddf.dat.working a list of resampled datasets to be used in the analyses 
 #'   obs.table an updated obs.table with additional entries for data replicates
@@ -113,7 +116,7 @@ resample.data <- function(resample, obs.table, sample.table, ddf.dat.master, dou
     for(dat in seq(along = ddf.dat.master)){
       #get unique species codes
       species.code <- unique(ddf.dat.master[[dat]][[subset.variable]])
-      for(sp in seq(along = species.codes)){
+      for(sp in seq(along = species.code)){
         #select only for one species code
         temp.dat <- ddf.dat.master[[dat]][ddf.dat.master[[dat]][[subset.variable]] == species.code[sp],]
         #get sample ID's for data

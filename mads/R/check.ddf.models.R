@@ -18,7 +18,7 @@
 #' @keywords input validation, data validation
 #'
 
-check.ddf.models <- function(model.names, ddf.models, MAE.warnings){             
+check.ddf.models <- function(model.names, ddf.models){             
 # 
 # check.ddf.models - Performs various checks on the model names supplied by the user
 #
@@ -86,8 +86,7 @@ check.ddf.models <- function(model.names, ddf.models, MAE.warnings){
       #CHECK MODEL EXISTS
       #if(class(method)[1] == "try-error"){
       if(is.null(method)){
-        #ddf object doesn't exist
-        process.warnings(MAE.warnings)
+        #ddf object doesn't exist    
         stop(paste("ddf object ",m,", analysis name ",model.names[[sp]][m],", for species code ",species.name[sp]," has not been provided.",sep = ""), call. = FALSE)
       } 
       model.type[counter] <- method 
@@ -98,20 +97,17 @@ check.ddf.models <- function(model.names, ddf.models, MAE.warnings){
   ds <- which(model.type%in%c("ds"))
   unsupported <- which(!model.type%in%c("trial", "trial.fi", "io", "io.fi", "ds"))
   if(length(unsupported) > 0){
-    process.warnings(MAE.warnings)
     stop(paste("Unsupported model types have been selected: ",paste(model.type[unsupported], collapse = ", "), sep = ""), call. = FALSE)
   }
   if(length(double.observer) == length(model.type)){
     double.observer <- TRUE
     #check all are trial or all are io
-    if(!(length(which(model.type%in%c("trial", "trial.fi"))) == length(model.type) | length(which(model.type%in%c("io", "io.fi"))) == length(model.type))){
-      process.warnings(MAE.warnings)
+    if(!(length(which(model.type%in%c("trial", "trial.fi"))) == length(model.type) | length(which(model.type%in%c("io", "io.fi"))) == length(model.type))){  
       stop(paste("Models must either be all trial or all io, not a mixture.", sep = ""), call. = FALSE)
     }
   }else if(length(ds) == length(model.type)){
     double.observer <- FALSE
   }else if(length(double.observer) > 0 & length(ds) > 0){
-    process.warnings(MAE.warnings)
     stop("Models must either be all double observer mark-recapture or all standard distance sampling models, not a mixture.", call. = FALSE)
   }
   rm(model.type, counter, ds, unsupported)
@@ -123,8 +119,7 @@ check.ddf.models <- function(model.names, ddf.models, MAE.warnings){
       for(mcheck in seq(along = assoc.model.names)){
         if(m == mcheck){
           next
-        }else if(assoc.model.names[m] == assoc.model.names[mcheck]){
-          process.warnings(MAE.warnings)
+        }else if(assoc.model.names[m] == assoc.model.names[mcheck]){      
           stop(paste("The model names are not unique for species ",names(model.names)[sp],".", sep = ""), call. = FALSE)
         }
       }#next model for checking
@@ -139,19 +134,16 @@ check.ddf.models <- function(model.names, ddf.models, MAE.warnings){
         #Get first dataset to compare all others too
         check.data <- ddf.data
       }else if(is.same(check.data, ddf.data) != 0){
-        process.warnings(MAE.warnings)
         stop(paste("Datasets within species must contain the same data to ensure the model selection criteria are valid. The ",species.name[sp]," analyses ",model.names[[sp]][1]," and ",model.names[[sp]][m]," do not have the same sightings and/or associated distances", sep = ""), call. = FALSE)
       }
     }#next model
     #CHECK IF DATA CONTAINS CLUSTER SIZES "size" (either all must or all most not)
     if("size"%in%names(ddf.data)){
       if(sp > 1 & !clusters){
-        process.warnings(MAE.warnings)
         stop("Cluster size must be present in all datasets within the ddf models or none.", call. = FALSE)
       }
       clusters <- TRUE
     }else if(clusters){
-      process.warnings(MAE.warnings)
       stop("Cluster size must be present in all datasets within the ddf models or none.", call. = FALSE)
     }    
   }#next species

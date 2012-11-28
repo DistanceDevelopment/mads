@@ -93,6 +93,7 @@
 #' @param species.presence must be specified if species.code.definitions is 
 #'  specified. A list with an element for each strata which contains the vector
 #'  of species codes present in that strata
+#' @param silent boolean used to surpress some warning messages
 #' @return object of class "ma" which consists of a list of objects of class 
 #'   "ma.element". Each "ma.element" consists of the following elements:
 #'   \item{individuals}{Summary, N (abundance) and D (density) tables}
@@ -102,8 +103,6 @@
 #'     as well as parameter estimates for selected models.}
 #' @export
 #' @author Laura Marshall
-#' @seealso \code{\link{ddf.ds}}, \code{\link{ddf.io}},\code{\link{ddf.io.fi}},
-#'   \code{\link{ddf.trial}},\code{\link{ddf.trial.fi}},\code{\link{ddf.rem}},\code{\link{ddf.rem.fi}}
 #' @references  
 #'   Marques, F.F.C. and S.T. Buckland. 2004. Covariate models for the detection
 #'     function. In: Advanced Distance Sampling, eds. S.T. Buckland,
@@ -115,9 +114,9 @@
 #' @keywords ~distance sampling, unidentified sightings, covariate uncertainty, model uncertainty 
 #' @examples
 #' 
-#'   coming soon...
+#'   #coming soon...
 #' 
-execute.multi.analysis <- function(region.table, sample.table, obs.table, bootstrap, bootstrap.options=list(resample="samples", n=1, quantile.type = 7), covariate.uncertainty = NULL, ddf.models, model.names, ddf.model.options=list(criterion="AIC"), species.code.definitions = NULL, species.presence = NULL, seed.array = NULL, silent = FALSE){
+execute.multi.analysis <- function(region.table, sample.table, obs.table, bootstrap, bootstrap.options=list(resample="samples", n=1, quantile.type = 7), covariate.uncertainty = NULL, ddf.models, model.names, ddf.model.options=list(criterion="AIC"), species.code.definitions = NULL, species.presence = NULL, silent = FALSE){
 # 
 # execute.multi.analysis  - function for dealing with model uncertainty, covariate uncertainty and unidentified species in Distance Sampling
 #
@@ -144,26 +143,26 @@ execute.multi.analysis <- function(region.table, sample.table, obs.table, bootst
 #   fit.ddf.models, calculate.dht, prorate.unidentified, process.warnings 
 
   #load required libraries for ddf so they don't need to be reloaded with each ddf call
-  loaded <- library(BB, logical.return = TRUE)
-  if(!loaded & !silent){
-    message("You do not have the BB library installed. It may speed up the analyses if you install it in your R libraries to avoid reloading on every bootstrap iteration.")
-  }
-  loaded <- library(ucminf, logical.return = TRUE)
-  if(!loaded & !silent){
-    message("You do not have the ucminf library installed. It may speed up the analyses if you install it in your R libraries to avoid reloading on every bootstrap iteration.")
-  }
-  loaded <- library(Rcgmin, logical.return = TRUE)
-  if(!loaded & !silent){
-    message("You do not have the Rcgmin library installed. It may speed up the analyses if you install it in your R libraries to avoid reloading on every bootstrap iteration.")
-  }
-  loaded <- library(Rvmmin, logical.return = TRUE)
-  if(!loaded & !silent){
-    message("You do not have the Rvmmin library installed. It may speed up the analyses if you install it in your R libraries to avoid reloading on every bootstrap iteration.")
-  }
-  loaded <- library(minqa, logical.return = TRUE)
-  if(!loaded & !silent){
-    message("You do not have the minqa library installed. It may speed up the analyses if you install it in your R libraries to avoid reloading on every bootstrap iteration.")
-  }
+  #loaded <- library(BB, logical.return = TRUE)
+  #if(!loaded & !silent){
+  #  message("You do not have the BB library installed. It may speed up the analyses if you install it in your R libraries to avoid reloading on every bootstrap iteration.")
+  #}
+  #loaded <- library(ucminf, logical.return = TRUE)
+  #if(!loaded & !silent){
+  #  message("You do not have the ucminf library installed. It may speed up the analyses if you install it in your R libraries to avoid reloading on every bootstrap iteration.")
+  #}
+  #loaded <- library(Rcgmin, logical.return = TRUE)
+  #if(!loaded & !silent){
+  #  message("You do not have the Rcgmin library installed. It may speed up the analyses if you install it in your R libraries to avoid reloading on every bootstrap iteration.")
+  #}
+  #loaded <- library(Rvmmin, logical.return = TRUE)
+  #if(!loaded & !silent){
+  #  message("You do not have the Rvmmin library installed. It may speed up the analyses if you install it in your R libraries to avoid reloading on every bootstrap iteration.")
+  #}
+  #loaded <- library(minqa, logical.return = TRUE)
+  #if(!loaded & !silent){
+  #  message("You do not have the minqa library installed. It may speed up the analyses if you install it in your R libraries to avoid reloading on every bootstrap iteration.")
+  #}
   
   #create global variable to store error messages
   MAE.warnings <- NULL
@@ -172,14 +171,14 @@ execute.multi.analysis <- function(region.table, sample.table, obs.table, bootst
   species.name <- names(model.names)
     
   #input checks
-  ddf.model.info           <- check.ddf.models(model.names, ddf.models, MAE.warnings)
+  ddf.model.info           <- check.ddf.models(model.names, ddf.models)
   clusters                 <- ddf.model.info$clusters
   double.observer          <- ddf.model.info$double.observer
-  species.code.definitions <- check.species.code.definitions(species.code.definitions, species.name, MAE.warnings)
+  species.code.definitions <- check.species.code.definitions(species.code.definitions, species.name)
   unidentified.species     <- species.code.definitions$unidentified
   species.code.definitions <- species.code.definitions$species.code.definitions
   species.presence         <- check.species.presence(species.presence, species.name, strata.name = as.character(region.table$Region.Label))
-  covariate.uncertainty    <- check.covar.uncertainty(covariate.uncertainty, MAE.warnings)
+  covariate.uncertainty    <- check.covar.uncertainty(covariate.uncertainty)
   check.bootstrap.options(bootstrap, bootstrap.options$resample, bootstrap.options$n, sample.table)
   bootstrap.options$n <- ifelse(bootstrap, bootstrap.options$n, 1)
   
@@ -198,9 +197,9 @@ execute.multi.analysis <- function(region.table, sample.table, obs.table, bootst
   #Set up a loop
   for(n in 1:bootstrap.options$n){
   
-      if(!is.null(seed.array)){
-        set.seet(seed.array[n])
-      }
+      #if(!is.null(seed.array)){
+      #  set.seet(seed.array[n])
+      #}
                                                                                 
       #Resample Data                                                                                           
       if(bootstrap){                                                              

@@ -4,12 +4,11 @@
 \usage{
   execute.multi.analysis(region.table, sample.table,
     obs.table, bootstrap,
-    bootstrap.options = list(resample = "samples", n = 1),
+    bootstrap.options = list(resample = "samples", n = 1, quantile.type = 7),
     covariate.uncertainty = NULL, ddf.models, model.names,
     ddf.model.options = list(criterion = "AIC"),
     species.code.definitions = NULL,
-    species.presence = NULL, seed.array = NULL,
-    silent = FALSE)
+    species.presence = NULL, silent = FALSE)
 }
 \arguments{
   \item{region.table}{dataframe of region records -
@@ -54,6 +53,9 @@
   species.code.definitions is specified. A list with an
   element for each strata which contains the vector of
   species codes present in that strata}
+
+  \item{silent}{boolean used to surpress some warning
+  messages}
 }
 \value{
   object of class "ma" which consists of a list of objects
@@ -158,7 +160,7 @@
   strata.
 }
 \examples{
-coming soon...
+#coming soon...
 }
 \author{
   Laura Marshall
@@ -173,12 +175,6 @@ coming soon...
   populations in the eastern tropical Pacific Ocean. Marine
   Ecology Progress Series, 291:1-21.
 }
-\seealso{
-  \code{\link{ddf.ds}},
-  \code{\link{ddf.io}},\code{\link{ddf.io.fi}},
-  \code{\link{ddf.trial}},\code{\link{ddf.trial.fi}},\code{\link{ddf.rem}},\code{\link{ddf.rem.fi}}
-}
-\keyword{~distance}
 \keyword{covariate}
 \keyword{model}
 \keyword{sampling,}
@@ -186,4 +182,5 @@ coming soon...
 \keyword{uncertainty}
 \keyword{uncertainty,}
 \keyword{unidentified}
+\keyword{~distance}
 

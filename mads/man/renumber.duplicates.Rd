@@ -13,6 +13,9 @@ bootstrapping}
   fields object, Region.Label, and Sample.Label which give
   links to sample.table, region.table and the data records
   used in \code{model}}
+
+  \item{double.observer}{boolean indicating if it is a
+  double observer survey}
 }
 \value{
   list with 2 elements: ddf.dat dataframe containing a

@@ -9,7 +9,7 @@
   \item{bootstrap.ddf.statistics}{a list containing various
   arrays and vectors storing model details.}
 
-  \item{species.name}{name of species model relates to}
+  \item{species.name}{name of species the model relates to}
 
   \item{model.name}{name of ddf object}
 

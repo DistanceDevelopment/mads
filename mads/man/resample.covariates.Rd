@@ -14,6 +14,8 @@
   variable.name, cor.factor.layer, cor.factor.name ,
   uncertainty.layer, uncertainty.name, uncertainty.measure,
   sampling.distribution.}
+
+  \item{MAE.warnings}{character vector of warning messages}
 }
 \value{
   list of dataframes containing the parametrically

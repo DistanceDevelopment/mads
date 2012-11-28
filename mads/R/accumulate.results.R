@@ -3,9 +3,10 @@
 #' @param n index of the current bootstrap iteration
 #' @param bootstrap.results list of 4-dimensional arrays containing the 
 #'   bootstrap results
-#' @param prorated.results list of data objects similar to the dht class
+#' @param formatted.results list of data objects similar to the dht class
+#' @param clusters boolean are the observations clusters of individuals
+#'   bootstrap results 
 #' @return list of 4-dimensional arrays containing the updated 
-#'   bootstrap results
 #' @author Laura Marshall
 #'
 accumulate.results <- function(n, bootstrap.results, formatted.results, clusters){

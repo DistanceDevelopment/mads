@@ -5,10 +5,11 @@
   get.datasets(model.names, ddf.models)
 }
 \arguments{
-  \item{species.name}{a character vector of species codes}
-
   \item{model.names}{a list of character vectors of model
   names with the elements named by species code}
+
+  \item{ddf.models}{a list of the ddf models named in
+  model.names}
 }
 \value{
   list with the following elements: unique.model.names - a

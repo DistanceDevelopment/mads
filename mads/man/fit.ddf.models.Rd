@@ -17,6 +17,13 @@
 
   \item{criterion}{character option specifying the model
   selection criteria - "AIC", "AICc" or "BIC".}
+
+  \item{bootstrap.ddf.statistics}{array storing parameter
+  estimates}
+
+  \item{rep.no}{numeric value indicating iteration number}
+
+  \item{MAE.warnings}{character vector of warning messages}
 }
 \value{
   list of ddf objects

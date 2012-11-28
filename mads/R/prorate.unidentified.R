@@ -12,6 +12,7 @@
 #'   name.
 #' @param species.presence a list of character vectors defining the species
 #'   present in each strata.
+#' @param clusters boolean whether observations are clusters of individuals
 #' of identified species codes corresponding to which species are present in 
 #' each strata.
 #' @return a list of proprated results with an element for each species

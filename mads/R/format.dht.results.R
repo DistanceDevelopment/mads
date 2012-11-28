@@ -4,6 +4,7 @@
 #' @param dht.results a list of objects of class dht
 #' @param species.name a character vectors detailing the 
 #'   species codes 
+#' @param clusters boolean whether observations are clusters of individuals
 #' @return a list of results with an element for each species
 #' @note Internal function not intended to be called by user.
 #' @author Laura Marshall

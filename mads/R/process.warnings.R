@@ -2,7 +2,8 @@
 #'
 #' Sumarises warnings generated during the bootstrap and removes the 
 #' MAE.warnings global object.  
-#'  
+#' 
+#' @param MAE.warnings character vector of warning messages 
 #' @note Internal function not intended to be called by user.
 #' @author Laura Marshall
 #'

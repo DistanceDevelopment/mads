@@ -6,7 +6,7 @@
 #' provided for all species codes and if not it adds the missing definitions 
 #' assuming they correspond to identified categories
 #' 
-#' @param object species.code.definitions a list with an element for each 
+#' @param species.code.definitions a list with an element for each 
 #'   unidentified code which contains a vector of corresponding identified 
 #'   species codes or NULL if not required
 #' @param species.name a vector of species names for which model names were 
@@ -18,7 +18,7 @@
 #' @seealso \code{execute.multi.analysis}
 #' @keywords input validation
 #'
-check.species.code.definitions <- function(species.code.definitions, species.name, MAE.warnings){
+check.species.code.definitions <- function(species.code.definitions, species.name){
 # 
 # check.species.code.definitions function to check the list of species code deifinitions supplied by the user 
 #
@@ -35,28 +35,24 @@ check.species.code.definitions <- function(species.code.definitions, species.nam
   #check to see if there are unidentified species codes
   unidentified = FALSE
   for(i in seq(along = species.code.definitions)){
-    if(is.null(species.code.definitions[[i]])){
-      process.warnings(MAE.warnings)
+    if(is.null(species.code.definitions[[i]])){      
       stop(paste("No species codes specified for ",names(species.code.definitions)[i]," in the species code definitions list.", sep = ""), call. = FALSE) 
     }else if(length(species.code.definitions[[i]]) > 1){
       unidentified = TRUE
       #check to see that unidentified codes are only being prorated to identified codes.
       for(j in seq(along = species.code.definitions[[i]])){
-        if(species.code.definitions[[i]][j] == names(species.code.definitions)[i]){
-          process.warnings(MAE.warnings)
+        if(species.code.definitions[[i]][j] == names(species.code.definitions)[i]){          
           stop("Incorrect species code definition for species ",names(species.code.definitions)[i],". Unidentified code cannot be prorated to itself.", call. = FALSE)
         }else if(species.code.definitions[[i]][j]%in%names(species.code.definitions)){   
-          if(length(species.code.definitions[[species.code.definitions[[i]][j]]]) > 1){
-            process.warnings(MAE.warnings)
+          if(length(species.code.definitions[[species.code.definitions[[i]][j]]]) > 1){           
             stop("Incorrect species code definition for species ",names(species.code.definitions)[i],". An Unidentified code cannot be prorated to another unidentified code.", call. = FALSE)
           }
         }
       } 
-    }else if(length(species.code.definitions[[i]]) == 1 & species.code.definitions[[i]] != names(species.code.definitions)[i]){
-      process.warnings(MAE.warnings)
+    }else if(length(species.code.definitions[[i]]) == 1 & species.code.definitions[[i]] != names(species.code.definitions)[i]){   
       stop("Incorrect species code definition for species ",names(species.code.definitions)[i],". If only a single code is entered it must match the name of the list element.", call. = FALSE)      
     }else if(length(species.code.definitions[[i]]) == 0){ 
-      process.warnings(MAE.warnings)
+      
       stop(paste("No species codes specified for ",names(species.code.definitions)[i]," in the species code definitions list.", sep = ""), call. = FALSE) 
     }
   } 
@@ -68,12 +64,10 @@ check.species.code.definitions <- function(species.code.definitions, species.nam
   unique.codes <- unique(all.codes)
   compare.codes <- ifelse(length(species.name) == length(unique.codes), sort(species.name) == sort(unique.codes), NA)
   #check that there are not multiple definitions for the same species code
-  if(length(species.code.definitions) != length(unique(definition.names))){
-    process.warnings(MAE.warnings)
+  if(length(species.code.definitions) != length(unique(definition.names))){   
     stop("Multiple species code entries in the species code definitions list.", call. = FALSE)
   #check that the names of the ddf models correspond to the names in the species code definitions  
-  }else if(is.na(compare.codes) | !is.na(compare.codes) & length(which(compare.codes)) == length(species.name)){
-    process.warnings(MAE.warnings)
+  }else if(is.na(compare.codes) | !is.na(compare.codes) & length(which(compare.codes)) == length(species.name)){   
     stop("Species mismatch in ddf models and species code definitions. Models not suppled for all species or models supplied for species not included in species code definitions.", call. = FALSE)
   #if there are no problems and definitions are provided for all species return the list unchanged
   }

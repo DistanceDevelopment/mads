@@ -7,6 +7,12 @@
 #'  
 #' @param bootstrap.results list of arrays containg results from the repeated
 #'   analyses.
+#' @param model.index named character vector which acts as a look up table for
+#'   duplicate detection function models.
+#' @param clusters boolean whether observations are clusters of individuals
+#' @param bootstrap.ddf.statistics array storing parameter estimates from ddf models
+#' @param quantile.type numeric value describing which quantile algorithm to use 
+#' @param analysis.options list describing the type of analysis carried out
 #' @return ma object a list of summary statistics for each species
 #' @note Internal functions not intended to be called by user.
 #' @author Laura Marshall
@@ -22,19 +28,29 @@ process.bootstrap.results <- function(bootstrap.results, model.index, clusters, 
 #
 # Function Calls: none
 #
+  #analysis options
+  n                        <- analysis.options$n
+  bootstrap                <- analysis.options$bootstrap
+  covariate.uncertainty    <- analysis.options$covariate.uncertainty 
+  clusters                 <- analysis.options$clusters
+  double.observer          <- analysis.options$double.observer
+  unidentified.species     <- analysis.options$unidentified.species
+  species.code.definitions <- analysis.options$species.code.definitions 
+  model.names              <- analysis.options$model.names 
+  
   #set up data storage for results
   results.summary <- list()
-  quantile.type = as.numeric(quantile.type)
+  quantile.type <- as.numeric(quantile.type)
 
   #add the analysis options to the result summary
-  results.summary$analysis.options$bootstrap = analysis.options$bootstrap
-  results.summary$analysis.options$n = analysis.options$n
-  results.summary$analysis.options$covariate.uncertainty = analysis.options$covariate.uncertainty
-  results.summary$analysis.options$clusters = analysis.options$clusters
-  results.summary$analysis.options$double.observer = analysis.options$double.observer
-  results.summary$analysis.options$unidentified.species = analysis.options$unidentified.species
-  results.summary$analysis.options$species.code.definitions = analysis.options$species.code.definitions
-  results.summary$analysis.options$model.names = analysis.options$model.names
+  results.summary$analysis.options$bootstrap                <- bootstrap
+  results.summary$analysis.options$n                        <- n
+  results.summary$analysis.options$covariate.uncertainty    <- covariate.uncertainty
+  results.summary$analysis.options$clusters                 <- clusters
+  results.summary$analysis.options$double.observer          <- double.observer
+  results.summary$analysis.options$unidentified.species     <- unidentified.species
+  results.summary$analysis.options$species.code.definitions <- species.code.definitions
+  results.summary$analysis.options$model.names              <- model.names
   
   #gather, array names, species.names, strata names, and number of strata       
   species.names <- dimnames(bootstrap.results[[1]])[[4]]

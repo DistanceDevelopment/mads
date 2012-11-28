@@ -11,6 +11,9 @@
 
   \item{warning.mode}{report or print errors (default
   report)}
+
+  \item{MAE.warnings}{character vector of existing warning
+  messages}
 }
 \value{
   None

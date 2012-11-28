@@ -3,11 +3,27 @@
 \title{Summarises the bootstrap results.}
 \usage{
   process.bootstrap.results(bootstrap.results, model.index,
-    clusters, bootstrap.ddf.statistics)
+    clusters, bootstrap.ddf.statistics, quantile.type,
+    analysis.options = list(bootstrap, n, covariate.uncertainty, clusters, double.observer, unidentified.species, species.code.definitions, model.names))
 }
 \arguments{
   \item{bootstrap.results}{list of arrays containg results
   from the repeated analyses.}
+
+  \item{model.index}{named character vector which acts as a
+  look up table for duplicate detection function models.}
+
+  \item{clusters}{boolean whether observations are clusters
+  of individuals}
+
+  \item{bootstrap.ddf.statistics}{array storing parameter
+  estimates from ddf models}
+
+  \item{quantile.type}{numeric value describing which
+  quantile algorithm to use}
+
+  \item{analysis.options}{list describing the type of
+  analysis carried out}
 }
 \value{
   ma object a list of summary statistics for each species

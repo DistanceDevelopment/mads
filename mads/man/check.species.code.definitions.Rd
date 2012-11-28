@@ -6,10 +6,10 @@
     species.name)
 }
 \arguments{
-  \item{object}{species.code.definitions a list with an
-  element for each unidentified code which contains a
-  vector of corresponding identified species codes or NULL
-  if not required}
+  \item{species.code.definitions}{a list with an element
+  for each unidentified code which contains a vector of
+  corresponding identified species codes or NULL if not
+  required}
 
   \item{species.name}{a vector of species names for which
   model names were supplied in the ddf.models list passed

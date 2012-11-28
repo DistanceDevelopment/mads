@@ -5,7 +5,7 @@
 #'
 #' @param bootstrap.ddf.statistics a list containing various arrays and vectors
 #'   storing model details.
-#' @param species.name name of species model relates to
+#' @param species.name name of species the model relates to
 #' @param model.name name of ddf object
 #' @param ddf.model ddf object
 #' @param rep.no iteration number of the bootstrap
