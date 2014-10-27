@@ -69,6 +69,23 @@
 #' of identified species codes corresponding to which species are present in 
 #' each strata. 
 #' 
+#' @param species.code vector of all the species codes to be included in 
+#'   the analysis
+#' @param unidentified.sightings  a list with an element for each 
+#'   unidentified code which contains a vector of corresponding identified 
+#'   species codes or NULL if not required 
+#' @param species.presence must be specified if species.code.definitions is 
+#'  specified. A list with an element for each strata which contains the vector
+#'  of species codes present in that strata
+#' @param covariate.uncertainty a dataframe detailing the variables to be 
+#'   resampled - variable.layer, variable.name, cor.factor.layer,        
+#'   cor.factor.name , uncertainty.layer, uncertainty.name, 
+#'   uncertainty.measure, sampling.distribution. or NULL if not required
+#' @param models.by.species.code a list of character vectors of model names 
+#'   with the elements named by species code
+#' @param ddf.model.objects a list of all the ddf models named in models.by.species.code
+#' @param ddf.model.options a list of options 1) selection.criterion either "AIC",
+#'   "AICc" or "BIC"
 #' @param region.table dataframe of region records - Region.Label and Area
 #' @param sample.table dataframe of sample records - Region.Label,
 #'   Sample.Label, Effort
@@ -78,21 +95,6 @@
 #' @param bootstrap if TRUE resamples data to obtain variance estimate
 #' @param bootstrap.options a list of options that can be set 1) n: number of
 #'   repetitions 2) resample: how to resample data ("samples", "observations")
-#' @param covariate.uncertainty a dataframe detailing the variables to be 
-#'   resampled - variable.layer, variable.name, cor.factor.layer,        
-#'   cor.factor.name , uncertainty.layer, uncertainty.name, 
-#'   uncertainty.measure, sampling.distribution. or NULL if not required
-#' @param ddf.models a list of all the ddf models named in model.names.
-#' @param model.names a list of character vectors of model names 
-#'   with the elements named by species code
-#' @param ddf.model.options a list of options 1) selection.criterion either "AIC",
-#'   "AICc" or "BIC"
-#' @param species.code.definitions  a list with an element for each 
-#'   unidentified code which contains a vector of corresponding identified 
-#'   species codes or NULL if not required 
-#' @param species.presence must be specified if species.code.definitions is 
-#'  specified. A list with an element for each strata which contains the vector
-#'  of species codes present in that strata
 #' @param silent boolean used to surpress some warning messages
 #' @return object of class "ma" which consists of a list of objects of class 
 #'   "ma.element". Each "ma.element" consists of the following elements:
@@ -117,52 +119,6 @@
 #'   #coming soon...
 #' 
 execute.multi.analysis <- function(species.code, unidentified.sightings = NULL, species.presence = NULL, covariate.uncertainty = NULL, models.by.species.code, ddf.model.objects, ddf.model.options = list(criterion="AIC"), region.table, sample.table, obs.table, bootstrap, bootstrap.options=list(resample="samples", n=1, quantile.type = 7), silent = FALSE){
-# 
-# execute.multi.analysis  - function for dealing with model uncertainty, covariate uncertainty and unidentified species in Distance Sampling
-#
-# Arguments:
-#
-#  region.table      - dataframe of region records
-#  sample.table      - dataframe of sample records
-#  obs.table         - dataframe of observation records 
-#  bootstrap         - boolean, if TRUE resamples data 
-#  bootstrap.options - list of bootstrap options 
-#  covariate.uncertinaty - dataframe used in parametric resampling
-#  model.names       - list of character vectors of previously fitted ddf model names
-#  ddf.models        - list of previously fitted ddf models 
-#  ddf.model.options - list of options for model uncertainty 
-#  species.code.definitions - list defining species codes
-#  species.presence  - list describing species presence 
-#
-# Value:
-# 
-#   result object of class = ma
-#
-# Functions Used: create.warning.storage, check.ddf.models, check.covar.uncertainty,
-#   check.species.code.definitions, get.datasets, resample.data, resample.covariates, 
-#   fit.ddf.models, calculate.dht, prorate.unidentified, process.warnings 
-
-  #load required libraries for ddf so they don't need to be reloaded with each ddf call
-  #loaded <- library(BB, logical.return = TRUE)
-  #if(!loaded & !silent){
-  #  message("You do not have the BB library installed. It may speed up the analyses if you install it in your R libraries to avoid reloading on every bootstrap iteration.")
-  #}
-  #loaded <- library(ucminf, logical.return = TRUE)
-  #if(!loaded & !silent){
-  #  message("You do not have the ucminf library installed. It may speed up the analyses if you install it in your R libraries to avoid reloading on every bootstrap iteration.")
-  #}
-  #loaded <- library(Rcgmin, logical.return = TRUE)
-  #if(!loaded & !silent){
-  #  message("You do not have the Rcgmin library installed. It may speed up the analyses if you install it in your R libraries to avoid reloading on every bootstrap iteration.")
-  #}
-  #loaded <- library(Rvmmin, logical.return = TRUE)
-  #if(!loaded & !silent){
-  #  message("You do not have the Rvmmin library installed. It may speed up the analyses if you install it in your R libraries to avoid reloading on every bootstrap iteration.")
-  #}
-  #loaded <- library(minqa, logical.return = TRUE)
-  #if(!loaded & !silent){
-  #  message("You do not have the minqa library installed. It may speed up the analyses if you install it in your R libraries to avoid reloading on every bootstrap iteration.")
-  #}
   
   #create global variable to store error messages
   MAE.warnings <- NULL
