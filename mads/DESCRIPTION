@@ -4,11 +4,11 @@ Depends:
 Suggests:
     testthat
 Type: Package
-Title: Multi-Analysis Distance Sampling.
-Version: 1.0
-Date: 2014-07-13
+Title: Multi-Analysis Distance Sampling
+Version: 0.1.1
+Date: 2014-12-10
 Author: Laura Marshall
-Maintainer: Laura Marshall <lauram@mcs.st-and.ac.uk>
+Maintainer: Laura Marshall <lhm@st-and.ac.uk>
 Description: Performs distance sampling analyses on a number of species
     accounting for unidentified sightings, model uncertainty and covariate
     uncertainty.
