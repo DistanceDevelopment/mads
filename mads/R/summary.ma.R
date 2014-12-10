@@ -4,7 +4,7 @@
 #' parameters, model selection criterion, and optionally abundance in the
 #' covered (sampled) region and its standard error for all species.
 #' 
-#' @S3method summary ma
+#' @export summary ma
 #' @method summary ma
 #' @aliases summary.ma
 #' @param object an object of class \code{ma} 
