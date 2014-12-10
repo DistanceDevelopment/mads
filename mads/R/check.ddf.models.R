@@ -95,7 +95,8 @@ check.ddf.models <- function(model.names, ddf.models){
   }# next species
   double.observer <- which(model.type%in%c("trial", "trial.fi", "io", "io.fi"))
   ds <- which(model.type%in%c("ds"))
-  unsupported <- which(!model.type%in%c("trial", "trial.fi", "io", "io.fi", "ds"))
+  #unsupported <- which(!model.type%in%c("trial", "trial.fi", "io", "io.fi", "ds"))
+  unsupported <- which(!model.type%in%c("ds"))
   if(length(unsupported) > 0){
     stop(paste("Unsupported model types have been selected: ",paste(model.type[unsupported], collapse = ", "), sep = ""), call. = FALSE)
   }
