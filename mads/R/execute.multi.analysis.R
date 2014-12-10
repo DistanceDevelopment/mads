@@ -8,6 +8,9 @@
 #' a parametric bootstrap, including model uncertainty and dealing with species 
 #' codes which relate to unidentified sightings. 
 #' 
+#' This is a new package with limited testing on real data, please drop
+#' me a line if you plan on using it (lhm[at]st-and.ac.uk).
+#' 
 #' The model fitting code in this function obtains its data and the model 
 #' descriptions from the ddf objects passed in via the \code{ddf.models} argument.
 #'
@@ -116,7 +119,43 @@
 #' @keywords ~distance sampling, unidentified sightings, covariate uncertainty, model uncertainty 
 #' @examples
 #' 
-#'   #coming soon...
+#' \dontrun{
+#' 
+#' ex.filename<-system.file("testData/input_checks/ddf_dat.robj", package="mads")
+#' load(ex.filename)
+#' ex.filename<-system.file("testData/input_checks/obs_table.robj", package="mads")
+#' load(ex.filename)
+#' ex.filename<-system.file("testData/input_checks/region_table.robj", package="mads")
+#' load(ex.filename)
+#' ex.filename<-system.file("testData/input_checks/sample_table.robj", package="mads")
+#' load(ex.filename)
+#' 
+#' #run ddf analyses
+#' ddf.1 <- ddf(dsmodel = ~mcds(key = "hn", formula = ~ size), 
+#'              method='ds', data=ddf.dat,meta.data=list(width=4)) 
+#' ddf.2 <- ddf(dsmodel = ~mcds(key = "hr", formula = ~ size), 
+#'              method='ds', data=ddf.dat,meta.data=list(width=4))
+#' 
+#' model.names <- list("CD"=c("ddf.1","ddf.2"), "WD"=c("ddf.1","ddf.2"), 
+#'                    "UnidDol"=c("ddf.1","ddf.2"))
+#' ddf.models  <- list("ddf.1" = ddf.1, "ddf.2" = ddf.2)
+#' 
+#' unidentified.code.definitions <- list("UnidDol" = c("CD","WD"))
+#' bootstrap.options             <- list(resample="samples", n=10, quantile.type = 7) 
+#' 
+#' results<- execute.multi.analysis(
+#'              species.code = names(model.names),
+#'              unidentified.sightings = unidentified.code.definitions,
+#'              models.by.species.code = model.names,
+#'              ddf.model.objects = ddf.models,
+#'              ddf.model.options = list(criterion="AIC"),
+#'              region.table = region.table,
+#'              sample.table = sample.table,
+#'              obs.table = obs.table,
+#'              bootstrap = TRUE,
+#'              bootstrap.option = bootstrap.options)
+#'              
+#' }
 #' 
 execute.multi.analysis <- function(species.code, unidentified.sightings = NULL, species.presence = NULL, covariate.uncertainty = NULL, models.by.species.code, ddf.model.objects, ddf.model.options = list(criterion="AIC"), region.table, sample.table, obs.table, bootstrap, bootstrap.options=list(resample="samples", n=1, quantile.type = 7), silent = FALSE){
   
@@ -227,6 +266,10 @@ execute.multi.analysis <- function(species.code, unidentified.sightings = NULL, 
       bootstrap.results <- accumulate.results(n, bootstrap.results, formatted.dht.results, clusters)   
                                                                            
   }#next iteration 
+  
+  #Debugging
+  #save(bootstrap.results, file = "/Users/laura/mads/bootstrap.results.robj")
+  #cat("saving bootstrap results")
   
   #process results
   results <- process.bootstrap.results(bootstrap.results, model.index, clusters, bootstrap.ddf.statistics, bootstrap.options$quantile.type, analysis.options = list(bootstrap = bootstrap, n = bootstrap.options$n, covariate.uncertainty = covariate.uncertainty, clusters = clusters, double.observer = double.observer, unidentified.species = unidentified.species, species.code.definitions = species.code.definitions, model.names = models.by.species.code))                                                                                                                                         
