@@ -70,6 +70,9 @@ a parametric bootstrap, including model uncertainty and dealing with species
 codes which relate to unidentified sightings.
 }
 \details{
+This is a new package with limited testing on real data, please drop
+me a line if you plan on using it (lhm[at]st-and.ac.uk).
+
 The model fitting code in this function obtains its data and the model
 descriptions from the ddf objects passed in via the \code{ddf.models} argument.
 
@@ -132,7 +135,43 @@ of identified species codes corresponding to which species are present in
 each strata.
 }
 \examples{
-#coming soon...
+\dontrun{
+
+ex.filename<-system.file("testData/input_checks/ddf_dat.robj", package="mads")
+load(ex.filename)
+ex.filename<-system.file("testData/input_checks/obs_table.robj", package="mads")
+load(ex.filename)
+ex.filename<-system.file("testData/input_checks/region_table.robj", package="mads")
+load(ex.filename)
+ex.filename<-system.file("testData/input_checks/sample_table.robj", package="mads")
+load(ex.filename)
+
+#run ddf analyses
+ddf.1 <- ddf(dsmodel = ~mcds(key = "hn", formula = ~ size),
+             method='ds', data=ddf.dat,meta.data=list(width=4))
+ddf.2 <- ddf(dsmodel = ~mcds(key = "hr", formula = ~ size),
+             method='ds', data=ddf.dat,meta.data=list(width=4))
+
+model.names <- list("CD"=c("ddf.1","ddf.2"), "WD"=c("ddf.1","ddf.2"),
+                   "UnidDol"=c("ddf.1","ddf.2"))
+ddf.models  <- list("ddf.1" = ddf.1, "ddf.2" = ddf.2)
+
+unidentified.code.definitions <- list("UnidDol" = c("CD","WD"))
+bootstrap.options             <- list(resample="samples", n=10, quantile.type = 7)
+
+results<- execute.multi.analysis(
+             species.code = names(model.names),
+             unidentified.sightings = unidentified.code.definitions,
+             models.by.species.code = model.names,
+             ddf.model.objects = ddf.models,
+             ddf.model.options = list(criterion="AIC"),
+             region.table = region.table,
+             sample.table = sample.table,
+             obs.table = obs.table,
+             bootstrap = TRUE,
+             bootstrap.option = bootstrap.options)
+
+}
 }
 \author{
 Laura Marshall
