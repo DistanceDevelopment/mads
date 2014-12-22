@@ -60,7 +60,9 @@ fit.ddf.models <- function(ddf.dat.working, model.names, ddf.models, criterion, 
         model.call$control <- call("list",initial=start.values)
       }
       #refit ddf model
-      temp.results[[m]] <- try(eval(model.call))
+      options(show.error.messages = FALSE)
+      temp.results[[m]] <- try(eval(model.call), silent = TRUE)
+      options(show.error.messages = TRUE)
       if(class(temp.results[[m]])[1] == "try-error"){
         #cat("Model did not converge for species ",species.name[sp]," model ",current.model.name, sep="", fill=TRUE)
         bootstrap.ddf.statistics[[species.name[sp]]]$convergence[2,current.model.name] <- bootstrap.ddf.statistics[[species.name[sp]]]$convergence[2,current.model.name] + 1
