@@ -1,0 +1,22 @@
+mads 0.1.1
+----------
+
+Notes
+
+  * These methods were designs to replicate the analyses of those in Gerrodette and Forcada (2005)
+    Currently we are still in the testing phase to ensure the methods in mads match those of Gerrodette and Forcada
+    Our pro-rating methods for individuals are the same, but in addition we also pro-rate clusters.
+    We do not perform model averaging only model selection at each iteration.
+    There may be small differences in how covariate uncertainty is incorporated.
+    
+    Gerodette, T. and Forcada, J. 2005. Non-recovery of two spotted and spinner dolphin populations in the eastern tropical Pacific Ocean. Marine Ecology Progress Series 291:1-21.
+  
+New Features
+
+  * Added example code
+  
+Bug Fixes
+
+  * Changed @S3method to @export
+  * Check to make sure that only ds models are input
+  * Updated documentation
