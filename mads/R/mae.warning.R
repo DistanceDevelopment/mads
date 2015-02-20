@@ -33,11 +33,11 @@ mae.warning <- function(warning.msg=NULL, warning.mode="store", MAE.warnings)
 {
 
   if(warning.mode == "report"){
-    cat(paste("\n** Warning:",warning.msg,"**\n"))
+    warning(warning.msg)
   }else if(warning.mode == "store"){
-    MAE.warnings <- c(MAE.warnings, paste("Warning:",warning.msg))  
+    MAE.warnings <- c(MAE.warnings, warning.msg)  
   }else{
-    cat("\nOnly report and store modes are implemented.\n")
+    warning("\nOnly report and store modes are implemented.\n")
   }
   return(MAE.warnings)     
 }

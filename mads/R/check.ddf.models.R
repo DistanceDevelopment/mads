@@ -84,7 +84,6 @@ check.ddf.models <- function(model.names, ddf.models){
       #method <- try(ddf.models[[model.names[[sp]][m]]]$method, silent = TRUE)
       method <- ddf.models[[model.names[[sp]][m]]]$method
       #CHECK MODEL EXISTS
-      #if(class(method)[1] == "try-error"){
       if(is.null(method)){
         #ddf object doesn't exist    
         stop(paste("ddf object ",m,", analysis name ",model.names[[sp]][m],", for species code ",species.name[sp]," has not been provided.",sep = ""), call. = FALSE)

@@ -219,7 +219,7 @@ execute.multi.analysis <- function(species.code, unidentified.sightings = NULL, 
      
   #Set up a loop
   for(n in 1:bootstrap.options$n){
-  
+
       #if(!is.null(seed.array)){
       #  set.seet(seed.array[n])
       #}
@@ -235,7 +235,7 @@ execute.multi.analysis <- function(species.code, unidentified.sightings = NULL, 
       }    
       
       #Add uncertainty to covariates
-      if(!is.null(covariate.uncertainty)){                                                   
+      if(!is.null(covariate.uncertainty)){ 
         ddf.dat.working <- resample.covariates(ddf.dat.working, covariate.uncertainty, MAE.warnings)
         MAE.warnings <- ddf.dat.working$MAE.warnings
         ddf.dat.working <- ddf.dat.working$ddf.dat.working  
@@ -243,12 +243,13 @@ execute.multi.analysis <- function(species.code, unidentified.sightings = NULL, 
            
       #Fit ddf models to all species codes
       ddf.results <- fit.ddf.models(ddf.dat.working, unique.model.names, ddf.model.objects, ddf.model.options$criterion, bootstrap.ddf.statistics, n, MAE.warnings)
-      if(class(ddf.results) == "list"){        
+      if(length(ddf.results) > 1){        
         bootstrap.ddf.statistics <- ddf.results$bootstrap.ddf.statistics
         ddf.results <- ddf.results$ddf.results
+        MAE.warnings <- ddf.results$mae.warnings
       }else{
         #If the ddf results are not valid for all species move to next bootstrap iteration
-        MAE.warnings <- ddf.results
+        MAE.warnings <- ddf.results$mae.warnings
         next
       }
                                                                                    

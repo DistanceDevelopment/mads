@@ -63,13 +63,13 @@ fit.ddf.models <- function(ddf.dat.working, model.names, ddf.models, criterion, 
       options(show.error.messages = FALSE)
       temp.results[[m]] <- try(eval(model.call), silent = TRUE)
       options(show.error.messages = TRUE)
-      if(class(temp.results[[m]])[1] == "try-error"){
-        #cat("Model did not converge for species ",species.name[sp]," model ",current.model.name, sep="", fill=TRUE)
+      if(any(class(temp.results[[m]]) == "try-error")){
+        #Model fitting threw an error
         bootstrap.ddf.statistics[[species.name[sp]]]$convergence[2,current.model.name] <- bootstrap.ddf.statistics[[species.name[sp]]]$convergence[2,current.model.name] + 1
+        MAE.warnings <- mae.warning(paste("Model was not successfull for species ",species.name[sp]," model ",current.model.name,".", sep = ""), warning.mode="store", MAE.warnings)
       }else if(check.convergence(temp.results[[m]])){
-        #cat("Model converged for species ",species.name[sp]," model ",current.model.name, sep="", fill=TRUE)
+        #Model converged save info
         bootstrap.ddf.statistics[[species.name[sp]]]$convergence[1,current.model.name] <- bootstrap.ddf.statistics[[species.name[sp]]]$convergence[1,current.model.name] + 1
-        #bootstrap.ddf.statistics[[species.name[sp]]][[current.model.name]]
         bootstrap.ddf.statistics <- store.param.ests(bootstrap.ddf.statistics, species.name[sp], current.model.name, temp.results[[m]], rep.no)
         lnl <- temp.results[[m]]$lnl 
         k <- length(temp.results[[m]]$par)
@@ -80,8 +80,9 @@ fit.ddf.models <- function(ddf.dat.working, model.names, ddf.models, criterion, 
           BIC  = k*log(n)-2*lnl)
         bootstrap.ddf.statistics[[species.name[sp]]][[current.model.name]][[criterion]][rep.no] <- selection.criterion.values[m]             
       }else{
-        cat("Model did not converge for species ",species.name[sp]," model ",current.model.name,". Convergence code was not zero.", sep="", fill=TRUE)
-        bootstrap.ddf.statistics[[species.name[sp]]]$convergence[2,current.model.name] <- bootstrap.ddf.statistics[[species.name[sp]]]$convergence[2,current.model.name] + 1
+        #Model failed to converge - this is an error so never gets here
+        MAE.warnings <- mae.warning(paste("Model did not converge for species ",species.name[sp]," model ",current.model.name,". Convergence code was not zero.", sep = ""), warning.mode="store", MAE.warnings)
+        bootstrap.ddf.statistics[[species.name[sp]]]$convergence[2,current.model.name] <- bootstrap.ddf.statistics[[species.name[sp]]]$convergence[2,current.model.name] + 1        
       }
     }#next model 
     #Check at least one converged                  
@@ -93,11 +94,11 @@ fit.ddf.models <- function(ddf.dat.working, model.names, ddf.models, criterion, 
       bootstrap.ddf.statistics[[species.name[sp]]][[selected.model.name]]$selected[rep.no] <- 1
     }else{
       #If none converged return NULL and exit function
-      mae.warning(paste("No models converged for species ",species.name[sp],", this bootstrap iteration is being skipped", sep=""), warning.mode="store", MAE.warnings)
-      return(MAE.warnings)
+      MAE.warnings <- mae.warning(paste("No models converged for species ",species.name[sp],", this bootstrap iteration is being skipped", sep=""), warning.mode="store", MAE.warnings)
+      return(list(mae.warnings = MAE.warnings))
     }
   }#next species
-  return(list(ddf.results = ddf.results, bootstrap.ddf.statistics = bootstrap.ddf.statistics))
+  return(list(ddf.results = ddf.results, bootstrap.ddf.statistics = bootstrap.ddf.statistics, mae.warnings = MAE.warnings))
 }
 
 
