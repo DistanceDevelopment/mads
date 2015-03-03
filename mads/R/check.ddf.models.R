@@ -84,7 +84,6 @@ check.ddf.models <- function(model.names, ddf.models){
       #method <- try(ddf.models[[model.names[[sp]][m]]]$method, silent = TRUE)
       method <- ddf.models[[model.names[[sp]][m]]]$method
       #CHECK MODEL EXISTS
-      #if(class(method)[1] == "try-error"){
       if(is.null(method)){
         #ddf object doesn't exist    
         stop(paste("ddf object ",m,", analysis name ",model.names[[sp]][m],", for species code ",species.name[sp]," has not been provided.",sep = ""), call. = FALSE)
@@ -95,7 +94,8 @@ check.ddf.models <- function(model.names, ddf.models){
   }# next species
   double.observer <- which(model.type%in%c("trial", "trial.fi", "io", "io.fi"))
   ds <- which(model.type%in%c("ds"))
-  unsupported <- which(!model.type%in%c("trial", "trial.fi", "io", "io.fi", "ds"))
+  #unsupported <- which(!model.type%in%c("trial", "trial.fi", "io", "io.fi", "ds"))
+  unsupported <- which(!model.type%in%c("ds"))
   if(length(unsupported) > 0){
     stop(paste("Unsupported model types have been selected: ",paste(model.type[unsupported], collapse = ", "), sep = ""), call. = FALSE)
   }

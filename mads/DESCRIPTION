@@ -1,13 +1,14 @@
 Package: mads
-Imports:
-    mrds,
+Depends:
+    mrds
+Suggests:
     testthat
 Type: Package
-Title: Multi-Analysis Distance Sampling.
-Version: 1.0
-Date: 2012-11-22
+Title: Multi-Analysis Distance Sampling
+Version: 0.1.2
+Date: 2015-02-27
 Author: Laura Marshall
-Maintainer: Laura Marshall <lauram@mcs.st-and.ac.uk>
+Maintainer: Laura Marshall <lhm@st-and.ac.uk>
 Description: Performs distance sampling analyses on a number of species
     accounting for unidentified sightings, model uncertainty and covariate
     uncertainty.

@@ -8,6 +8,9 @@
 #' a parametric bootstrap, including model uncertainty and dealing with species 
 #' codes which relate to unidentified sightings. 
 #' 
+#' This is a new package with limited testing on real data, please drop
+#' me a line if you plan on using it (lhm[at]st-and.ac.uk).
+#' 
 #' The model fitting code in this function obtains its data and the model 
 #' descriptions from the ddf objects passed in via the \code{ddf.models} argument.
 #'
@@ -69,6 +72,23 @@
 #' of identified species codes corresponding to which species are present in 
 #' each strata. 
 #' 
+#' @param species.code vector of all the species codes to be included in 
+#'   the analysis
+#' @param unidentified.sightings  a list with an element for each 
+#'   unidentified code which contains a vector of corresponding identified 
+#'   species codes or NULL if not required 
+#' @param species.presence must be specified if species.code.definitions is 
+#'  specified. A list with an element for each strata which contains the vector
+#'  of species codes present in that strata
+#' @param covariate.uncertainty a dataframe detailing the variables to be 
+#'   resampled - variable.layer, variable.name, cor.factor.layer,        
+#'   cor.factor.name , uncertainty.layer, uncertainty.name, 
+#'   uncertainty.measure, sampling.distribution. or NULL if not required
+#' @param models.by.species.code a list of character vectors of model names 
+#'   with the elements named by species code
+#' @param ddf.model.objects a list of all the ddf models named in models.by.species.code
+#' @param ddf.model.options a list of options 1) selection.criterion either "AIC",
+#'   "AICc" or "BIC"
 #' @param region.table dataframe of region records - Region.Label and Area
 #' @param sample.table dataframe of sample records - Region.Label,
 #'   Sample.Label, Effort
@@ -78,21 +98,6 @@
 #' @param bootstrap if TRUE resamples data to obtain variance estimate
 #' @param bootstrap.options a list of options that can be set 1) n: number of
 #'   repetitions 2) resample: how to resample data ("samples", "observations")
-#' @param covariate.uncertainty a dataframe detailing the variables to be 
-#'   resampled - variable.layer, variable.name, cor.factor.layer,        
-#'   cor.factor.name , uncertainty.layer, uncertainty.name, 
-#'   uncertainty.measure, sampling.distribution. or NULL if not required
-#' @param ddf.models a list of all the ddf models named in model.names.
-#' @param model.names a list of character vectors of model names 
-#'   with the elements named by species code
-#' @param ddf.model.options a list of options 1) selection.criterion either "AIC",
-#'   "AICc" or "BIC"
-#' @param species.code.definitions  a list with an element for each 
-#'   unidentified code which contains a vector of corresponding identified 
-#'   species codes or NULL if not required 
-#' @param species.presence must be specified if species.code.definitions is 
-#'  specified. A list with an element for each strata which contains the vector
-#'  of species codes present in that strata
 #' @param silent boolean used to surpress some warning messages
 #' @return object of class "ma" which consists of a list of objects of class 
 #'   "ma.element". Each "ma.element" consists of the following elements:
@@ -114,55 +119,45 @@
 #' @keywords ~distance sampling, unidentified sightings, covariate uncertainty, model uncertainty 
 #' @examples
 #' 
-#'   #coming soon...
+#' \dontrun{
+#' 
+#' ex.filename<-system.file("testData/input_checks/ddf_dat.robj", package="mads")
+#' load(ex.filename)
+#' ex.filename<-system.file("testData/input_checks/obs_table.robj", package="mads")
+#' load(ex.filename)
+#' ex.filename<-system.file("testData/input_checks/region_table.robj", package="mads")
+#' load(ex.filename)
+#' ex.filename<-system.file("testData/input_checks/sample_table.robj", package="mads")
+#' load(ex.filename)
+#' 
+#' #run ddf analyses
+#' ddf.1 <- ddf(dsmodel = ~mcds(key = "hn", formula = ~ size), 
+#'              method='ds', data=ddf.dat,meta.data=list(width=4)) 
+#' ddf.2 <- ddf(dsmodel = ~mcds(key = "hr", formula = ~ size), 
+#'              method='ds', data=ddf.dat,meta.data=list(width=4))
+#' 
+#' model.names <- list("CD"=c("ddf.1","ddf.2"), "WD"=c("ddf.1","ddf.2"), 
+#'                    "UnidDol"=c("ddf.1","ddf.2"))
+#' ddf.models  <- list("ddf.1" = ddf.1, "ddf.2" = ddf.2)
+#' 
+#' unidentified.code.definitions <- list("UnidDol" = c("CD","WD"))
+#' bootstrap.options             <- list(resample="samples", n=10, quantile.type = 7) 
+#' 
+#' results<- execute.multi.analysis(
+#'              species.code = names(model.names),
+#'              unidentified.sightings = unidentified.code.definitions,
+#'              models.by.species.code = model.names,
+#'              ddf.model.objects = ddf.models,
+#'              ddf.model.options = list(criterion="AIC"),
+#'              region.table = region.table,
+#'              sample.table = sample.table,
+#'              obs.table = obs.table,
+#'              bootstrap = TRUE,
+#'              bootstrap.option = bootstrap.options)
+#'              
+#' }
 #' 
 execute.multi.analysis <- function(species.code, unidentified.sightings = NULL, species.presence = NULL, covariate.uncertainty = NULL, models.by.species.code, ddf.model.objects, ddf.model.options = list(criterion="AIC"), region.table, sample.table, obs.table, bootstrap, bootstrap.options=list(resample="samples", n=1, quantile.type = 7), silent = FALSE){
-# 
-# execute.multi.analysis  - function for dealing with model uncertainty, covariate uncertainty and unidentified species in Distance Sampling
-#
-# Arguments:
-#
-#  region.table      - dataframe of region records
-#  sample.table      - dataframe of sample records
-#  obs.table         - dataframe of observation records 
-#  bootstrap         - boolean, if TRUE resamples data 
-#  bootstrap.options - list of bootstrap options 
-#  covariate.uncertinaty - dataframe used in parametric resampling
-#  model.names       - list of character vectors of previously fitted ddf model names
-#  ddf.models        - list of previously fitted ddf models 
-#  ddf.model.options - list of options for model uncertainty 
-#  species.code.definitions - list defining species codes
-#  species.presence  - list describing species presence 
-#
-# Value:
-# 
-#   result object of class = ma
-#
-# Functions Used: create.warning.storage, check.ddf.models, check.covar.uncertainty,
-#   check.species.code.definitions, get.datasets, resample.data, resample.covariates, 
-#   fit.ddf.models, calculate.dht, prorate.unidentified, process.warnings 
-
-  #load required libraries for ddf so they don't need to be reloaded with each ddf call
-  #loaded <- library(BB, logical.return = TRUE)
-  #if(!loaded & !silent){
-  #  message("You do not have the BB library installed. It may speed up the analyses if you install it in your R libraries to avoid reloading on every bootstrap iteration.")
-  #}
-  #loaded <- library(ucminf, logical.return = TRUE)
-  #if(!loaded & !silent){
-  #  message("You do not have the ucminf library installed. It may speed up the analyses if you install it in your R libraries to avoid reloading on every bootstrap iteration.")
-  #}
-  #loaded <- library(Rcgmin, logical.return = TRUE)
-  #if(!loaded & !silent){
-  #  message("You do not have the Rcgmin library installed. It may speed up the analyses if you install it in your R libraries to avoid reloading on every bootstrap iteration.")
-  #}
-  #loaded <- library(Rvmmin, logical.return = TRUE)
-  #if(!loaded & !silent){
-  #  message("You do not have the Rvmmin library installed. It may speed up the analyses if you install it in your R libraries to avoid reloading on every bootstrap iteration.")
-  #}
-  #loaded <- library(minqa, logical.return = TRUE)
-  #if(!loaded & !silent){
-  #  message("You do not have the minqa library installed. It may speed up the analyses if you install it in your R libraries to avoid reloading on every bootstrap iteration.")
-  #}
   
   #create global variable to store error messages
   MAE.warnings <- NULL
@@ -224,7 +219,7 @@ execute.multi.analysis <- function(species.code, unidentified.sightings = NULL, 
      
   #Set up a loop
   for(n in 1:bootstrap.options$n){
-  
+
       #if(!is.null(seed.array)){
       #  set.seet(seed.array[n])
       #}
@@ -240,7 +235,7 @@ execute.multi.analysis <- function(species.code, unidentified.sightings = NULL, 
       }    
       
       #Add uncertainty to covariates
-      if(!is.null(covariate.uncertainty)){                                                   
+      if(!is.null(covariate.uncertainty)){ 
         ddf.dat.working <- resample.covariates(ddf.dat.working, covariate.uncertainty, MAE.warnings)
         MAE.warnings <- ddf.dat.working$MAE.warnings
         ddf.dat.working <- ddf.dat.working$ddf.dat.working  
@@ -248,12 +243,13 @@ execute.multi.analysis <- function(species.code, unidentified.sightings = NULL, 
            
       #Fit ddf models to all species codes
       ddf.results <- fit.ddf.models(ddf.dat.working, unique.model.names, ddf.model.objects, ddf.model.options$criterion, bootstrap.ddf.statistics, n, MAE.warnings)
-      if(class(ddf.results) == "list"){        
+      if(length(ddf.results) > 1){        
         bootstrap.ddf.statistics <- ddf.results$bootstrap.ddf.statistics
         ddf.results <- ddf.results$ddf.results
+        MAE.warnings <- ddf.results$mae.warnings
       }else{
         #If the ddf results are not valid for all species move to next bootstrap iteration
-        MAE.warnings <- ddf.results
+        MAE.warnings <- ddf.results$mae.warnings
         next
       }
                                                                                    
@@ -271,6 +267,10 @@ execute.multi.analysis <- function(species.code, unidentified.sightings = NULL, 
       bootstrap.results <- accumulate.results(n, bootstrap.results, formatted.dht.results, clusters)   
                                                                            
   }#next iteration 
+  
+  #Debugging
+  #save(bootstrap.results, file = "/Users/laura/mads/bootstrap.results.robj")
+  #cat("saving bootstrap results")
   
   #process results
   results <- process.bootstrap.results(bootstrap.results, model.index, clusters, bootstrap.ddf.statistics, bootstrap.options$quantile.type, analysis.options = list(bootstrap = bootstrap, n = bootstrap.options$n, covariate.uncertainty = covariate.uncertainty, clusters = clusters, double.observer = double.observer, unidentified.species = unidentified.species, species.code.definitions = species.code.definitions, model.names = models.by.species.code))                                                                                                                                         

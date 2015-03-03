@@ -16,9 +16,12 @@ process.warnings <- function(MAE.warnings){
 #
   mae.warning <- unique(MAE.warnings)
   no.warnings <- NULL
+  if(length(mae.warning) > 0){
+    cat("Warning messages: \n")  
+  }
   for(i in seq(along = mae.warning)){
     no.warnings <- length(which(MAE.warnings == mae.warning[i])) 
-    message(paste(mae.warning[i], " [warning occured ",no.warnings," times]", sep = "")) 
+    cat(paste(i, ": ", mae.warning[i], " [warning occured ",no.warnings," times]\n", sep = "")) 
   }
 }  
 

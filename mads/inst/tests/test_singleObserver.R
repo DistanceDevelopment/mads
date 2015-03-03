@@ -37,11 +37,20 @@ test_that("Test Analyses", {
   bootstrap.options        <- list(resample="samples", n=2, quantile.type = 7)                     
   
   set.seed(747)
-  results.to.compare <- execute.multi.analysis(region.table=region.table, 
-               sample.table=sample.table, obs.table=obs.table, bootstrap, 
-               bootstrap.options, covariate.uncertainty=covariate.uncertainty, 
-               ddf.models, model.names, ddf.model.options = ddf.model.options, 
-               species.code.definitions, species.presence)
+  results.to.compare <- execute.multi.analysis(
+                              species.code = names(model.names),
+                              unidentified.sightings = species.code.definitions,
+                              species.presence = species.presence,
+                              covariate.uncertainty = covariate.uncertainty,
+                              models.by.species.code = model.names,
+                              ddf.model.objects = ddf.models,
+                              ddf.model.options = ddf.model.options,
+                              region.table = region.table,
+                              sample.table = sample.table,
+                              obs.table = obs.table,
+                              bootstrap = bootstrap,
+                              bootstrap.option = bootstrap.options,
+                              silent = FALSE)
 
   set.seed(747)
   MAE.warnings    <- NULL
@@ -154,7 +163,7 @@ test_that("Test Analyses", {
   }
   
   ##################################
-  expect_that(as.numeric(bootstrap.ddf.statistics[["CD"]][["ddf.2"]]$ds.param[n,1:2]), equals(ddf.results[[1]]$ds$aux$ddfobj$scale$parameters))
+  expect_that(as.numeric(bootstrap.ddf.statistics[["CD"]][["ddf.2"]]$ds.param[n,1:2]), equals(as.numeric(ddf.results[[1]]$ds$aux$ddfobj$scale$parameters)))
   expect_that(bootstrap.ddf.statistics[["CD"]][["ddf.2"]]$AIC[n] < bootstrap.ddf.statistics[["CD"]][["ddf.1"]]$AIC[n], is_true()) 
   expect_that(ddf.results[[1]]$criterion, equals(bootstrap.ddf.statistics[["CD"]][["ddf.2"]]$AIC[n])) 
   ##################################
@@ -231,9 +240,9 @@ test_that("Test Analyses", {
   }
   
   ##################################
-  expect_that(as.numeric(bootstrap.ddf.statistics[["CD"]][["ddf.2"]]$ds.param[n,1:2]), equals(ddf.results[[1]]$ds$aux$ddfobj$scale$parameters))
-  expect_that(bootstrap.ddf.statistics[["CD"]][["ddf.2"]]$AIC[n] < bootstrap.ddf.statistics[["CD"]][["ddf.1"]]$AIC[n], is_true()) 
-  expect_that(ddf.results[[1]]$criterion, equals(bootstrap.ddf.statistics[["CD"]][["ddf.2"]]$AIC[n])) 
+  expect_that(as.numeric(bootstrap.ddf.statistics[["CD"]][["ddf.1"]]$ds.param[n,1:2]), equals(as.numeric(ddf.results[[1]]$ds$aux$ddfobj$scale$parameters)))
+  expect_that(bootstrap.ddf.statistics[["CD"]][["ddf.2"]]$AIC[n] > bootstrap.ddf.statistics[["CD"]][["ddf.1"]]$AIC[n], is_true()) 
+  expect_that(ddf.results[[1]]$criterion, equals(bootstrap.ddf.statistics[["CD"]][["ddf.1"]]$AIC[n])) 
   ##################################
   
   dht.results <- calculate.dht(species.name, model.index, ddf.results, region.table, sample.table, obs.table)

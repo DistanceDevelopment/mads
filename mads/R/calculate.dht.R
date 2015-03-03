@@ -41,8 +41,9 @@ calculate.dht <- function(species.name, model.index, ddf.results, region.table, 
       obs.table.subset <- create.obs.table(obs.table, ddf.data = ddf.results[[model.species.name]]$data, subset.variable = "species", subset.value = species.name[sp])
       #run dht analysis
       dht.results[[species.name[sp]]] <- try(dht(ddf.results[[model.species.name]], region.table, sample.table, obs.table.subset))
-      if(class(dht.results[[species.name[sp]]] ) == "try-error"){
-        cat("Error running dht for species ",species.name[sp], sep = "", fill = TRUE)
+      if(any(class(dht.results[[species.name[sp]]]) == "try-error")){
+        warning("Error running dht for species ",species.name[sp], sep = "", fill = TRUE)
+        dht.results[[species.name[sp]]] <- NULL
       }
     }else{
       dht.results[[species.name[sp]]] <- NULL
