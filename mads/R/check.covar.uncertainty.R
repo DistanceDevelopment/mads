@@ -59,7 +59,7 @@ check.covar.uncertainty <- function(covariate.uncertainty){
   if(length(which(!compare)) != 0){
     stop(paste("An incorrect variable layer value has been entered in the covariate uncertainty dataframe. Only one of the following may be specified: region, sample, observation.",sep = ""), call. = FALSE)
   }
-  compare <- covariate.uncertainty$uncertainty.measure%in%c("CV", "sd", "var")
+  compare <- covariate.uncertainty$uncertainty.measure%in%c("cv", "CV", "sd", "var")
   if(length(which(!compare)) != 0){
     stop(paste("An incorrect variable layer value has been entered in the covariate uncertainty dataframe. Only one of the following may be specified: region, sample, observation.",sep = ""), call. = FALSE)
   }             
