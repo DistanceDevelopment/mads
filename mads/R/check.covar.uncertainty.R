@@ -62,6 +62,37 @@ check.covar.uncertainty <- function(covariate.uncertainty){
   compare <- covariate.uncertainty$uncertainty.measure%in%c("cv", "CV", "sd", "var")
   if(length(which(!compare)) != 0){
     stop(paste("An incorrect uncertainty measure has been entered in the covariate uncertainty dataframe. Only one of the following may be specified: cv (or CV), sd and var.",sep = ""), call. = FALSE)
-  }             
+  }  
+  #check to see if distance names are provided
+  for(i in seq(along = covariate.uncertainty$variable.name)){
+    if(covariate.uncertainty$variable.name[i] == "Cluster size"){
+      covariate.uncertainty$variable.name[i] <- "size"  
+    }else if(covariate.uncertainty$variable.name[i] == "Perp distance"){
+      covariate.uncertainty$variable.name[i] <- "distance"
+    }
+  }
+  #make variable names lower case
+  #this is a patch for Distance 7 Alpha
+  for(i in seq(along = covariate.uncertainty$variable.name)){
+    #VARIABLE NAME
+    covariate.uncertainty$variable.name[i] <- tolower(covariate.uncertainty$variable.name[i])
+    temp <- strsplit(as.character(covariate.uncertainty$variable.name[i]), split = " ")[[1]]
+    if(length(temp) > 1){
+      covariate.uncertainty$variable.name[i] <- paste(temp, collapse = ".")
+    }
+    #UNCERTAINTY NAME
+    covariate.uncertainty$uncertainty.name[i] <- tolower(covariate.uncertainty$uncertainty.name[i])
+    temp <- strsplit(as.character(covariate.uncertainty$uncertainty.name[i]), split = " ")[[1]]
+    if(length(temp) > 1){
+      covariate.uncertainty$uncertainty.name[i] <- paste(temp, collapse = ".")
+    }
+    #COR FACTOR NAME
+    covariate.uncertainty$cor.factor.name[i] <- tolower(covariate.uncertainty$cor.factor.name[i])
+    temp <- strsplit(as.character(covariate.uncertainty$cor.factor.name[i]), split = " ")[[1]]
+    if(length(temp) > 1){
+      covariate.uncertainty$cor.factor.name[i] <- paste(temp, collapse = ".")
+    }
+  }
+  
   return(covariate.uncertainty)
 }
