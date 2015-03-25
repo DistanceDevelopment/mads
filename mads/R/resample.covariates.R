@@ -52,7 +52,7 @@ resample.covariates <- function(ddf.dat.working, covariate.uncertainty, MAE.warn
                                                                                 
       #Apply correction factor
       if(covariate.uncertainty$cor.factor.layer[covar] == "numeric"){   
-        correction.factor <- covariate.uncertainty$cor.factor.name[covar]
+        correction.factor <- as.numeric(covariate.uncertainty$cor.factor.name[covar])
       }else if(covariate.uncertainty$cor.factor.layer[covar] == "observation"){
         correction.factor <- ddf.dat.working[[species.name[sp]]][[covariate.uncertainty$cor.factor.name[covar]]] 
       }else{
