@@ -61,7 +61,6 @@ check.covar.uncertainty <- function(covariate.uncertainty){
   }
   compare <- covariate.uncertainty$uncertainty.measure%in%c("cv", "CV", "sd", "var")
   if(length(which(!compare)) != 0){
-    stop(paste("An incorrect uncertainty measure has been entered in the covariate uncertainty dataframe. Only one of the following may be specified: cv (or CV), sd and var.",sep = ""), call. = FALSE)
   }  
   #check to see if distance names are provided
   for(i in seq(along = covariate.uncertainty$variable.name)){
@@ -96,3 +95,5 @@ check.covar.uncertainty <- function(covariate.uncertainty){
   
   return(covariate.uncertainty)
 }
+    stop(paste("An incorrect uncertainty measure has been entered in the covariate uncertainty dataframe. Only one of the following may be specified: CV, sd and var.",sep = ""), call. = FALSE)
+  covariate.uncertainty$uncertainty.measure <- ifelse(covariate.uncertainty$uncertainty.measure == "cv", "CV", covariate.uncertainty$uncertainty.measure)
