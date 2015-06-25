@@ -4,14 +4,17 @@
 \title{Calculates the abundance for each species code including the unidentified
 codes if supplied.}
 \usage{
-calculate.dht(species.name, model.index, ddf.results, region.table,
+calculate.dht(species.name, species.field.name, model.index, ddf.results, region.table,
   sample.table, obs.table)
 }
 \arguments{
 \item{species.name}{character vector of species codes}
 
+\item{species.field.name}{character vector giving the field name of the 
+ddf data that contains the species codes}
+
 \item{model.index}{named character vector which acts as a look up table for
-duplicate detection function models.}
+duplicate detection function models}
 
 \item{ddf.results}{a list of ddf objects}
 

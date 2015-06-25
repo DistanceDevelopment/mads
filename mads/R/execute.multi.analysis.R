@@ -88,7 +88,8 @@
 #'   with the elements named by species code
 #' @param ddf.model.objects a list of all the ddf models named in models.by.species.code
 #' @param ddf.model.options a list of options 1) selection.criterion either "AIC",
-#'   "AICc" or "BIC"
+#'   "AICc" or "BIC" 2) species.field.name describing the field name in the ddf
+#'   dataset containing species codes.
 #' @param region.table dataframe of region records - Region.Label and Area
 #' @param sample.table dataframe of sample records - Region.Label,
 #'   Sample.Label, Effort
@@ -157,7 +158,7 @@
 #'              
 #' }
 #' 
-execute.multi.analysis <- function(species.code, unidentified.sightings = NULL, species.presence = NULL, covariate.uncertainty = NULL, models.by.species.code, ddf.model.objects, ddf.model.options = list(criterion="AIC"), region.table, sample.table, obs.table, bootstrap, bootstrap.options=list(resample="samples", n=1, quantile.type = 7), silent = FALSE){
+execute.multi.analysis <- function(species.code, unidentified.sightings = NULL, species.presence = NULL, covariate.uncertainty = NULL, models.by.species.code, ddf.model.objects, ddf.model.options = list(criterion="AIC", species.field.name = "species"), region.table, sample.table, obs.table, bootstrap, bootstrap.options=list(resample="samples", n=1, quantile.type = 7), silent = FALSE){
   
   #create global variable to store error messages
   MAE.warnings <- NULL
@@ -254,7 +255,7 @@ execute.multi.analysis <- function(species.code, unidentified.sightings = NULL, 
       }
                                                                                    
       #Calculate densities and abundance for all species codes
-      dht.results <- calculate.dht(species.code, model.index, ddf.results, region.table, sample.table, obs.table)
+      dht.results <- calculate.dht(species.code, ddf.model.options$species.field.name, model.index, ddf.results, region.table, sample.table, obs.table)
                           
       #Deal with unidentified sightings if present or format dht results if not
       if(unidentified.species){

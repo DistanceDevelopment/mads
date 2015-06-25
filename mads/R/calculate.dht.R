@@ -2,8 +2,10 @@
 #' codes if supplied.
 #'  
 #' @param species.name character vector of species codes
+#' @param species.field.name character vector giving the field name of the 
+#'   ddf data that contains the species codes
 #' @param model.index named character vector which acts as a look up table for
-#'   duplicate detection function models.
+#'   duplicate detection function models
 #' @param ddf.results a list of ddf objects 
 #' @param region.table dataframe of region records - Region.Label and Area
 #' @param sample.table dataframe of sample records - Region.Label,
@@ -15,7 +17,7 @@
 #' @author Laura Marshall
 #' @seealso \code{mrds::dht}
 #'
-calculate.dht <- function(species.name, model.index, ddf.results, region.table, sample.table, obs.table){
+calculate.dht <- function(species.name, species.field.name, model.index, ddf.results, region.table, sample.table, obs.table){
 # calculate.dht function to calculate the abundance for each species code 
 #
 # Arguments:
@@ -38,7 +40,7 @@ calculate.dht <- function(species.name, model.index, ddf.results, region.table, 
     model.species.name <- model.index[[species.name[sp]]]
     #create obs.table [subset functionality in mrds relies on covariates in the ddf.data... this would involve changing stuff in Distance and/or mrds]
     if(!is.null(ddf.results[[model.species.name]])){
-      obs.table.subset <- create.obs.table(obs.table, ddf.data = ddf.results[[model.species.name]]$data, subset.variable = "species", subset.value = species.name[sp])
+      obs.table.subset <- create.obs.table(obs.table, ddf.data = ddf.results[[model.species.name]]$data, subset.variable = species.field.name, subset.value = species.name[sp])
       #run dht analysis
       dht.results[[species.name[sp]]] <- try(dht(ddf.results[[model.species.name]], region.table, sample.table, obs.table.subset))
       if(any(class(dht.results[[species.name[sp]]]) == "try-error")){

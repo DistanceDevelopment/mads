@@ -6,8 +6,9 @@
 execute.multi.analysis(species.code, unidentified.sightings = NULL,
   species.presence = NULL, covariate.uncertainty = NULL,
   models.by.species.code, ddf.model.objects,
-  ddf.model.options = list(criterion = "AIC"), region.table, sample.table,
-  obs.table, bootstrap, bootstrap.options = list(resample = "samples", n = 1,
+  ddf.model.options = list(criterion = "AIC", species.field.name = "species"), 
+  region.table, sample.table, obs.table, bootstrap, 
+  bootstrap.options = list(resample = "samples", n = 1,
   quantile.type = 7), silent = FALSE)
 }
 \arguments{
@@ -33,7 +34,8 @@ with the elements named by species code}
 \item{ddf.model.objects}{a list of all the ddf models named in models.by.species.code}
 
 \item{ddf.model.options}{a list of options 1) selection.criterion either "AIC",
-"AICc" or "BIC"}
+"AICc" or "BIC" 2) species.field.name describing the field name in the ddf
+ dataset containing species codes.}
 
 \item{region.table}{dataframe of region records - Region.Label and Area}
 
