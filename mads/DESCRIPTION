@@ -5,8 +5,8 @@ Suggests:
     testthat
 Type: Package
 Title: Multi-Analysis Distance Sampling
-Version: 0.1.2
-Date: 2015-02-27
+Version: 0.1.3
+Date: 2015-06-25
 Author: Laura Marshall
 Maintainer: Laura Marshall <lhm@st-and.ac.uk>
 Description: Performs distance sampling analyses on a number of species
