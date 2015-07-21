@@ -61,7 +61,7 @@ check.covar.uncertainty <- function(covariate.uncertainty){
   }
   compare <- covariate.uncertainty$uncertainty.measure%in%c("CV", "sd", "var")
   if(length(which(!compare)) != 0){
-    stop(paste("An incorrect uncertainty measure has been entered in the covariate uncertainty dataframe. Only one of the following may be specified: cv (or CV), sd and var.",sep = ""), call. = FALSE)
+    stop(paste("An incorrect uncertainty measure has been entered in the covariate uncertainty dataframe. Only one of the following may be specified: CV, sd or var.",sep = ""), call. = FALSE)
   }             
   return(covariate.uncertainty)
 }
