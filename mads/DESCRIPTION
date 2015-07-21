@@ -5,11 +5,13 @@ Suggests:
     testthat
 Type: Package
 Title: Multi-Analysis Distance Sampling
-Version: 0.1.3
-Date: 2015-06-25
+Version: 0.1.2-2
+Date: 2015-07-08
 Author: Laura Marshall
 Maintainer: Laura Marshall <lhm@st-and.ac.uk>
-Description: Performs distance sampling analyses on a number of species
+Description: Note this is a beta version of 0.1.3 developed for Distance 7 
+    Beta 1 and not for release on CRAN.
+    Performs distance sampling analyses on a number of species
     accounting for unidentified sightings, model uncertainty and covariate
     uncertainty.
 License: GPL (>=2)
