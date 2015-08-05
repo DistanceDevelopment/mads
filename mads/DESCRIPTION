@@ -1,6 +1,7 @@
 Package: mads
 Depends:
-    mrds
+    mrds,
+    stats
 Suggests:
     testthat
 Type: Package

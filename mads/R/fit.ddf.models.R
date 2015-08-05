@@ -17,6 +17,7 @@
 #' @return list of ddf objects 
 #' @note Internal function not intended to be called by user.
 #' @author Laura Marshall
+#' @importFrom stats na.omit
 #'
 fit.ddf.models <- function(ddf.dat.working, model.names, ddf.models, criterion, bootstrap.ddf.statistics, rep.no, MAE.warnings){
 # fit.ddf.models function to refits the detection functions to the data provided

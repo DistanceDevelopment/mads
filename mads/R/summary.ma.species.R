@@ -17,7 +17,7 @@
 #' @author Laura Marshall
 #' @seealso \code{\link{summary.ma}}
 #' @keywords utility
-
+#' @importFrom stats sd
 summary.ma.species <- function (object, species=NULL, ...){
 
   print.tables <- function(object){

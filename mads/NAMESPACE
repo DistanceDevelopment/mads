@@ -1,4 +1,5 @@
 import(mrds)
+import(stats)
 S3method(summary,ma)
 S3method(summary,ma.allspecies)
 S3method(summary,ma.allunid)

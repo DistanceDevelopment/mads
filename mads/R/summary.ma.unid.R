@@ -16,6 +16,7 @@
 #'   \code{ma} object.  
 #' @author Laura Marshall
 #' @keywords utility
+#' @importFrom stats sd
 summary.ma.unid <- function(object, species = NULL, ...){
   if(!is.null(object)){
     #Display title line

@@ -16,6 +16,8 @@
 #' @return ma object a list of summary statistics for each species
 #' @note Internal functions not intended to be called by user.
 #' @author Laura Marshall
+#' @importFrom stats sd
+#' @importFrom stats quantile
 #'
 process.bootstrap.results <- function(bootstrap.results, model.index, clusters, bootstrap.ddf.statistics, quantile.type, analysis.options = list(bootstrap, n, covariate.uncertainty, clusters, double.observer, unidentified.species, species.code.definitions, model.names)){
 #process.bootstrap.results function to summarise bootstrap results

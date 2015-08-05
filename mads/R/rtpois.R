@@ -8,6 +8,9 @@
 #' @param mean mean of the generated values
 #' @note Internal function not intended to be called by user.
 #' @author Laura Marshall
+#' @importFrom stats runif
+#' @importFrom stats dpois
+#' @importFrom stats qpois
 #'
 rtpois <-
 function(N, mean=NA){

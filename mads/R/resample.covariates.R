@@ -18,6 +18,8 @@
 #' @note Internal function not intended to be called by user.
 #' @author Laura Marshall
 #' @keywords data manipulation
+#' @importFrom stats rnorn
+#' @importFrom stats rpois
 #'         
 resample.covariates <- function(ddf.dat.working, covariate.uncertainty, MAE.warnings){
 # adds uncertainty and/or applies correction factors to the specified covariates 
