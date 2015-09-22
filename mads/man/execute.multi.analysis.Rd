@@ -8,9 +8,9 @@ execute.multi.analysis(species.code, unidentified.sightings = NULL,
   species.presence = NULL, covariate.uncertainty = NULL,
   models.by.species.code, ddf.model.objects,
   ddf.model.options = list(criterion = "AIC", species.field.name = "species"),
-  region.table, sample.table, obs.table, bootstrap,
-  bootstrap.options = list(resample = "samples", n = 1, quantile.type = 7),
-  silent = FALSE)
+  region.table, sample.table, obs.table, dht.options = list(convert.units =
+  1), bootstrap, bootstrap.options = list(resample = "samples", n = 1,
+  quantile.type = 7), silent = FALSE)
 }
 \arguments{
 \item{species.code}{vector of all the species codes to be included in
@@ -46,6 +46,10 @@ Sample.Label, Effort}
 \item{obs.table}{dataframe of observation records with fields object,
 Region.Label, and Sample.Label which give links to sample.table,
 region.table and the data records used in \code{model}}
+
+\item{dht.options}{list containing option for dht: convert.units indicated
+if the distance measurement units are different from shapefile and transect
+coordinate units.}
 
 \item{bootstrap}{if TRUE resamples data to obtain variance estimate}
 

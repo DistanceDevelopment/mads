@@ -6,7 +6,7 @@
 codes if supplied.}
 \usage{
 calculate.dht(species.name, species.field.name, model.index, ddf.results,
-  region.table, sample.table, obs.table)
+  region.table, sample.table, obs.table, dht.options)
 }
 \arguments{
 \item{species.name}{character vector of species codes}
@@ -27,6 +27,8 @@ Sample.Label, Effort}
 \item{obs.table}{dataframe of observation records with fields object,
 Region.Label, and Sample.Label which give links to sample.table,
 region.table and the data records used in \code{model}}
+
+\item{dht.options}{a list of the options to be supplied to mrds::dht}
 }
 \value{
 a list of dht objects, one for each species code

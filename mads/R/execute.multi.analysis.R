@@ -96,6 +96,9 @@
 #' @param obs.table dataframe of observation records with fields object,
 #'   Region.Label, and Sample.Label which give links to sample.table,
 #'   region.table and the data records used in \code{model}
+#' @param dht.options list containing option for dht: convert.units indicated
+#'   if the distance measurement units are different from shapefile and transect
+#'   coordinate units.
 #' @param bootstrap if TRUE resamples data to obtain variance estimate
 #' @param bootstrap.options a list of options that can be set 1) n: number of
 #'   repetitions 2) resample: how to resample data ("samples", "observations")
@@ -158,7 +161,7 @@
 #'
 #' }
 #'
-execute.multi.analysis <- function(species.code, unidentified.sightings = NULL, species.presence = NULL, covariate.uncertainty = NULL, models.by.species.code, ddf.model.objects, ddf.model.options = list(criterion="AIC", species.field.name = "species"), region.table, sample.table, obs.table, bootstrap, bootstrap.options=list(resample="samples", n=1, quantile.type = 7), silent = FALSE){
+execute.multi.analysis <- function(species.code, unidentified.sightings = NULL, species.presence = NULL, covariate.uncertainty = NULL, models.by.species.code, ddf.model.objects, ddf.model.options = list(criterion="AIC", species.field.name = "species"), region.table, sample.table, obs.table, dht.options = list(convert.units=1), bootstrap, bootstrap.options=list(resample="samples", n=1, quantile.type = 7), silent = FALSE){
 
   #create global variable to store error messages
   MAE.warnings <- NULL
@@ -260,7 +263,7 @@ execute.multi.analysis <- function(species.code, unidentified.sightings = NULL, 
       }
 
       #Calculate densities and abundance for all species codes
-      dht.results <- calculate.dht(species.code, ddf.model.options$species.field.name, model.index, ddf.results, region.table, sample.table, obs.table)
+      dht.results <- calculate.dht(species.code, ddf.model.options$species.field.name, model.index, ddf.results, region.table, sample.table, obs.table, dht.options)
 
       #Deal with unidentified sightings if present or format dht results if not
       if(unidentified.species){
