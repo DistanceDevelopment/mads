@@ -302,6 +302,8 @@ test_that("Test data input checks", {
   
   
   #Test that the species.field.name argument works
+  ddf.1 <- ddf(dsmodel = ~mcds(key = "hn", formula = ~ size), method='ds', data=ddf.dat,meta.data=list(width=4))
+  ddf.2 <- ddf(dsmodel = ~mcds(key = "hr", formula = ~ size), method='ds', data=ddf.dat,meta.data=list(width=4))
   model.names              <- list("CD"=c("ddf.1","ddf.2"), "WD"=c("ddf.1","ddf.2"), "UnidDol"=c("ddf.1","ddf.2"))
   ddf.models               <- list("ddf.1" = ddf.1, "ddf.2" = ddf.2)
   species.code.definitions <- list("UnidDol" = c("CD","WD"))
@@ -309,12 +311,11 @@ test_that("Test data input checks", {
   covariate.uncertainty    <- NULL
   ddf.model.options        <- list(criterion="AIC")
   ddf.model.options$distance.naming.conv <- TRUE
-  bootstrap                <- TRUE
+  bootstrap                <- FALSE
   bootstrap.options        <- list(resample="samples", n=1)
   seed.array               <- NULL
   
   set.seed(444)
-  
   species.field.name <- execute.multi.analysis(
     species.code = names(model.names),
     unidentified.sightings = species.code.definitions,
@@ -333,15 +334,17 @@ test_that("Test data input checks", {
   #add a new column of a different name the same as species
   ddf.dat$test <- ddf.dat$species
   #Remove the species column
-  ddf.new <- ddf.dat[,-13]
+  new.dat <- ddf.dat[,-13]
   
   #re-run ddf analyses so they have the updated data
   ddf.1 <- ddf(dsmodel = ~mcds(key = "hn", formula = ~ size), method='ds', data=new.dat,meta.data=list(width=4))
   ddf.2 <- ddf(dsmodel = ~mcds(key = "hr", formula = ~ size), method='ds', data=new.dat,meta.data=list(width=4))
-  head(ddf.1$data)
+  #Use new models!
+  ddf.models               <- list("ddf.1" = ddf.1, "ddf.2" = ddf.2)
   
   #provide the new species.field.name
   ddf.model.options <- list(criterion="AIC", species.field.name = "test")
+  set.seed(444)
   alternative.field.name <- execute.multi.analysis(
     species.code = names(model.names),
     unidentified.sightings = species.code.definitions,

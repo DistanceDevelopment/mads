@@ -35,6 +35,7 @@ test_that("Test Analyses", {
   ddf.model.options$distance.naming.conv <- TRUE
   bootstrap                <- TRUE
   bootstrap.options        <- list(resample="samples", n=2, quantile.type = 7)
+  dht.options              <- list(convert.units = 1)
 
   set.seed(747)
   results.to.compare <- execute.multi.analysis(
@@ -176,7 +177,7 @@ test_that("Test Analyses", {
   expect_that(ddf.results[[1]]$criterion, equals(bootstrap.ddf.statistics[["CD"]][["ddf.2"]]$AIC[n]))
   ##################################
 
-  dht.results <- calculate.dht(species.code, ddf.model.options$species.field.name, model.index, ddf.results, region.table, sample.table, obs.table)
+  dht.results <- calculate.dht(species.code, ddf.model.options$species.field.name, model.index, ddf.results, region.table, sample.table, obs.table, dht.options)
 
   ##################################
   expect_that(names(dht.results), is_identical_to(c("CD","WD","UnidDol")))
@@ -253,7 +254,7 @@ test_that("Test Analyses", {
   expect_that(ddf.results[[1]]$criterion, equals(bootstrap.ddf.statistics[["CD"]][["ddf.1"]]$AIC[n]))
   ##################################
 
-  dht.results <- calculate.dht(species.code, ddf.model.options$species.field.name, model.index, ddf.results, region.table, sample.table, obs.table)
+  dht.results <- calculate.dht(species.code, ddf.model.options$species.field.name, model.index, ddf.results, region.table, sample.table, obs.table, dht.options)
   if(unidentified.species){
     formatted.dht.results <- prorate.unidentified(dht.results, species.code.definitions, species.presence, clusters)
   }else{
