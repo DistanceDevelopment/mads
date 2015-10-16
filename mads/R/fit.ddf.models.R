@@ -61,8 +61,10 @@ fit.ddf.models <- function(ddf.dat.working, model.names, ddf.models, criterion, 
         model.call$control <- call("list",initial=start.values)
       }
       #refit ddf model
+      arguments <- as.list(model.call[2:length(model.call)])
       options(show.error.messages = FALSE)
-      temp.results[[m]] <- try(eval(model.call), silent = TRUE)
+      temp.results[[m]] <- try(do.call(ddf, arguments), silent = TRUE)
+      #temp.results[[m]] <- try(eval(model.call), silent = TRUE)
       options(show.error.messages = TRUE)
       if(any(class(temp.results[[m]]) == "try-error")){
         #Model fitting threw an error
