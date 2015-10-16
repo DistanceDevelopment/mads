@@ -1,3 +1,11 @@
+mads 0.1.3-2
+----------
+
+Notes
+
+  * Bug fix for warnings
+  * Catches the case when fitted values in ddf are 0
+
 mads 0.1.3
 ----------
 
