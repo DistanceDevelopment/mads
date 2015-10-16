@@ -70,7 +70,7 @@ fit.ddf.models <- function(ddf.dat.working, model.names, ddf.models, criterion, 
         #Model fitting threw an error
         bootstrap.ddf.statistics[[species.name[sp]]]$convergence[2,current.model.name] <- bootstrap.ddf.statistics[[species.name[sp]]]$convergence[2,current.model.name] + 1
         MAE.warnings <- mae.warning(paste("Model was not successfull for species ",species.name[sp]," model ",current.model.name,".", sep = ""), warning.mode="store", MAE.warnings)
-      }else if(check.convergence(temp.results[[m]])){
+      }else if(check.convergence(temp.results[[m]]) & check.fitted(temp.results[[m]])){
         #Model converged save info
         bootstrap.ddf.statistics[[species.name[sp]]]$convergence[1,current.model.name] <- bootstrap.ddf.statistics[[species.name[sp]]]$convergence[1,current.model.name] + 1
         bootstrap.ddf.statistics <- store.param.ests(bootstrap.ddf.statistics, species.name[sp], current.model.name, temp.results[[m]], rep.no)
@@ -83,8 +83,8 @@ fit.ddf.models <- function(ddf.dat.working, model.names, ddf.models, criterion, 
           BIC  = k*log(n)-2*lnl)
         bootstrap.ddf.statistics[[species.name[sp]]][[current.model.name]][[criterion]][rep.no] <- selection.criterion.values[m]             
       }else{
-        #Model failed to converge - this is an error so never gets here
-        MAE.warnings <- mae.warning(paste("Model did not converge for species ",species.name[sp]," model ",current.model.name,". Convergence code was not zero.", sep = ""), warning.mode="store", MAE.warnings)
+        #Model failed to converge 
+        MAE.warnings <- mae.warning(paste("ddf model was problematic for species ",species.name[sp]," model ",current.model.name,". Convergence code was not zero or one or more fitted values were zero.", sep = ""), warning.mode="store", MAE.warnings)
         bootstrap.ddf.statistics[[species.name[sp]]]$convergence[2,current.model.name] <- bootstrap.ddf.statistics[[species.name[sp]]]$convergence[2,current.model.name] + 1        
       }
     }#next model 
