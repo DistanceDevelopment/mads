@@ -7,6 +7,6 @@ check.bootstrap.options <- function(bootstrap, resample, n, sample.table){
     }
   }
   if(!bootstrap){
-    warning("Currently the only method of variance estimation in mads is via the bootstrap.")
+    warning("Currently the only method of variance estimation in mads is via the bootstrap.", call. = FALSE, immediate. = TRUE)
   }  
 }
