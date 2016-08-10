@@ -316,7 +316,8 @@ test_that("Test data input checks", {
   seed.array               <- NULL
   
   set.seed(444)
-  species.field.name <- execute.multi.analysis(
+  #Surpressing the warning about not bootstrapping
+  species.field.name <- suppressWarnings(execute.multi.analysis(
     species.code = names(model.names),
     unidentified.sightings = species.code.definitions,
     species.presence = species.presence,
@@ -329,7 +330,7 @@ test_that("Test data input checks", {
     obs.table = obs.table,
     bootstrap = bootstrap,
     bootstrap.option = bootstrap.options,
-    silent = FALSE)
+    silent = FALSE))
   
   #add a new column of a different name the same as species
   ddf.dat$test <- ddf.dat$species
@@ -345,7 +346,8 @@ test_that("Test data input checks", {
   #provide the new species.field.name
   ddf.model.options <- list(criterion="AIC", species.field.name = "test")
   set.seed(444)
-  alternative.field.name <- execute.multi.analysis(
+  #Surpressing the warning about not bootstrapping
+  alternative.field.name <- suppressWarnings(execute.multi.analysis(
     species.code = names(model.names),
     unidentified.sightings = species.code.definitions,
     species.presence = species.presence,
@@ -358,7 +360,7 @@ test_that("Test data input checks", {
     obs.table = obs.table,
     bootstrap = bootstrap,
     bootstrap.option = bootstrap.options,
-    silent = FALSE)
+    silent = FALSE))
   
   expect_identical(species.field.name, alternative.field.name)
   

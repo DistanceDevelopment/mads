@@ -5,7 +5,7 @@ context("Single Observer Analyses")
 
 test_that("Test Analyses", {
 
-
+  
   #datasetup
   ex.filename<-system.file("testData/input_checks/ddf_dat.robj", package="mads")
   load(ex.filename)
