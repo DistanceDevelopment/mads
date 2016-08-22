@@ -13,6 +13,7 @@ Maintainer: Laura Marshall <lhm@st-and.ac.uk>
 Description: Performs distance sampling analyses on a number of species
     accounting for unidentified sightings, model uncertainty and covariate
     uncertainty.
+BugReports: https://github.com/DistanceDevelopment/mads/issues
 License: GPL (>=2)
 Collate:
     'accumulate.results.R'
