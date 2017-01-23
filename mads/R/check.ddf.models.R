@@ -81,7 +81,6 @@ check.ddf.models <- function(model.names, ddf.models){
   for(sp in seq(along = model.names)){     
     #for every model
     for(m in seq(along = model.names[[sp]])){
-      #method <- try(ddf.models[[model.names[[sp]][m]]]$method, silent = TRUE)
       method <- ddf.models[[model.names[[sp]][m]]]$method
       #CHECK MODEL EXISTS
       if(is.null(method)){
@@ -97,7 +96,7 @@ check.ddf.models <- function(model.names, ddf.models){
   #unsupported <- which(!model.type%in%c("trial", "trial.fi", "io", "io.fi", "ds"))
   unsupported <- which(!model.type%in%c("ds"))
   if(length(unsupported) > 0){
-    stop(paste("Unsupported model types have been selected: ",paste(model.type[unsupported], collapse = ", "), sep = ""), call. = FALSE)
+    stop(paste("Unsupported model types have been selected: ",paste(model.type[unsupported], collapse = ", "), ". Only single observer models are currently supported.", sep = ""), call. = FALSE)
   }
   if(length(double.observer) == length(model.type)){
     double.observer <- TRUE
