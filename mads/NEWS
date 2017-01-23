@@ -1,3 +1,10 @@
+mads 0.1.5
+----------
+
+Bug Fixes
+
+  * Fixed bug in the call to repeat fitting of the detection functions by ddf in mrds. Previously, information such as whether the data were point transect, binned, left-truncated etc. was lost from the ddf object and may have caused dht to produce incorrect estimates of abundance / density. The default options of line transects with exact distances will not have been affected.
+
 mads 0.1.4
 ----------
 
