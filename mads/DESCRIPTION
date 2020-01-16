@@ -6,12 +6,20 @@ Suggests:
     testthat
 Type: Package
 Title: Multi-Analysis Distance Sampling
-Version: 0.1.5
+Version: 0.1.6
 Author: Laura Marshall
 Maintainer: Laura Marshall <lhm@st-and.ac.uk>
-Description: Performs distance sampling analyses on a number of species
-    accounting for unidentified sightings, model uncertainty and covariate
-    uncertainty.
+Description: Can perform distance sampling analyses on a number of species 
+    at once and can account for unidentified sightings. Unidentified 
+    sightings refer to sightings which cannot be allocated to a single 
+    species but may instead be allocated to a group of species. The 
+    abundance of each unidentified group is estimated and then prorated 
+    to the species estimates. The multi-analysis engine can also incorporate 
+    model and covariate uncertainty. Variance estimation is via a non 
+    parametric bootstrap. The methods implemented are described in Gerodette 
+    T. and Forcada J. (2005) <10.3354/meps291001> Non-recovery of two 
+    spotted and spinner dolphin populations in the eastern tropical 
+    Pacific Ocean.
 BugReports: https://github.com/DistanceDevelopment/mads/issues
 License: GPL (>=2)
 Collate:
@@ -49,3 +57,5 @@ Collate:
     'summary.ma.R'
     'summary.ma.species.R'
     'summary.ma.unid.R'
+    'mads-package.R'
+RoxygenNote: 6.1.1
