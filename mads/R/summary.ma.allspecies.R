@@ -4,7 +4,7 @@
 #' parameters, model selection criterion, and optionally abundance in the
 #' covered (sampled) region and its standard error for all species.
 #' 
-#' @export summary ma.allspecies
+#' @export 
 #' @method summary ma.allspecies
 #' @aliases summary.ma.allspecies
 #' @param object a \code{ma} model object

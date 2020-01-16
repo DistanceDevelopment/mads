@@ -6,7 +6,7 @@
 #' covered (sampled) region and its standard error. What is printed depends
 #' on the corresponding call to summary.
 #' 
-#' @export summary ma.species
+#' @export
 #' @method summary ma.species
 #' @aliases summary.ma.species
 #' @param object a summary of \code{ma} model object

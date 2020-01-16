@@ -18,7 +18,7 @@
 #' @note Internal function not intended to be called by user.
 #' @author Laura Marshall
 #' @keywords data manipulation
-#' @importFrom stats rnorn
+#' @importFrom stats rnorm
 #' @importFrom stats rpois
 #'         
 resample.covariates <- function(ddf.dat.working, covariate.uncertainty, MAE.warnings){
