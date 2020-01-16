@@ -17,6 +17,7 @@
 #' @return a list of dht objects, one for each species code
 #' @author Laura Marshall
 #' @seealso \code{mrds::dht}
+#' @importFrom mrds dht
 #'
 calculate.dht <- function(species.name, species.field.name, model.index, ddf.results, region.table, sample.table, obs.table, dht.options){
 # calculate.dht function to calculate the abundance for each species code 
