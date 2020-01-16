@@ -57,7 +57,7 @@ coordinate units.}
 \item{bootstrap.options}{a list of options that can be set 1) n: number of
 repetitions 2) resample: how to resample data ("samples", "observations")}
 
-\item{silent}{boolean used to surpress some warning messages}
+\item{silent}{boolean used to supress progress counter output}
 }
 \value{
 object of class "ma" which consists of a list of objects of class
@@ -144,43 +144,69 @@ each strata.
 }
 \examples{
 
-\dontrun{
-
-ex.filename<-system.file("testData/input_checks/ddf_dat.robj", package="mads")
+ex.filename<-system.file("testData/example_data/dist_data.robj", package="mads")
 load(ex.filename)
-ex.filename<-system.file("testData/input_checks/obs_table.robj", package="mads")
-load(ex.filename)
-ex.filename<-system.file("testData/input_checks/region_table.robj", package="mads")
-load(ex.filename)
-ex.filename<-system.file("testData/input_checks/sample_table.robj", package="mads")
+ex.filename<-system.file("testData/example_data/survey_data.robj", package="mads")
 load(ex.filename)
 
-#run ddf analyses
-ddf.1 <- ddf(dsmodel = ~mcds(key = "hn", formula = ~ size),
-             method='ds', data=ddf.dat,meta.data=list(width=4))
-ddf.2 <- ddf(dsmodel = ~mcds(key = "hr", formula = ~ size),
-             method='ds', data=ddf.dat,meta.data=list(width=4))
+region.table <- survey.data@region.table@region.table
+sample.table <- survey.data@sample.table@sample.table
+obs.table <- survey.data@obs.table@obs.table
 
-model.names <- list("CD"=c("ddf.1","ddf.2"), "WD"=c("ddf.1","ddf.2"),
-                   "UnidDol"=c("ddf.1","ddf.2"))
-ddf.models  <- list("ddf.1" = ddf.1, "ddf.2" = ddf.2)
+# Fit detection functions using ddf in mrds
+# Fit a half-normal model
+df.all.hn <- ddf(dsmodel = ~mcds(key = "hn", formula = ~ 1),
+                 method='ds', data=dist.data, meta.data=list(width=30))
+summary(df.all.hn)
+plot(df.all.hn)
 
-unidentified.code.definitions <- list("UnidDol" = c("CD","WD"))
-bootstrap.options             <- list(resample="samples", n=10, quantile.type = 7)
+# Fit a hazard rate model
+df.all.hr <- ddf(dsmodel = ~mcds(key = "hr", formula = ~ 1),
+                 method='ds', data=dist.data, meta.data=list(width=30))
+summary(df.all.hr)
+plot(df.all.hr)
 
-results<- execute.multi.analysis(
-             species.code = names(model.names),
-             unidentified.sightings = unidentified.code.definitions,
-             models.by.species.code = model.names,
-             ddf.model.objects = ddf.models,
-             ddf.model.options = list(criterion="AIC"),
-             region.table = region.table,
-             sample.table = sample.table,
-             obs.table = obs.table,
-             bootstrap = TRUE,
-             bootstrap.option = bootstrap.options)
+species.codes <- c("CD", "WD", "UnID")
+unid.defs <- list("UnID" = c("CD", "WD"))
+mod.uncert <- list("CD" = c("df.all.hn", "df.all.hr"),
+                   "WD" = c("df.all.hn", "df.all.hr"),
+                   "UnID" = c("df.all.hn", "df.all.hr"))
+models <- list("df.all.hn" = df.all.hn,
+               "df.all.hr" = df.all.hr)
+model.opts <- list(criterion = "AIC")
+bootstrap.opts <- list(resample = 'samples', n=500)
 
+\donttest{
+#Warning this will take some time to run!
+results<- execute.multi.analysis( species.code = species.codes,
+                                  unidentified.sightings = unid.defs,
+                                  models.by.species.code = mod.uncert, 
+                                  ddf.model.objects = models, 
+                                  ddf.model.options = model.opts, 
+                                  region.table = region.table, 
+                                  sample.table = sample.table, 
+                                  obs.table = obs.table, 
+                                  bootstrap = TRUE, 
+                                  bootstrap.option = bootstrap.opts)
 }
+
+#Short example to run as per CRAN requirements - warning not enough 
+#repetitions to estimate variance!
+bootstrap.opts <- list(resample = 'samples', n=5)
+
+results<- execute.multi.analysis( species.code = species.codes,
+                                  unidentified.sightings = unid.defs,
+                                  models.by.species.code = mod.uncert, 
+                                  ddf.model.objects = models, 
+                                  ddf.model.options = model.opts, 
+                                  region.table = region.table, 
+                                  sample.table = sample.table, 
+                                  obs.table = obs.table, 
+                                  bootstrap = TRUE, 
+                                  bootstrap.option = bootstrap.opts)
+
+#These are simulated data and true abundances are: CD = 560, WD = 240               
+summary(results)                                   
 
 }
 \references{
