@@ -32,14 +32,14 @@ test_that("Test Analyses", {
   
   model1 <- ddf(data = ptdata.binned, dsmodel = ~cds(key = "hn"),
                 meta.data = list(width = 100, point = TRUE, binned = TRUE, breaks = 10*(0:10)))
-  expect_warning(model2 <- ddf(data = ptdata.binned, dsmodel = ~cds(key = "hr"),
-                meta.data = list(width = 100, point = TRUE, binned = TRUE, breaks = 10*(0:10))))
+  model2 <- ddf(data = ptdata.binned, dsmodel = ~cds(key = "hr"),
+                meta.data = list(width = 100, point = TRUE, binned = TRUE, breaks = 10*(0:10)))
   
   ddf.models <- list("model1" = model1, "model2" = model2)
   
   # Model1 has minimum AIC
   orig.AIC <- model1$criterion
-  dht.results <- dht(model1, region, samples, obs)
+  dht.results <- dht(model1, region, samples, obs, options = list(ervar = "P3"))
   
   # Get mads to refit models and select model with minimum AIC
   expect_warning(
@@ -49,8 +49,10 @@ test_that("Test Analyses", {
                                                region.table = region,
                                                sample.table = samples,
                                                obs.table = obs,
+                                               dht.options = list(ervar = "P3"),
                                                bootstrap = bootstrap,
-                                               silent = TRUE))
+                                               silent = TRUE),
+  "Currently the only method of variance estimation in mads is via the bootstrap.")
   
   expect_equal(orig.AIC, results.to.compare$species$all$ddf$model1$AIC)
   expect_equal(as.numeric(dht.results$individuals$N$Estimate), results.to.compare$species$all$individuals$N$Estimate[1])
@@ -58,36 +60,38 @@ test_that("Test Analyses", {
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Test uniform key function with adjustments with exact data
   
-  expect_warning(model1 <- ddf(data=ptdata.exact, dsmodel=~cds(key="unif", adj.series="cos", adj.order=c(1,2)),
-                meta.data=list(width = 100, point=TRUE),
-                control = list(initial = list(scale = NULL, 
-                                              shape = NULL, 
-                                              adjustment = c(1.18514462448985, -0.0349107135619797)))))
-  expect_warning(model2 <- ddf(data=ptdata.exact, dsmodel=~cds(key="unif", adj.series="cos", adj.order=c(2,4)),
-                meta.data=list(width = 100, point=TRUE),
-                control = list(initial = list(scale = NULL, 
-                                              shape = NULL, 
-                                              adjustment = c(-0.6164571, -0.1788562)))))
-  
-  ddf.models <- list("model1" = model1, "model2" = model2)
-  
-  # Model1 has minimum AIC
-  orig.AIC <- model1$criterion
-  dht.results <- dht(model1, region, samples, obs)
-  
-  # Get mads to refit models and select model with minimum AIC
-  expect_warning(
-    results.to.compare <- execute.multi.analysis(species.code = names(model.names),
-                                                 models.by.species.code = model.names,
-                                                 ddf.model.objects = ddf.models,
-                                                 region.table = region,
-                                                 sample.table = samples,
-                                                 obs.table = obs,
-                                                 bootstrap = bootstrap,
-                                                 silent = TRUE))
-  
-  expect_equal(orig.AIC, results.to.compare$species$all$ddf$model1$AIC)
-  expect_equal(as.numeric(dht.results$individuals$N$Estimate), results.to.compare$species$all$individuals$N$Estimate[1])
+  # model1 <- ddf(data=ptdata.exact, dsmodel=~cds(key="unif", adj.series="cos", adj.order=c(1,2)),
+  #               meta.data=list(width = 100, point=TRUE),
+  #               control = list(initial = list(scale = NULL, 
+  #                                             shape = NULL, 
+  #                                             adjustment = c(1.18514462448985, -0.0349107135619797))))
+  # model2 <- ddf(data=ptdata.exact, dsmodel=~cds(key="unif", adj.series="cos", adj.order=c(2,4)),
+  #               meta.data=list(width = 100, point=TRUE),
+  #               control = list(initial = list(scale = NULL, 
+  #                                             shape = NULL, 
+  #                                             adjustment = c(-0.6164571, -0.1788562))))
+  # 
+  # ddf.models <- list("model1" = model1, "model2" = model2)
+  # 
+  # # Model1 has minimum AIC
+  # orig.AIC <- model1$criterion
+  # dht.results <- dht(model1, region, samples, obs, options = list(ervar = "P3"))
+  # 
+  # # Get mads to refit models and select model with minimum AIC
+  # expect_warning(
+  #   results.to.compare <- execute.multi.analysis(species.code = names(model.names),
+  #                                                models.by.species.code = model.names,
+  #                                                ddf.model.objects = ddf.models,
+  #                                                region.table = region,
+  #                                                sample.table = samples,
+  #                                                obs.table = obs,
+  #                                                dht.options = list(ervar = "P3"),
+  #                                                bootstrap = bootstrap,
+  #                                                silent = TRUE),
+  #   "Currently the only method of variance estimation in mads is via the bootstrap.")
+  # 
+  # expect_equal(orig.AIC, results.to.compare$species$all$ddf$model1$AIC)
+  # expect_equal(as.numeric(dht.results$individuals$N$Estimate), results.to.compare$species$all$individuals$N$Estimate[1])
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Test left truncation
@@ -101,7 +105,7 @@ test_that("Test Analyses", {
   
   # Model1 has minimum AIC
   orig.AIC <- model2$criterion
-  dht.results <- dht(model2, region, samples, obs)
+  dht.results <- dht(model2, region, samples, obs, options = list(ervar = "P3"))
   
   # Get mads to refit models and select model with minimum AIC
   expect_warning(
@@ -111,8 +115,10 @@ test_that("Test Analyses", {
                                                  region.table = region,
                                                  sample.table = samples,
                                                  obs.table = obs,
+                                                 dht.options = list(ervar = "P3"),
                                                  bootstrap = bootstrap,
-                                                 silent = TRUE))
+                                                 silent = TRUE),
+    "Currently the only method of variance estimation in mads is via the bootstrap.")
   
   expect_equal(orig.AIC, results.to.compare$species$all$ddf$model2$AIC)
   expect_equal(as.numeric(dht.results$individuals$N$Estimate), results.to.compare$species$all$individuals$N$Estimate[1])
@@ -126,15 +132,15 @@ test_that("Test Analyses", {
                 meta.data = list(width = 100, left = 10, point = TRUE, 
                                  binned = TRUE, breaks = 10*(1:10), mono = TRUE))
   
-  expect_warning(model2 <- ddf(data = new.data, dsmodel = ~cds(key = "hr", adj.series="cos", adj.order=c(2)),
+  model2 <- ddf(data = new.data, dsmodel = ~cds(key = "hr", adj.series="cos", adj.order=c(2)),
                 meta.data = list(width = 100, left = 10, point = TRUE, 
-                                 binned = TRUE, breaks = 10*(1:10), mono = TRUE)))
+                                 binned = TRUE, breaks = 10*(1:10), mono = TRUE))
   
   ddf.models <- list("model1" = model1, "model2" = model2)
   
   # Model1 has minimum AIC
   orig.AIC <- model2$criterion
-  dht.results <- dht(model2, region, samples, obs)
+  dht.results <- dht(model2, region, samples, obs, options = list(ervar = "P3"))
   
   # Get mads to refit models and select model with minimum AIC
   expect_warning(
@@ -145,7 +151,8 @@ test_that("Test Analyses", {
                                                  sample.table = samples,
                                                  obs.table = obs,
                                                  bootstrap = bootstrap,
-                                                 silent = TRUE))
+                                                 silent = TRUE),
+    "Currently the only method of variance estimation in mads is via the bootstrap.")
   
   expect_equal(orig.AIC, results.to.compare$species$all$ddf$model2$AIC)
   expect_equal(round(as.numeric(dht.results$individuals$N$Estimate),2),

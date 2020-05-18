@@ -69,8 +69,8 @@ test_that("Test Analyses", {
   }
 
   ##################################
-  expect_that(clusters, is_true())
-  expect_that(double.observer, is_false())
+  expect_true(clusters)
+  expect_false(double.observer)
   ##################################
 
   species.code.definitions <- check.species.code.definitions(species.code.definitions, species.code)
@@ -78,14 +78,14 @@ test_that("Test Analyses", {
   species.code.definitions <- species.code.definitions$species.code.definitions
 
   ##################################
-  expect_that(unidentified.species, is_true())
+  expect_true(unidentified.species)
   ##################################
 
   species.presence         <- check.species.presence(species.presence, species.code, strata.name = as.character(region.table$Region.Label))
 
   ##################################
-  expect_that(names(species.presence), is_identical_to(c("A")))
-  expect_that(species.presence[[1]], is_identical_to(c("CD","WD")))
+  expect_identical(names(species.presence), "A")
+  expect_identical(species.presence[[1]], c("CD","WD"))
   ##################################
 
   species.presence.compare <- species.presence
@@ -107,13 +107,13 @@ test_that("Test Analyses", {
   ddf.dat.master      <- ddf.dat.master$ddf.dat.master
 
   ##################################
-  expect_that(unique.model.names, is_identical_to(list("CD" = c("ddf.1", "ddf.2", "ddf.3"))))
+  expect_identical(unique.model.names, list("CD" = c("ddf.1", "ddf.2", "ddf.3")))
   test <- c("CD","CD","CD")
   names(test) <- c("CD","WD","UnidDol")
   expect_that(model.index, is_identical_to(test))
   rm(test)
-  expect_that(length(ddf.dat.master), equals(1))
-  expect_that(nrow(ddf.dat.master[[1]]), equals(nrow(ddf.1$data)))
+  expect_equal(length(ddf.dat.master), 1)
+  expect_equal(nrow(ddf.dat.master[[1]]), nrow(ddf.1$data))
   ##################################
 
   obs.table.master    <- obs.table
@@ -123,8 +123,8 @@ test_that("Test Analyses", {
   bootstrap.ddf.statistics <- create.param.arrays(unique.model.names, ddf.models, bootstrap.options$n, ddf.model.options$criterion)
 
   ##################################
-  expect_that(names(bootstrap.ddf.statistics), matches("CD"))
-  expect_that(dimnames(bootstrap.results$individual.summary)[[4]], is_identical_to(c("CD","WD")))
+  expect_match(names(bootstrap.ddf.statistics), "CD")
+  expect_identical(dimnames(bootstrap.results$individual.summary)[[4]], c("CD","WD"))
   ##################################
 
   n=1
@@ -140,11 +140,11 @@ test_that("Test Analyses", {
   }
 
   ##################################
-  expect_that(length(unique(sample.table$Sample.Label)), equals(length(unique(sample.table.master$Sample.Label))))
-  expect_that(table(sample.table$Region), is_identical_to(table(sample.table.master$Region)))
-  expect_that(nrow(ddf.dat.working[[1]]), equals(nrow(obs.table)))
-  expect_that(length(which(ddf.dat.working[[1]]$object%in%obs.table$object)), equals(nrow(obs.table)))
-  expect_that(ddf.dat.working[["CD"]]$distance[ddf.dat.working[["CD"]]$object == 16], equals(ddf.dat.master[["CD"]]$distance[ddf.dat.master[["CD"]]$object == 16]))
+  expect_equal(length(unique(sample.table$Sample.Label)), length(unique(sample.table.master$Sample.Label)))
+  expect_identical(table(sample.table$Region), table(sample.table.master$Region))
+  expect_equal(nrow(ddf.dat.working[[1]]), nrow(obs.table))
+  expect_equal(length(which(ddf.dat.working[[1]]$object%in%obs.table$object)), nrow(obs.table))
+  expect_equal(ddf.dat.working[["CD"]]$distance[ddf.dat.working[["CD"]]$object == 16], ddf.dat.master[["CD"]]$distance[ddf.dat.master[["CD"]]$object == 16])
   ##################################
 
   #ddf.dat.working.check <- ddf.dat.working
@@ -172,16 +172,16 @@ test_that("Test Analyses", {
   }
 
   ##################################
-  expect_that(as.numeric(bootstrap.ddf.statistics[["CD"]][["ddf.2"]]$ds.param[n,1:2]), equals(as.numeric(ddf.results[[1]]$ds$aux$ddfobj$scale$parameters)))
-  expect_that(bootstrap.ddf.statistics[["CD"]][["ddf.2"]]$AIC[n] < bootstrap.ddf.statistics[["CD"]][["ddf.1"]]$AIC[n], is_true())
-  expect_that(ddf.results[[1]]$criterion, equals(bootstrap.ddf.statistics[["CD"]][["ddf.2"]]$AIC[n]))
+  expect_equal(as.numeric(bootstrap.ddf.statistics[["CD"]][["ddf.2"]]$ds.param[n,1:2]), as.numeric(ddf.results[[1]]$ds$aux$ddfobj$scale$parameters))
+  expect_true(bootstrap.ddf.statistics[["CD"]][["ddf.2"]]$AIC[n] < bootstrap.ddf.statistics[["CD"]][["ddf.1"]]$AIC[n])
+  expect_equal(ddf.results[[1]]$criterion, bootstrap.ddf.statistics[["CD"]][["ddf.2"]]$AIC[n])
   ##################################
 
   dht.results <- calculate.dht(species.code, ddf.model.options$species.field.name, model.index, ddf.results, region.table, sample.table, obs.table, dht.options)
 
   ##################################
-  expect_that(names(dht.results), is_identical_to(c("CD","WD","UnidDol")))
-  expect_that(dht.results[[1]]$clusters$summary$n[1]+dht.results[[2]]$clusters$summary$n[1]+dht.results[[3]]$clusters$summary$n[1], equals(nrow(obs.table)))
+  expect_identical(names(dht.results), c("CD","WD","UnidDol"))
+  expect_equal(dht.results[[1]]$clusters$summary$n[1]+dht.results[[2]]$clusters$summary$n[1]+dht.results[[3]]$clusters$summary$n[1], nrow(obs.table))
   ##################################
 
   if(unidentified.species){
@@ -191,9 +191,9 @@ test_that("Test Analyses", {
   }
 
   ##################################
-  expect_that(length(formatted.dht.results), equals(2))
-  expect_that(names(formatted.dht.results), is_identical_to(c("CD","WD")))
-  expect_that(dht.results[[1]]$clusters$N$Estimate[1]+dht.results[[2]]$clusters$N$Estimate[1]+dht.results[[3]]$clusters$N$Estimate[1], equals(formatted.dht.results[[1]]$clusters$N$Estimate[1]+formatted.dht.results[[2]]$clusters$N$Estimate[1]))
+  expect_equal(length(formatted.dht.results), 2)
+  expect_identical(names(formatted.dht.results), c("CD","WD"))
+  expect_equal(dht.results[[1]]$clusters$N$Estimate[1]+dht.results[[2]]$clusters$N$Estimate[1]+dht.results[[3]]$clusters$N$Estimate[1], formatted.dht.results[[1]]$clusters$N$Estimate[1]+formatted.dht.results[[2]]$clusters$N$Estimate[1])
   expect_that(as.numeric(((formatted.dht.results[["CD"]]$clusters$N$Estimate[1]-dht.results[["CD"]]$clusters$N$Estimate[1])/formatted.dht.results[["CD"]]$clusters$N$Estimate[1])*100), equals(formatted.dht.results[["CD"]]$clusters$N$PercentUnidentified[1], tolerance = 0.0001))
   ##################################
 
@@ -250,7 +250,7 @@ test_that("Test Analyses", {
 
   ##################################
   expect_that(as.numeric(bootstrap.ddf.statistics[["CD"]][["ddf.1"]]$ds.param[n,1:2]), equals(as.numeric(ddf.results[[1]]$ds$aux$ddfobj$scale$parameters)))
-  expect_that(bootstrap.ddf.statistics[["CD"]][["ddf.2"]]$AIC[n] > bootstrap.ddf.statistics[["CD"]][["ddf.1"]]$AIC[n], is_true())
+  expect_true(bootstrap.ddf.statistics[["CD"]][["ddf.2"]]$AIC[n] > bootstrap.ddf.statistics[["CD"]][["ddf.1"]]$AIC[n])
   expect_that(ddf.results[[1]]$criterion, equals(bootstrap.ddf.statistics[["CD"]][["ddf.1"]]$AIC[n]))
   ##################################
 
