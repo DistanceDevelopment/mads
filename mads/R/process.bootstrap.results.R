@@ -72,7 +72,7 @@ process.bootstrap.results <- function(bootstrap.results, model.index, clusters, 
     #...$summary
     summary.element$individuals$summary <- data.frame(Region = strata.names, Area = rep(NA,no.strata), CoveredArea = rep(NA,no.strata), Effort = rep(NA,no.strata), n = rep(NA,no.strata), ER = rep(NA,no.strata), se.ER = rep(NA,no.strata), cv.ER = rep(NA,no.strata))
     for(st in seq(along = strata.names)){
-      if(class(bootstrap.results[["individual.summary"]][strata.names[st],,,species.names[sp]]) == "matrix"){
+      if("matrix" %in% class(bootstrap.results[["individual.summary"]][strata.names[st],,,species.names[sp]])){
         summary.element$individuals$summary[summary.element$individuals$summary$Region == strata.names[st],2:6] <- apply(bootstrap.results[["individual.summary"]][strata.names[st],,,species.names[sp]], 1, mean, na.rm = TRUE)
       }else if(class(bootstrap.results[["individual.summary"]][strata.names[st],,,species.names[sp]]) == "numeric"){
         summary.element$individuals$summary[summary.element$individuals$summary$Region == strata.names[st],2:6] <- bootstrap.results[["individual.summary"]][strata.names[st],,,species.names[sp]]
@@ -84,7 +84,7 @@ process.bootstrap.results <- function(bootstrap.results, model.index, clusters, 
     #...$N 
     summary.element$individuals$N <- data.frame(Label = strata.names, Estimate = rep(NA,no.strata), se = rep(NA,no.strata), cv = rep(NA,no.strata), lcl = rep(NA,no.strata), ucl = rep(NA,no.strata), df = rep(NA,no.strata), pctUnid = rep(NA,no.strata), pctUnid.se = rep(NA,no.strata), pctUnid.cv = rep(NA,no.strata), pctUnid.lcl = rep(NA,no.strata), pctUnid.ucl = rep(NA,no.strata))
     for(st in seq(along = strata.names)){
-      if(class(bootstrap.results[["individual.N"]][strata.names[st],,,species.names[sp]]) == "matrix"){
+      if("matrix" %in% class(bootstrap.results[["individual.N"]][strata.names[st],,,species.names[sp]])){
         summary.element$individuals$N[summary.element$individuals$N$Label == strata.names[st], c(2,7,8)] <- apply(bootstrap.results[["individual.N"]][strata.names[st],,,species.names[sp]], 1, mean, na.rm = TRUE)
         summary.element$individuals$N[summary.element$individuals$N$Label == strata.names[st], c(3,9)] <- apply(bootstrap.results[["individual.N"]][strata.names[st],c("Estimate","PercentUnidentified"),,species.names[sp]], 1, sd, na.rm = TRUE)
         summary.element$individuals$N[summary.element$individuals$N$Label == strata.names[st], c(5,11)] <- apply(bootstrap.results[["individual.N"]][strata.names[st],c("Estimate","PercentUnidentified"),,species.names[sp]], 1, quantile, na.rm = TRUE, type = quantile.type, probs = 0.025)
@@ -113,7 +113,7 @@ process.bootstrap.results <- function(bootstrap.results, model.index, clusters, 
       #...$summary
      summary.element$clusters$summary <- data.frame(Region = strata.names, Area = rep(NA,no.strata), CoveredArea = rep(NA,no.strata), Effort = rep(NA,no.strata), n = rep(NA,no.strata), k = rep(NA,no.strata), ER = rep(NA,no.strata), se.ER = rep(NA,no.strata), cv.ER = rep(NA,no.strata))
       for(st in seq(along = strata.names)){
-        if(class(bootstrap.results[["clusters.summary"]][strata.names[st],,,species.names[sp]]) == "matrix"){
+        if("matrix" %in% class(bootstrap.results[["clusters.summary"]][strata.names[st],,,species.names[sp]])){
           summary.element$clusters$summary[summary.element$clusters$summary$Region == strata.names[st],c(2:7)] <- apply(bootstrap.results[["clusters.summary"]][strata.names[st],,,species.names[sp]], 1, mean, na.rm = TRUE)
         }else if(class(bootstrap.results[["clusters.summary"]][strata.names[st],,,species.names[sp]]) == "numeric"){
           summary.element$clusters$summary[summary.element$clusters$summary$Region == strata.names[st],c(2:7)] <- bootstrap.results[["clusters.summary"]][strata.names[st],,,species.names[sp]]
@@ -125,7 +125,7 @@ process.bootstrap.results <- function(bootstrap.results, model.index, clusters, 
       #...$N
       summary.element$clusters$N <- data.frame(Label = strata.names, Estimate = rep(NA,no.strata), se = rep(NA,no.strata), cv = rep(NA,no.strata), lcl = rep(NA,no.strata), ucl = rep(NA,no.strata), df = rep(NA,no.strata), pctUnid = rep(NA,no.strata), pctUnid.se = rep(NA,no.strata), pctUnid.cv = rep(NA,no.strata), pctUnid.lcl = rep(NA,no.strata), pctUnid.ucl = rep(NA,no.strata))
       for(st in seq(along = strata.names)){
-        if(class(bootstrap.results[["clusters.N"]][strata.names[st],,,species.names[sp]]) == "matrix"){
+        if("matrix" %in% class(bootstrap.results[["clusters.N"]][strata.names[st],,,species.names[sp]])){
           summary.element$clusters$N[summary.element$clusters$N$Label == strata.names[st], c(2,7,8)] <- apply(bootstrap.results[["clusters.N"]][strata.names[st],,,species.names[sp]], 1, mean, na.rm = TRUE)
           summary.element$clusters$N[summary.element$clusters$N$Label == strata.names[st], c(3,9)] <- apply(bootstrap.results[["clusters.N"]][strata.names[st],c("Estimate","PercentUnidentified"),,species.names[sp]], 1, sd, na.rm = TRUE)
           summary.element$clusters$N[summary.element$clusters$N$Label == strata.names[st], c(5,11)] <- apply(bootstrap.results[["clusters.N"]][strata.names[st],c("Estimate","PercentUnidentified"),,species.names[sp]], 1, quantile, na.rm = TRUE, type = quantile.type, probs = 0.025)

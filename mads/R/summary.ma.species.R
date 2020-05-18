@@ -59,7 +59,7 @@ summary.ma.species <- function (object, species=NULL, ...){
     selected <- FALSE
     if(!is.null(object$ddf[[model.names[m]]]$ds.param)){
       cat("\nParameter estimates (dsmodel):\n")
-      if(class(object$ddf[[model.names[m]]]$ds.param) == "matrix"){
+      if("matrix" %in% class(object$ddf[[model.names[m]]]$ds.param)){
         param.estimates <- apply(object$ddf[[model.names[m]]]$ds.param, 2, mean)
         param.se <- apply(object$ddf[[model.names[m]]]$ds.param, 2, sd)
         print(array(c(param.estimates, param.se), dim=c(length(param.estimates),2), dimnames=list(dimnames(object$ddf[[model.names[m]]]$ds.param)[[2]], c("Estimate", "se"))))
@@ -74,7 +74,7 @@ summary.ma.species <- function (object, species=NULL, ...){
     }
     if(!is.null(object$ddf[[model.names[m]]]$mr.param)){
       cat("\nParameter estimates (mrmodel):\n")
-      if(class(object$ddf[[model.names[m]]]$mr.param) == "matrix"){
+      if("matrix" %in% class(object$ddf[[model.names[m]]]$mr.param)){
         param.estimates <- apply(object$ddf[[model.names[m]]]$mr.param, 2, mean)
         param.se <- apply(object$ddf[[model.names[m]]]$mr.param, 2, sd)
         print(array(c(param.estimates, param.se), dim=c(length(param.estimates),2), dimnames=list(dimnames(object$ddf[[model.names[m]]]$mr.param)[[2]], c("Estimate", "se"))))
