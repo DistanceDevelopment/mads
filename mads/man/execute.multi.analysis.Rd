@@ -4,14 +4,22 @@
 \alias{execute.multi.analysis}
 \title{Performs Multiple Analyses on Distance Data}
 \usage{
-execute.multi.analysis(species.code, unidentified.sightings = NULL,
-  species.presence = NULL, covariate.uncertainty = NULL,
-  models.by.species.code, ddf.model.objects,
-  ddf.model.options = list(criterion = "AIC", species.field.name =
-  "species"), region.table, sample.table, obs.table,
-  dht.options = list(convert.units = 1), bootstrap,
-  bootstrap.options = list(resample = "samples", n = 1, quantile.type =
-  7), silent = FALSE)
+execute.multi.analysis(
+  species.code,
+  unidentified.sightings = NULL,
+  species.presence = NULL,
+  covariate.uncertainty = NULL,
+  models.by.species.code,
+  ddf.model.objects,
+  ddf.model.options = list(criterion = "AIC", species.field.name = "species"),
+  region.table,
+  sample.table,
+  obs.table,
+  dht.options = list(convert.units = 1),
+  bootstrap,
+  bootstrap.options = list(resample = "samples", n = 1, quantile.type = 7),
+  silent = FALSE
+)
 }
 \arguments{
 \item{species.code}{vector of all the species codes to be included in
@@ -144,37 +152,45 @@ each strata.
 }
 \examples{
 
-ex.filename<-system.file("testData/example_data/dist_data.robj", package="mads")
-load(ex.filename)
-ex.filename<-system.file("testData/example_data/survey_data.robj", package="mads")
-load(ex.filename)
+#Load the example data
+data("mads.data")
+ddf.data <- mads.data$dist.data
+region.table <- mads.data$region.table
+sample.table <- mads.data$sample.table
+obs.table <- mads.data$obs.table
 
-region.table <- survey.data@region.table@region.table
-sample.table <- survey.data@sample.table@sample.table
-obs.table <- survey.data@obs.table@obs.table
-
-# Fit detection functions using ddf in mrds
-# Fit a half-normal model
+# Fit candidate detection function models using ddf in mrds
+# Fit a half normal model
 df.all.hn <- ddf(dsmodel = ~mcds(key = "hn", formula = ~ 1),
-                 method='ds', data=dist.data, meta.data=list(width=30))
+                 method='ds', data=ddf.data, meta.data=list(width=1))
 summary(df.all.hn)
 plot(df.all.hn)
-
 # Fit a hazard rate model
-df.all.hr <- ddf(dsmodel = ~mcds(key = "hr", formula = ~ 1),
-                 method='ds', data=dist.data, meta.data=list(width=30))
+df.all.hr <- ddf(dsmodel = ~mcds(key = "hn", formula = ~ 1),
+                 method='ds', data=ddf.data, meta.data=list(width=1))
 summary(df.all.hr)
 plot(df.all.hr)
 
-species.codes <- c("CD", "WD", "UnID")
-unid.defs <- list("UnID" = c("CD", "WD"))
+# Set up mads data:
+
+# A vector of the species names
+species.codes <- c("CD", "WSD", "Unid")
+
+# A list defining which species the unidentified categories could be
+unid.defs <- list("Unid" = c("CD", "WSD"))
+
+# Specify which models are to be tried for each species code
 mod.uncert <- list("CD" = c("df.all.hn", "df.all.hr"),
-                   "WD" = c("df.all.hn", "df.all.hr"),
-                   "UnID" = c("df.all.hn", "df.all.hr"))
+                   "WSD" = c("df.all.hn", "df.all.hr"),
+                   "Unid" = c("df.all.hn", "df.all.hr"))
+                   
+# Provide the models in a named list and the selection criteria
 models <- list("df.all.hn" = df.all.hn,
                "df.all.hr" = df.all.hr)
 model.opts <- list(criterion = "AIC")
-bootstrap.opts <- list(resample = 'samples', n=500)
+
+# Bootstrap options
+bootstrap.opts <- list(resample = 'samples', n=999)
 
 \donttest{
 #Warning this will take some time to run!
@@ -192,7 +208,7 @@ results<- execute.multi.analysis( species.code = species.codes,
 
 #Short example to run as per CRAN requirements - warning not enough 
 #repetitions to estimate variance!
-bootstrap.opts <- list(resample = 'samples', n=5)
+bootstrap.opts <- list(resample = 'samples', n=3)
 
 results<- execute.multi.analysis( species.code = species.codes,
                                   unidentified.sightings = unid.defs,
@@ -205,7 +221,10 @@ results<- execute.multi.analysis( species.code = species.codes,
                                   bootstrap = TRUE, 
                                   bootstrap.option = bootstrap.opts)
 
-#These are simulated data and true abundances are: CD = 560, WD = 240               
+#These are simulated data and true abundances are: 
+#  CD (common dolphins) = 3000 
+#  WSD (white sided dolphins) =  1500
+              
 summary(results)                                   
 
 }
