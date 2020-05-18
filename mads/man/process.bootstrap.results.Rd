@@ -15,7 +15,7 @@ process.bootstrap.results(
 )
 }
 \arguments{
-\item{bootstrap.results}{list of arrays containg results from the repeated
+\item{bootstrap.results}{list of arrays containing results from the repeated
 analyses.}
 
 \item{model.index}{named character vector which acts as a look up table for

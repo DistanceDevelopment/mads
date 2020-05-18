@@ -38,7 +38,7 @@ list of ddf objects
 \description{
 Fits all the models named in model.names to the associated data supplied in 
 ddf.dat.working. If more than one model is supplied for any species the 
-model with the minimum selection crieteria will be selected.
+model with the minimum selection criteria will be selected.
 }
 \note{
 Internal function not intended to be called by user.

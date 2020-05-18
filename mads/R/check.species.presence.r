@@ -1,6 +1,6 @@
 #' Checks the list of species presence definitions supplied by the user
 #'
-#' Performs a numer of checks to ensure the list has been defined correctly.
+#' Performs a number of checks to ensure the list has been defined correctly.
 #' If no list was specified one is created assuming all species are present in 
 #' all strata.
 #' 

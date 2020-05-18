@@ -51,9 +51,9 @@
 #' \code{"var"} or \code{"CV"}. The \code{sampling.distribution} should specify
 #' one of the following distributions to parametrically resample from
 #' \code{"Normal"}, \code{"Normal.Absolute"}, \code{"Lognormal.BC"},
-#' \code{"Poisson"} or \code{"TruncPoissonBC"}. The remaning column in this
+#' \code{"Poisson"} or \code{"TruncPoissonBC"}. The remaining column in this
 #' dataset, \code{variable.correction.factos}, allows the user to specify a
-#' value by which the variable should be scaled. If this is not reqied this
+#' value by which the variable should be scaled. If this is not requied this
 #' should be set to 1.
 #'
 #' If there are unidentified sightings in the dataset then the
@@ -102,7 +102,7 @@
 #' @param bootstrap if TRUE resamples data to obtain variance estimate
 #' @param bootstrap.options a list of options that can be set 1) n: number of
 #'   repetitions 2) resample: how to resample data ("samples", "observations")
-#' @param silent boolean used to supress progress counter output
+#' @param silent boolean used to suppress progress counter output
 #' @return object of class "ma" which consists of a list of objects of class
 #'   "ma.element". Each "ma.element" consists of the following elements:
 #'   \item{individuals}{Summary, N (abundance) and D (density) tables}
@@ -117,7 +117,7 @@
 #'     function. In: Advanced Distance Sampling, eds. S.T. Buckland,
 #'     D.R.Anderson, K.P. Burnham, J.L. Laake, D.L. Borchers, and L. Thomas.
 #'     Oxford University Press.
-#'   Gerrodette, T. and Forcada, J. 2005 Non-recovery of two spotted and spinner
+#'   Gerodette, T. and Forcada, J. 2005 Non-recovery of two spotted and spinner
 #'     dolphin populations in the eastern tropical Pacific Ocean. Marine Ecology
 #'     Progress Series, 291:1-21.
 #' @keywords Statistical Model
@@ -160,10 +160,10 @@
 #'                "df.all.hr" = df.all.hr)
 #' model.opts <- list(criterion = "AIC")
 #' 
+#' \donttest{
 #' # Bootstrap options
 #' bootstrap.opts <- list(resample = 'samples', n=999)
 #' 
-#' \donttest{
 #' #Warning this will take some time to run!
 #' results<- execute.multi.analysis( species.code = species.codes,
 #'                                   unidentified.sightings = unid.defs,
@@ -177,9 +177,8 @@
 #'                                   bootstrap.option = bootstrap.opts)
 #' }
 #'
-#' #Short example to run as per CRAN requirements - warning not enough 
-#' #repetitions to estimate variance!
-#' bootstrap.opts <- list(resample = 'samples', n=3)
+#' #Short example to run as per CRAN requirements - warning only 1 repetition, results not interpretable!
+#' bootstrap.opts <- list(resample = 'samples', n=1)
 #' 
 #' results<- execute.multi.analysis( species.code = species.codes,
 #'                                   unidentified.sightings = unid.defs,

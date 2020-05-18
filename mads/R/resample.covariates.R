@@ -1,6 +1,6 @@
-#' Parametrcally resamples selected variables in the dataset.
+#' Parametrically resamples selected variables in the dataset.
 #'
-#' Parametricelly resamples specified variables in the dataset based on a 
+#' Parametrically resamples specified variables in the dataset based on a 
 #' measure of uncertainty and a sampling distribution supplied by the user.
 #'
 #' This function may also apply a correction factor. If numeric is specified the

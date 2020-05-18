@@ -27,7 +27,7 @@ of identified species codes corresponding to which species are present in
 each strata.}
 }
 \value{
-a list of proprated results with an element for each species
+a list of pro-rated results with an element for each species
 }
 \description{
 The prorating is done individually for each strata. It will prorate the 

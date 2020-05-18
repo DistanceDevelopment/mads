@@ -11,7 +11,7 @@
 #'   Forcada J. (2005) <10.3354/meps291001> "Non-recovery of two spotted 
 #'   and spinner dolphin populations in the eastern tropical Pacific Ocean".
 #'
-#'  The main function in this pacakge is \link{execute.multi.analysis}.
+#'  The main function in this package is \link{execute.multi.analysis}.
 #'
 #' Further information on distance sampling methods and example code is available at \url{http://distancesampling.org/R/}.
 #'
@@ -37,7 +37,7 @@ NULL
 #' normal detection functions with a scale parameter of 0.5 and a truncation 
 #' distance of 1. A systematic parallel line transect design was used. Once both 
 #' sets of data had been generated they were combined and 10% of the sightings were
-#' randomly selected to be in the unidntified sightings category.
+#' randomly selected to be in the unidentified sightings category.
 #'
 #' @name mads.data
 #' @docType data

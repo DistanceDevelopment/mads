@@ -1,6 +1,6 @@
 #' Summarises warnings
 #'
-#' Sumarises warnings generated during the bootstrap and removes the 
+#' Summarises warnings generated during the bootstrap and removes the 
 #' MAE.warnings global object.  
 #' 
 #' @param MAE.warnings character vector of warning messages 

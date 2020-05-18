@@ -20,7 +20,7 @@
 #'
 check.species.code.definitions <- function(species.code.definitions, species.name){
 # 
-# check.species.code.definitions function to check the list of species code deifinitions supplied by the user 
+# check.species.code.definitions function to check the list of species code definitions supplied by the user 
 #
 # Arguments:  #
 #  species.code.definitions - a list of vectors containing the species codes which correspond to the 

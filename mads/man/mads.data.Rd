@@ -19,6 +19,6 @@ and 1500, respectively. Detections of individuals were simulated based on half
 normal detection functions with a scale parameter of 0.5 and a truncation 
 distance of 1. A systematic parallel line transect design was used. Once both 
 sets of data had been generated they were combined and 10% of the sightings were
-randomly selected to be in the unidntified sightings category.
+randomly selected to be in the unidentified sightings category.
 }
 \keyword{datasets}

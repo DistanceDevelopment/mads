@@ -2,7 +2,7 @@
 % Please edit documentation in R/resample.covariates.R
 \name{resample.covariates}
 \alias{resample.covariates}
-\title{Parametrcally resamples selected variables in the dataset.}
+\title{Parametrically resamples selected variables in the dataset.}
 \usage{
 resample.covariates(ddf.dat.working, covariate.uncertainty, MAE.warnings)
 }
@@ -20,7 +20,7 @@ uncertainty.measure, sampling.distribution.}
 list of dataframes containing the parametrically resampled data
 }
 \description{
-Parametricelly resamples specified variables in the dataset based on a 
+Parametrically resamples specified variables in the dataset based on a 
 measure of uncertainty and a sampling distribution supplied by the user.
 }
 \details{

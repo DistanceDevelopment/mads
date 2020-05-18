@@ -10,7 +10,7 @@ process.warnings(MAE.warnings)
 \item{MAE.warnings}{character vector of warning messages}
 }
 \description{
-Sumarises warnings generated during the bootstrap and removes the 
+Summarises warnings generated during the bootstrap and removes the 
 MAE.warnings global object.
 }
 \note{

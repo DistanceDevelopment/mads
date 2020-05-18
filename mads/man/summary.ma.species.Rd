@@ -2,7 +2,7 @@
 % Please edit documentation in R/summary.ma.species.R
 \name{summary.ma.species}
 \alias{summary.ma.species}
-\title{Print a summary of an element of a multi-analysis result correcponding to 
+\title{Print a summary of an element of a multi-analysis result corresponding to 
 a single species included in the analyses.}
 \usage{
 \method{summary}{ma.species}(object, species = NULL, ...)

@@ -15,7 +15,7 @@
 #' @param clusters boolean whether observations are clusters of individuals
 #' of identified species codes corresponding to which species are present in 
 #' each strata.
-#' @return a list of proprated results with an element for each species
+#' @return a list of pro-rated results with an element for each species
 #' @note Internal function not intended to be called by user.
 #' @author Laura Marshall
 #'

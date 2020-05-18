@@ -18,7 +18,7 @@ Can perform distance sampling analyses on a number of species at once
   and spinner dolphin populations in the eastern tropical Pacific Ocean".
 }
 \details{
-The main function in this pacakge is \link{execute.multi.analysis}.
+The main function in this package is \link{execute.multi.analysis}.
 
 Further information on distance sampling methods and example code is available at \url{http://distancesampling.org/R/}.
 

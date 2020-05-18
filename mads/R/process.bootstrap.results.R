@@ -5,7 +5,7 @@
 #' and clusters. In addition, summary statistics for expected cluster size 
 #' (Expected.S) are also calculated.
 #'  
-#' @param bootstrap.results list of arrays containg results from the repeated
+#' @param bootstrap.results list of arrays containing results from the repeated
 #'   analyses.
 #' @param model.index named character vector which acts as a look up table for
 #'   duplicate detection function models.

@@ -1,4 +1,4 @@
-#' Print a summary of an element of a multi-analysis result correcponding to 
+#' Print a summary of an element of a multi-analysis result corresponding to 
 #' a single species included in the analyses.
 #' 
 #' Provides a summary of the fitted detection probability model
