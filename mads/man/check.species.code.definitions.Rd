@@ -2,7 +2,7 @@
 % Please edit documentation in R/check.species.code.definitions.R
 \name{check.species.code.definitions}
 \alias{check.species.code.definitions}
-\title{Checks the list of species code deifinitions supplied by the user}
+\title{Checks the list of species code definitions supplied by the user}
 \usage{
 check.species.code.definitions(species.code.definitions, species.name)
 }

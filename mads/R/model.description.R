@@ -3,7 +3,7 @@
 #' Returns a description of the model fitted in the ddf object.
 #' 
 #' @param model a ddf object
-#' @return mod.str a string descibing the fitted model
+#' @return mod.str a string describing the fitted model
 #' @author Jeff Laake & Laura Marshall
 model.description<-function(model){
 # builds the description of the model to be printed

@@ -1,4 +1,4 @@
-#' Checks the list of species code deifinitions supplied by the user
+#' Checks the list of species code definitions supplied by the user
 #'
 #' Firstly, it checks that there are not multiple definitions for the same species code.
 #' Secondly, it checks that the names of the ddf models correspond to the names 

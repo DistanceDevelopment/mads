@@ -10,7 +10,7 @@ model.description(model)
 \item{model}{a ddf object}
 }
 \value{
-mod.str a string descibing the fitted model
+mod.str a string describing the fitted model
 }
 \description{
 Returns a description of the model fitted in the ddf object.

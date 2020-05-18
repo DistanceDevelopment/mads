@@ -53,7 +53,7 @@
 #' \code{"Normal"}, \code{"Normal.Absolute"}, \code{"Lognormal.BC"},
 #' \code{"Poisson"} or \code{"TruncPoissonBC"}. The remaining column in this
 #' dataset, \code{variable.correction.factos}, allows the user to specify a
-#' value by which the variable should be scaled. If this is not requied this
+#' value by which the variable should be scaled. If this is not required this
 #' should be set to 1.
 #'
 #' If there are unidentified sightings in the dataset then the
