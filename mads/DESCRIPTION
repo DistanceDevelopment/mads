@@ -1,5 +1,6 @@
 Package: mads
 Depends:
+    R (>= 3.5.0),
     mrds,
     stats
 Suggests:
@@ -9,17 +10,21 @@ Title: Multi-Analysis Distance Sampling
 Version: 0.1.6
 Author: Laura Marshall
 Maintainer: Laura Marshall <lhm@st-and.ac.uk>
-Description: Can perform distance sampling analyses on a number of species 
-    at once and can account for unidentified sightings. Unidentified 
-    sightings refer to sightings which cannot be allocated to a single 
-    species but may instead be allocated to a group of species. The 
-    abundance of each unidentified group is estimated and then prorated 
-    to the species estimates. The multi-analysis engine can also incorporate 
-    model and covariate uncertainty. Variance estimation is via a non 
-    parametric bootstrap. The methods implemented are described in Gerodette 
-    T. and Forcada J. (2005) <10.3354/meps291001> Non-recovery of two 
-    spotted and spinner dolphin populations in the eastern tropical 
-    Pacific Ocean.
+Description: Performs distance sampling analyses on a number of species 
+    at once and can account for unidentified sightings, model uncertainty 
+    and covariate uncertainty. Unidentified sightings refer to sightings 
+    which cannot be allocated to a single species but may instead be 
+    allocated to a group of species. The abundance of each unidentified 
+    group is estimated and then prorated to the species estimates. Model 
+    uncertainty should be incorporated when multiple models give equally
+    good fit to the data but lead to large differences in estimated
+    density / abundance. Covariate uncertainty should be incorporated
+    when covariates cannot be measured acurately, for example this is 
+    often the case for group size in marine mammal surveys. Variance 
+    estimation for these methods is via a non parametric bootstrap. 
+    The methods implemented are described in Gerodette T. and Forcada 
+    J. (2005) <10.3354/meps291001> Non-recovery of two spotted and spinner 
+    dolphin populations in the eastern tropical Pacific Ocean.
 BugReports: https://github.com/DistanceDevelopment/mads/issues
 License: GPL (>=2)
 Collate:
@@ -58,5 +63,5 @@ Collate:
     'summary.ma.species.R'
     'summary.ma.unid.R'
     'mads-package.R'
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0
 Encoding: UTF-8
