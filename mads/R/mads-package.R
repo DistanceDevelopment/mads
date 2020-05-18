@@ -27,4 +27,23 @@
 #'
 NULL
 
-
+#' Example simulated data used to demonstrate the package functionality
+#'
+#' These data were generated using DSsim. Two populations were generated inside
+#' a rectangular study region, one of these is called 'CD' (common dolphin) and the 
+#' other is 'WSD' (white-sided dolphin). Density was assumed to be equal across the 
+#' study area and the population sizes for the CD and WSD populations were 3000
+#' and 1500, respectively. Detections of individuals were simulated based on half
+#' normal detection functions with a scale parameter of 0.5 and a truncation 
+#' distance of 1. A systematic parallel line transect design was used. Once both 
+#' sets of data had been generated they were combined and 10% of the sightings were
+#' randomly selected to be in the unidntified sightings category.
+#'
+#' @name mads.data
+#' @docType data
+#' @format This is a list of 4 items. The first is dist.data a dataframe with 
+#' distance sampling data including the columns object, transect.ID, distance, 
+#' x, y, true.species, unid, species, observer. The other items are the 
+#' region, sample and observations tables as per the definitions in mrds.
+#' @keywords datasets
+NULL

@@ -22,7 +22,7 @@ The main function in this pacakge is \link{execute.multi.analysis}.
 
 Further information on distance sampling methods and example code is available at \url{http://distancesampling.org/R/}.
 
-We are also in the process of setting up a new area of the website for vignettes / example code at \url{http://examples.distancesampling.org }.
+We are also in the process of setting up a new area of the website for vignettes / example code at \url{http://examples.distancesampling.org }. 
 
 For help with distance sampling and this package, there is a Google Group \url{https://groups.google.com/forum/#!forum/distance-sampling}.
 }
