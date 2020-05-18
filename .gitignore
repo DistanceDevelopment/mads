@@ -1,0 +1,10 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+mads/inst/testData/example_data/.DS_Store
+mads/inst/testData/.DS_Store
+example_data/.DS_Store
+example_data/dist_data.robj
+example_data/survey_data.robj
