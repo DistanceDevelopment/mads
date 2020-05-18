@@ -19,7 +19,7 @@ Description: Performs distance sampling analyses on a number of species
     uncertainty should be incorporated when multiple models give equally
     good fit to the data but lead to large differences in estimated
     density / abundance. Covariate uncertainty should be incorporated
-    when covariates cannot be measured acurately, for example this is 
+    when covariates cannot be measured accurately, for example this is 
     often the case for group size in marine mammal surveys. Variance 
     estimation for these methods is via a non parametric bootstrap. 
     The methods implemented are described in Gerodette T. and Forcada 
