@@ -13,7 +13,7 @@
 #' @note Internal function not intended to be called by user.
 #' @author Laura Marshall
 #' @seealso \code{create.param.arrays}
-#' @keywords data manipulation
+#' @keywords internal
 #'        
 store.param.ests <- function(bootstrap.ddf.statistics, species.name, model.name, ddf.model, rep.no){
 # store.param.ests function to non-parametrically resample the observations

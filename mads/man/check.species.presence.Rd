@@ -34,5 +34,4 @@ Internal function not intended to be called by user.
 \author{
 Laura Marshall
 }
-\keyword{input}
-\keyword{validation}
+\keyword{internal}

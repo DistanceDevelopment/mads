@@ -18,7 +18,7 @@
 #'     for each species.                                                                       
 #' @note Internal function not intended to be called by user.
 #' @author Laura Marshall
-#' @keywords data preparation
+#' @keywords internal
 #'
 get.datasets <- function(model.names, ddf.models){
 # get.datasets function to extract unique models and corresponding data and provide the

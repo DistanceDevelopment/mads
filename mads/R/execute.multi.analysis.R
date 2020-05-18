@@ -120,7 +120,7 @@
 #'   Gerrodette, T. and Forcada, J. 2005 Non-recovery of two spotted and spinner
 #'     dolphin populations in the eastern tropical Pacific Ocean. Marine Ecology
 #'     Progress Series, 291:1-21.
-#' @keywords ~distance sampling, unidentified sightings, covariate uncertainty, model uncertainty
+#' @keywords Statistical Model
 #' @examples
 #' 
 #' #Load the example data

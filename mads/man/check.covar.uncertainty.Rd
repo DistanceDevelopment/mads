@@ -26,7 +26,4 @@ Internal function not intended to be called by user.
 \author{
 Laura Marshall
 }
-\keyword{data}
-\keyword{input}
-\keyword{validation}
-\keyword{validation,}
+\keyword{internal}

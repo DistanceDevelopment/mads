@@ -18,7 +18,7 @@
 #' @note Internal function not intended to be called by user.
 #' @author Laura Marshall
 #' @seealso \code{resample.data}
-#' @keywords data manipulation
+#' @keywords internal
 #'
 renumber.duplicates <- function(ddf.dat, obs.table, double.observer){
 # renumber.duplicates function to renumbers the object IDs for the duplicate observations generated when

@@ -240,11 +240,5 @@ Marques, F.F.C. and S.T. Buckland. 2004. Covariate models for the detection
 \author{
 Laura Marshall
 }
-\keyword{covariate}
-\keyword{model}
-\keyword{sampling,}
-\keyword{sightings,}
-\keyword{uncertainty}
-\keyword{uncertainty,}
-\keyword{unidentified}
-\keyword{~distance}
+\keyword{Model}
+\keyword{Statistical}

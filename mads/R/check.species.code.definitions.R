@@ -16,7 +16,7 @@
 #' @note Internal function not intended to be called by user.
 #' @author Laura Marshall
 #' @seealso \code{execute.multi.analysis}
-#' @keywords input validation
+#' @keywords internal
 #'
 check.species.code.definitions <- function(species.code.definitions, species.name){
 # 

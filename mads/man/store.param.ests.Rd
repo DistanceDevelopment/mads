@@ -40,5 +40,4 @@ Internal function not intended to be called by user.
 \author{
 Laura Marshall
 }
-\keyword{data}
-\keyword{manipulation}
+\keyword{internal}

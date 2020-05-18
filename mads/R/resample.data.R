@@ -21,7 +21,7 @@
 #'   obs.table an updated obs.table with additional entries for data replicates
 #' @note Internal function not intended to be called by user.
 #' @author Laura Marshall
-#' @keywords data manipulation
+#' @keywords internal
 #'
 resample.data <- function(resample, obs.table, sample.table, ddf.dat.master, double.observer, subset.variable = "species"){
 # resample.data function to non-parametrically resample the observations

@@ -17,7 +17,7 @@
 #' @return list of dataframes containing the parametrically resampled data
 #' @note Internal function not intended to be called by user.
 #' @author Laura Marshall
-#' @keywords data manipulation
+#' @keywords internal
 #' @importFrom stats rnorm
 #' @importFrom stats rpois
 #'         
