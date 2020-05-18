@@ -5,8 +5,12 @@
 \title{Prorate the estimated abundances of the unidentified sightings to the
 other identified species categories.}
 \usage{
-prorate.unidentified(dht.results, species.code.definitions,
-  species.presence, clusters)
+prorate.unidentified(
+  dht.results,
+  species.code.definitions,
+  species.presence,
+  clusters
+)
 }
 \arguments{
 \item{dht.results}{a list of objects of class dht}

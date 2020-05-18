@@ -4,8 +4,7 @@
 \alias{summary.ma}
 \title{Summary of multi-analysis object}
 \usage{
-\method{summary}{ma}(object, description = FALSE, glossary = FALSE,
-  ...)
+\method{summary}{ma}(object, description = FALSE, glossary = FALSE, ...)
 }
 \arguments{
 \item{object}{an object of class \code{ma}}

@@ -4,8 +4,14 @@
 \alias{resample.data}
 \title{Resamples the data for the bootstrap}
 \usage{
-resample.data(resample, obs.table, sample.table, ddf.dat.master,
-  double.observer, subset.variable = "species")
+resample.data(
+  resample,
+  obs.table,
+  sample.table,
+  ddf.dat.master,
+  double.observer,
+  subset.variable = "species"
+)
 }
 \arguments{
 \item{resample}{if "samples" resample samples within strata, if 

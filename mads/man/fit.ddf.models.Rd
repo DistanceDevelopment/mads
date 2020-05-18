@@ -4,8 +4,15 @@
 \alias{fit.ddf.models}
 \title{Refits the detection functions to the resampled data}
 \usage{
-fit.ddf.models(ddf.dat.working, model.names, ddf.models, criterion,
-  bootstrap.ddf.statistics, rep.no, MAE.warnings)
+fit.ddf.models(
+  ddf.dat.working,
+  model.names,
+  ddf.models,
+  criterion,
+  bootstrap.ddf.statistics,
+  rep.no,
+  MAE.warnings
+)
 }
 \arguments{
 \item{ddf.dat.working}{list of dataframes containing the data to which the 

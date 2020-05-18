@@ -4,11 +4,15 @@
 \alias{process.bootstrap.results}
 \title{Summarises the bootstrap results.}
 \usage{
-process.bootstrap.results(bootstrap.results, model.index, clusters,
-  bootstrap.ddf.statistics, quantile.type,
+process.bootstrap.results(
+  bootstrap.results,
+  model.index,
+  clusters,
+  bootstrap.ddf.statistics,
+  quantile.type,
   analysis.options = list(bootstrap, n, covariate.uncertainty, clusters,
-  double.observer, unidentified.species, species.code.definitions,
-  model.names))
+    double.observer, unidentified.species, species.code.definitions, model.names)
+)
 }
 \arguments{
 \item{bootstrap.results}{list of arrays containg results from the repeated

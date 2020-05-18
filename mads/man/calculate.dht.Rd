@@ -5,8 +5,16 @@
 \title{Calculates the abundance for each species code including the unidentified 
 codes if supplied.}
 \usage{
-calculate.dht(species.name, species.field.name, model.index, ddf.results,
-  region.table, sample.table, obs.table, dht.options)
+calculate.dht(
+  species.name,
+  species.field.name,
+  model.index,
+  ddf.results,
+  region.table,
+  sample.table,
+  obs.table,
+  dht.options
+)
 }
 \arguments{
 \item{species.name}{character vector of species codes}

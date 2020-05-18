@@ -4,8 +4,13 @@
 \alias{create.result.arrays}
 \title{Creates a list of arrays for storing the dht results}
 \usage{
-create.result.arrays(species.name, species.code.definitions, region.table,
-  clusters, n)
+create.result.arrays(
+  species.name,
+  species.code.definitions,
+  region.table,
+  clusters,
+  n
+)
 }
 \arguments{
 \item{species.name}{a list of all the species in the analysis}

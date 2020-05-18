@@ -4,8 +4,13 @@
 \alias{store.param.ests}
 \title{Updates bootstrap.ddf.statistics}
 \usage{
-store.param.ests(bootstrap.ddf.statistics, species.name, model.name,
-  ddf.model, rep.no)
+store.param.ests(
+  bootstrap.ddf.statistics,
+  species.name,
+  model.name,
+  ddf.model,
+  rep.no
+)
 }
 \arguments{
 \item{bootstrap.ddf.statistics}{a list containing various arrays and vectors
