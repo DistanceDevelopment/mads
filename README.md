@@ -8,4 +8,16 @@
 
 `mads` provides a users with the option of incorporating unidentified sightings, covariate uncertainty and model uncertainty into distance sampling analyses.
 
+As of November 2023, the `mads` package is no longer under active development.  Please contact the Distance development team [distance\@st-andrews.ac.uk](mailto:distance@st-andrews.ac.uk?subject=mcds) if you are using the package and run into any issues.
 
+# Getting `mads`
+
+You can download and install `mads` using the remotes package:
+```
+  install.packages("remotes")
+```
+
+then install mads from github:
+```
+  remotes::install_github("DistanceDevelopment/mads")
+```
